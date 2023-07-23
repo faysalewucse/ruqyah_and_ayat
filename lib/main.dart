@@ -13,7 +13,7 @@ void main() {
       cardColor: Colors.indigo[800],
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: Colors.white
-      )
+      ),
     ),
   ));
 }

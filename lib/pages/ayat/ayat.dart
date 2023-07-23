@@ -29,7 +29,7 @@ class _AyatPageState extends State<AyatPage> {
                 fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
           ),
           const Text(
-            ' بِسْمِ اللَّهِ الرَّحْمَـنِ الرَّحِيـمِ',
+            'بِسْمِ اللَّهِ الرَّحْمَـنِ الرَّحِيـم',
             textDirection: TextDirection.rtl,
             style: TextStyle(
                 fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
