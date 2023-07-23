@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Ayat {
   final String title;
@@ -9,13 +10,13 @@ class Ayat {
 
 class AyatCard extends StatelessWidget {
   final Ayat verse;
+  final String selectedFont;
 
-  AyatCard({required this.verse});
+  AyatCard({required this.verse, required this.selectedFont});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.indigo[800],
       margin: const EdgeInsets.all(10),
       elevation: 4,
       child: Padding(
@@ -27,11 +28,15 @@ class AyatCard extends StatelessWidget {
               verse.title,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white ),
             ),
+            const SizedBox(height: 5,),
             Text(
               verse.verseText,
               textDirection: TextDirection.rtl,
               textAlign: TextAlign.justify,
-              style: const TextStyle(fontSize: 20, color: Colors.white ),
+              style: GoogleFonts.getFont(
+                selectedFont,
+                textStyle: const TextStyle(fontSize: 16, color: Colors.white),
+              ),
             ),
           ],
         ),
