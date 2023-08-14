@@ -1,6 +1,8 @@
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:rukiyah_and_ayat/components/cards/ayat_card.dart';
-import 'package:rukiyah_and_ayat/data/ayats.dart';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:rukiyah_and_ayat/models/models.dart';
 
 class AyatPage extends StatefulWidget {
   @override
@@ -8,7 +10,39 @@ class AyatPage extends StatefulWidget {
 }
 
 class _AyatPageState extends State<AyatPage> {
-  String selectedFont = 'IBM Plex Sans Arabic'; // Default font
+  String selectedFont = 'Amiri'; // Default font
+  List verses = [];
+  List<CategoryDropdown> categories = <CategoryDropdown>[
+    CategoryDropdown(value: "common", text: "রুকইয়ার সাধারণ আয়াত"),
+    CategoryDropdown(value: "bodnojor", text: "বদনজর/হাসাদের আয়াত (শর্ট)")
+  ];
+
+  late CategoryDropdown selectedCategory;
+
+  Future<List> readData() async {
+    List ayatList = [];
+    ByteData data = await rootBundle.load('assets/ayat.xlsx');
+
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var excel = Excel.decodeBytes(bytes);
+
+    for (var table in excel.tables.keys) {
+      for (var row in excel.tables[table]!.rows) {
+        ayatList.add(Ayat(
+            title: row[0]!.value.toString(),
+            verse: row[1]!.value.toString(),
+            category: row[2]!.value.toString()));
+      }
+    }
+    return ayatList;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedCategory = categories[0];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,27 +53,58 @@ class _AyatPageState extends State<AyatPage> {
       ),
       body: Column(
         children: [
-          const SizedBox(
-            height: 10,
-          ),
-          const Text(
-            'أَعُوذُ باللَّهِ مِنَ الشَّيْطانِ الرَّجِيـم',
-            textDirection: TextDirection.rtl,
-            style: TextStyle(
-                fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          const Text(
-            'بِسْمِ اللَّهِ الرَّحْمَـنِ الرَّحِيـم',
-            textDirection: TextDirection.rtl,
-            style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: DropdownButtonFormField<CategoryDropdown>(
+              
+              decoration: const InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              value: selectedCategory,
+              onChanged: (CategoryDropdown? newValue) {
+                setState(() {
+                  selectedCategory = newValue!;
+                });
+              },
+              dropdownColor: Colors.white,
+              items: categories.map((CategoryDropdown category) {
+                return DropdownMenuItem<CategoryDropdown>(
+                  value: category,
+                  child: Text(
+                    category.text,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                );
+              }).toList(),
+            ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: quranVerses.length,
-              itemBuilder: (context, index) {
-                return AyatCard(
-                    verse: quranVerses[index], selectedFont: selectedFont);
+            child: FutureBuilder<List>(
+              future: readData(),
+              builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  List ayahList = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: ayahList.length,
+                    itemBuilder: (context, index) {
+                      if (ayahList[index].category == selectedCategory.value) {
+                        return AyatCard(
+                          verse: ayahList[index],
+                          selectedFont: selectedFont,
+                        );
+                      }
+                      return Container();
+                    },
+                  );
+                } else {
+                  return const Text(
+                      'No data available'); // Display message for no data
+                }
               },
             ),
           ),
@@ -55,8 +120,7 @@ class _AyatPageState extends State<AyatPage> {
             builder: (context) {
               return AlertDialog(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)
-                ),
+                    borderRadius: BorderRadius.circular(20.0)),
                 title: const Text('ফন্ট পরিবর্তন করুন'),
                 content: DropdownButton<String>(
                   value: selectedFont,

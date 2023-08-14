@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-class Ayat {
-  final String title;
-  final String verseText;
-
-  Ayat({required this.title,  required this.verseText});
-}
+import 'package:rukiyah_and_ayat/models/models.dart';
 
 class AyatCard extends StatelessWidget {
   final Ayat verse;
@@ -30,12 +24,12 @@ class AyatCard extends StatelessWidget {
             ),
             const SizedBox(height: 5,),
             Text(
-              verse.verseText,
+              verse.verse,
               textDirection: TextDirection.rtl,
               textAlign: TextAlign.justify,
               style: GoogleFonts.getFont(
                 selectedFont,
-                textStyle: const TextStyle(fontSize: 16, color: Colors.white),
+                textStyle: const TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
           ],

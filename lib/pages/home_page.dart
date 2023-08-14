@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
     Category('বিবিধ', Icons.bookmark_added_rounded, () => AyatPage()),
   ];
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
