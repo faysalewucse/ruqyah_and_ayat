@@ -20,7 +20,7 @@ class _AyatPageState extends State<AyatPage> {
   late CategoryDropdown selectedCategory;
 
   Future<List> readData() async {
-    List ayatList = [];
+    List ayahList = [];
     ByteData data = await rootBundle.load('assets/ayat.xlsx');
 
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
@@ -28,13 +28,13 @@ class _AyatPageState extends State<AyatPage> {
 
     for (var table in excel.tables.keys) {
       for (var row in excel.tables[table]!.rows) {
-        ayatList.add(Ayat(
+        ayahList.add(Ayat(
             title: row[0]!.value.toString(),
             verse: row[1]!.value.toString(),
             category: row[2]!.value.toString()));
       }
     }
-    return ayatList;
+    return ayahList;
   }
 
   @override

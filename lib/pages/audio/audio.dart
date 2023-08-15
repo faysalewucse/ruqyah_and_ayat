@@ -1,3 +1,4 @@
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -25,15 +26,14 @@ class _AudioPageState extends State<AudioPage> {
         id: 2,
         title: 'Audio 2',
         audioUrl:
-            'https://cdn.islamic.network/quran/audio/128/ar.alafasy/262.mp3'),
-    // Add more audio tracks here
+            'https://cdn.islamic.network/quran/audio/128/ar.alafasy/263.mp3'),
   ];
 
   late AudioPlayer audioPlayer;
   AudioTrack? currentTrack;
   PlayerState audioState = PlayerState.stopped;
-  Duration? totalDuration;
-  Duration? currentPosition;
+  late Duration totalDuration = const Duration(microseconds: 0);
+  late Duration currentPosition = const Duration(microseconds: 0);
 
   @override
   void initState() {
@@ -46,6 +46,7 @@ class _AudioPageState extends State<AudioPage> {
         });
       }
     });
+
     audioPlayer.onDurationChanged.listen((duration) {
       if (mounted) {
         setState(() {
@@ -54,7 +55,7 @@ class _AudioPageState extends State<AudioPage> {
       }
     });
 
-    audioPlayer.onDurationChanged.listen((duration) {
+    audioPlayer.onPositionChanged. listen((duration) {
       if (mounted) {
         setState(() {
           currentPosition = duration;
@@ -87,9 +88,8 @@ class _AudioPageState extends State<AudioPage> {
     });
   }
 
-  void stopAudio() async {
+  void stopAudio() {
     audioPlayer.stop();
-
     setState(() {
       audioState = PlayerState.stopped;
       currentPosition = Duration.zero;
@@ -125,7 +125,6 @@ class _AudioPageState extends State<AudioPage> {
             child: DropdownButton<String>(
               value: selectedOption,
               isExpanded: true,
-              underline: SizedBox(),
               items: [
                 // Placeholder item
                 const DropdownMenuItem<String>(
@@ -157,6 +156,7 @@ class _AudioPageState extends State<AudioPage> {
                 final isPlaying =
                     audioState == PlayerState.playing && isCurrentTrack;
                 return AudioTrackCard(
+                  player: audioPlayer,
                   track: audioTrack,
                   isPlaying: isPlaying,
                   currentPosition: currentPosition,
@@ -174,11 +174,12 @@ class _AudioPageState extends State<AudioPage> {
   }
 }
 
-class AudioTrackCard extends StatelessWidget {
+class AudioTrackCard extends StatefulWidget {
+  final AudioPlayer player;
   final AudioTrack track;
   final bool isPlaying;
-  final Duration? currentPosition;
-  final Duration? totalDuration;
+  final Duration currentPosition;
+  final Duration totalDuration;
   final VoidCallback onPlay;
   final VoidCallback onPause;
   final VoidCallback onStop;
@@ -192,85 +193,68 @@ class AudioTrackCard extends StatelessWidget {
     required this.onPlay,
     required this.onPause,
     required this.onStop,
+    required this.player,
   });
 
   @override
+  State<AudioTrackCard> createState() => _AudioTrackCardState();
+}
+
+class _AudioTrackCardState extends State<AudioTrackCard> {
+  @override
   Widget build(BuildContext context) {
+
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: ListTile(
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-              padding: const EdgeInsets.all(8),
-              child: isPlaying
-                  ? Icon(Icons.pause, color: Colors.indigo[700], size: 24)
-                  : Icon(Icons.play_arrow, color: Colors.indigo[700], size: 24),
-            ),
-          ],
-        ),
-        title: Text(track.title,
-            style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 20)),
-        subtitle: AudioProgressBar(
-          currentPosition: currentPosition,
-          totalDuration: totalDuration,
-        ),
-        trailing: isPlaying
-            ? IconButton(
-                icon: const Icon(
-                  Icons.stop,
-                  color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: ListTile(
+          leading: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: widget.isPlaying ? widget.onPause : widget.onPlay,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  padding: const EdgeInsets.all(10),
+                  child: widget.isPlaying
+                      ? Icon(Icons.pause, color: Colors.indigo[700], size: 24)
+                      : Icon(Icons.play_arrow, color: Colors.indigo[700], size: 24),
                 ),
-                onPressed: onStop)
-            : null,
-        onTap: isPlaying ? onPause : onPlay,
-      ),
-    );
-  }
-}
-
-class AudioProgressBar extends StatelessWidget {
-  final Duration? currentPosition;
-  final Duration? totalDuration;
-
-  const AudioProgressBar(
-      {super.key, required this.currentPosition, required this.totalDuration});
-
-  @override
-  Widget build(BuildContext context) {
-    final positionText = currentPosition != null
-        ? currentPosition!.toString().split('.').first
-        : '0:00';
-    final durationText = totalDuration != null
-        ? totalDuration!.toString().split('.').first
-        : '0:00';
-
-    return Row(
-      children: [
-        Text(
-          positionText,
-          style: const TextStyle(color: Colors.white),
-        ),
-        Expanded(
-          child: Slider(
-            activeColor: Colors.white,
-            value: currentPosition?.inMilliseconds.toDouble() ?? 0.0,
-            onChanged: (value) {},
-            max: totalDuration?.inMilliseconds.toDouble() ?? 0.0,
+              ),
+            ],
           ),
+          title: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Text(widget.track.title,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20)),
+          ),
+          subtitle: widget.isPlaying ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: ProgressBar(
+              baseBarColor: Colors.white,
+              progressBarColor: Colors.white,
+              thumbColor: Colors.white,
+              thumbGlowColor: Colors.white,
+              timeLabelTextStyle: const TextStyle(color: Colors.white),
+              progress: widget.currentPosition,
+              buffered: const Duration(milliseconds: 1000),
+              total: widget.totalDuration,
+              onSeek: (duration) {
+                widget.player.seek(duration);
+              },
+            ),
+          ) : null,
         ),
-        Text(durationText, style: const TextStyle(color: Colors.white)),
-      ],
+      ),
     );
   }
 }
