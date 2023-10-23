@@ -14,7 +14,17 @@ class _AyatPageState extends State<AyatPage> {
   List verses = [];
   List<CategoryDropdown> categories = <CategoryDropdown>[
     CategoryDropdown(value: "common", text: "রুকইয়ার সাধারণ আয়াত"),
-    CategoryDropdown(value: "bodnojor", text: "বদনজর/হাসাদের আয়াত (শর্ট)")
+    CategoryDropdown(value: "bodnojor", text: "বদনজর/হাসাদের আয়াত (শর্ট)"),
+    CategoryDropdown(value: "hark", text: "আয়াতুল হারক"),
+    CategoryDropdown(value: "ajab", text: "আয়াতুল আযাব"),
+    CategoryDropdown(value: "ajab_short", text: "আয়াতুল আযাব (শর্ট)"),
+    CategoryDropdown(value: "kital", text: "আয়াতুল ক্বিতাল"),
+    CategoryDropdown(value: "husun", text: "আয়াতুল হুসুন"),
+    CategoryDropdown(value: "jin_shaitan", text: "আয়াতুল জ্বীন্নি ওয়াশ শায়তান"),
+    CategoryDropdown(value: "fahishat", text: "আয়াতু জাম্মিল ফাহিশাত"),
+    CategoryDropdown(value: "khuruj", text: "আয়াতুল খুরুজ"),
+    CategoryDropdown(value: "hikmah", text: "আয়াতুল ইলমি ওয়াল হিকমাহ"),
+    CategoryDropdown(value: "talak", text: "আয়াতুত তালাক ওয়াল আরহাম"),
   ];
 
   late CategoryDropdown selectedCategory;
