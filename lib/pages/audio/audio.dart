@@ -1,6 +1,10 @@
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'dart:typed_data';
+
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
+import 'package:rukiyah_and_ayat/components/cards/audio_player_card.dart';
 
 class AudioTrack {
   final int id;
@@ -35,6 +39,24 @@ class _AudioPageState extends State<AudioPage> {
   late Duration totalDuration = const Duration(microseconds: 0);
   late Duration currentPosition = const Duration(microseconds: 0);
 
+  Future<List> readAudioData() async {
+    List audioList = [];
+    ByteData data = await rootBundle.load('assets/audio.xlsx');
+
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var excel = Excel.decodeBytes(bytes);
+
+    for (var table in excel.tables.keys) {
+      for (var row in excel.tables[table]!.rows) {
+        audioList.add(AudioTrack(
+            id: row[0]!.value,
+            title: row[1]!.value.toString(),
+            audioUrl: row[2]!.value.toString()));
+      }
+    }
+    return audioList;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -55,7 +77,7 @@ class _AudioPageState extends State<AudioPage> {
       }
     });
 
-    audioPlayer.onPositionChanged. listen((duration) {
+    audioPlayer.onPositionChanged.listen((duration) {
       if (mounted) {
         setState(() {
           currentPosition = duration;
@@ -72,7 +94,7 @@ class _AudioPageState extends State<AudioPage> {
   }
 
   void playAudio(String url, int id) async {
-    if(PlayerState.playing == true){
+    if (PlayerState.playing == true) {
       stopAudio();
     }
     await audioPlayer.play(UrlSource(url));
@@ -148,112 +170,29 @@ class _AudioPageState extends State<AudioPage> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: audioTracks.length,
-              itemBuilder: (context, index) {
-                final audioTrack = audioTracks[index];
-                final isCurrentTrack = currentTrack == audioTrack;
-                final isPlaying =
-                    audioState == PlayerState.playing && isCurrentTrack;
-                return AudioTrackCard(
-                  player: audioPlayer,
-                  track: audioTrack,
-                  isPlaying: isPlaying,
-                  currentPosition: currentPosition,
-                  totalDuration: totalDuration,
-                  onPlay: () => playAudio(audioTrack.audioUrl, audioTrack.id),
-                  onPause: pauseAudio,
-                  onStop: stopAudio,
-                );
-              },
-            ),
+            child:
+              ListView.builder(
+                    itemCount: audioTracks.length,
+                    itemBuilder: (context, index) {
+                      final audioTrack = audioTracks[index];
+                      final isCurrentTrack = currentTrack == audioTrack;
+                      final isPlaying =
+                          audioState == PlayerState.playing && isCurrentTrack;
+                      return AudioTrackCard(
+                        player: audioPlayer,
+                        track: audioTrack,
+                        isPlaying: isPlaying,
+                        currentPosition: currentPosition,
+                        totalDuration: totalDuration,
+                        onPlay: () =>
+                            playAudio(audioTrack.audioUrl, audioTrack.id),
+                        onPause: pauseAudio,
+                        onStop: stopAudio,
+                      );
+                    },
+                  )
           ),
         ],
-      ),
-    );
-  }
-}
-
-class AudioTrackCard extends StatefulWidget {
-  final AudioPlayer player;
-  final AudioTrack track;
-  final bool isPlaying;
-  final Duration currentPosition;
-  final Duration totalDuration;
-  final VoidCallback onPlay;
-  final VoidCallback onPause;
-  final VoidCallback onStop;
-
-  const AudioTrackCard({
-    super.key,
-    required this.track,
-    required this.isPlaying,
-    required this.currentPosition,
-    required this.totalDuration,
-    required this.onPlay,
-    required this.onPause,
-    required this.onStop,
-    required this.player,
-  });
-
-  @override
-  State<AudioTrackCard> createState() => _AudioTrackCardState();
-}
-
-class _AudioTrackCardState extends State<AudioTrackCard> {
-  @override
-  Widget build(BuildContext context) {
-
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: ListTile(
-          leading: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: widget.isPlaying ? widget.onPause : widget.onPlay,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  padding: const EdgeInsets.all(10),
-                  child: widget.isPlaying
-                      ? Icon(Icons.pause, color: Colors.indigo[700], size: 24)
-                      : Icon(Icons.play_arrow, color: Colors.indigo[700], size: 24),
-                ),
-              ),
-            ],
-          ),
-          title: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Text(widget.track.title,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20)),
-          ),
-          subtitle: widget.isPlaying ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: ProgressBar(
-              baseBarColor: Colors.white,
-              progressBarColor: Colors.white,
-              thumbColor: Colors.white,
-              thumbGlowColor: Colors.white,
-              timeLabelTextStyle: const TextStyle(color: Colors.white),
-              progress: widget.currentPosition,
-              buffered: const Duration(milliseconds: 1000),
-              total: widget.totalDuration,
-              onSeek: (duration) {
-                widget.player.seek(duration);
-              },
-            ),
-          ) : null,
-        ),
       ),
     );
   }
