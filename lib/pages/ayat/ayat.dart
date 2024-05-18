@@ -1,8 +1,10 @@
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:rukiyah_and_ayat/components/cards/ayat_card.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
-import 'package:rukiyah_and_ayat/models/models.dart';
+import 'package:rukiyah_and_ayat/helper/colors.dart';
+import 'package:rukiyah_and_ayat/helper/constant.dart';
+import 'package:rukiyah_and_ayat/models/Ayat.dart';
+import 'package:rukiyah_and_ayat/widgets/cards/ayat_card.dart';
 
 class AyatPage extends StatefulWidget {
   @override
@@ -18,6 +20,16 @@ class _AyatPageState extends State<AyatPage> {
     CategoryDropdown(value: "bodnojorL", text: "বদনজর/হাসাদের আয়াত (লং)"),
     CategoryDropdown(value: "hasad", text: "হাসাদের আয়াত"),
     CategoryDropdown(value: "sihr", text: "সিহর (জাদুর) কমন আয়াত"),
+    CategoryDropdown(value: "hark", text: "আয়াতুল হারক"),
+    CategoryDropdown(value: "ajab", text: "আয়াতুল আযাব"),
+    CategoryDropdown(value: "ajab_short", text: "আয়াতুল আযাব (শর্ট)"),
+    CategoryDropdown(value: "kital", text: "আয়াতুল ক্বিতাল"),
+    CategoryDropdown(value: "husun", text: "আয়াতুল হুসুন"),
+    CategoryDropdown(value: "jin_shaitan", text: "আয়াতুল জ্বীন্নি ওয়াশ শায়তান"),
+    CategoryDropdown(value: "fahishat", text: "আয়াতু জাম্মিল ফাহিশাত"),
+    CategoryDropdown(value: "khuruj", text: "আয়াতুল খুরুজ"),
+    CategoryDropdown(value: "hikmah", text: "আয়াতুল ইলমি ওয়াল হিকমাহ"),
+    CategoryDropdown(value: "talak", text: "আয়াতুত তালাক ওয়াল আরহাম"),
   ];
 
   late CategoryDropdown selectedCategory;
@@ -43,26 +55,31 @@ class _AyatPageState extends State<AyatPage> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     selectedCategory = categories[0];
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.indigo[700],
         title: const Text('রুকইয়ার সাধারণ আয়াত'),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: DropdownButtonFormField<CategoryDropdown>(
-              
-              decoration: const InputDecoration(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            DropdownButtonFormField<CategoryDropdown>(
+              decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: BORDER_COLOR_1),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: BORDER_COLOR_1),
+                ),
               ),
               value: selectedCategory,
               onChanged: (CategoryDropdown? newValue) {
@@ -81,9 +98,8 @@ class _AyatPageState extends State<AyatPage> {
                 );
               }).toList(),
             ),
-          ),
-          Expanded(
-            child: FutureBuilder<List>(
+            verticalGap12,
+            FutureBuilder<List>(
               future: readData(),
               builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -92,17 +108,20 @@ class _AyatPageState extends State<AyatPage> {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
                   List ayahList = snapshot.data!;
-                  return ListView.builder(
-                    itemCount: ayahList.length,
-                    itemBuilder: (context, index) {
-                      if (ayahList[index].category == selectedCategory.value) {
-                        return AyatCard(
-                          verse: ayahList[index],
-                          selectedFont: selectedFont,
-                        );
-                      }
-                      return Container();
-                    },
+                  return Expanded(
+                    child: ListView.separated(
+                      itemCount: ayahList.length,
+                      separatorBuilder: (_, index) => verticalGap12,
+                      itemBuilder: (context, index) {
+                        if (ayahList[index].category == selectedCategory.value) {
+                          return AyatCard(
+                            verse: ayahList[index],
+                            selectedFont: selectedFont,
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
                   );
                 } else {
                   return const Text(
@@ -110,11 +129,8 @@ class _AyatPageState extends State<AyatPage> {
                 }
               },
             ),
-          ),
-          const SizedBox(
-            height: 60,
-          )
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

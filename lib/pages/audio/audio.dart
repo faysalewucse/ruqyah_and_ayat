@@ -1,10 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
-import 'package:rukiyah_and_ayat/components/cards/audio_player_card.dart';
+import 'package:rukiyah_and_ayat/widgets/cards/audio_player_card.dart';
 
 class AudioTrack {
   final int id;
