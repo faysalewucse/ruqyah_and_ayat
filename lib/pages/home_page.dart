@@ -3,8 +3,8 @@ import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/pages/audio/audio.dart';
-import 'package:rukiyah_and_ayat/pages/ayat/ayat.dart';
-import 'package:rukiyah_and_ayat/widgets/cards/category_card.dart';
+import 'package:rukiyah_and_ayat/pages/ayat/ayat_categories.dart';
+import 'package:rukiyah_and_ayat/widgets/cards/screen_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,15 +14,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Category> categories = [
-    Category('আয়াত', FlutterIslamicIcons.quran, () => AyatPage()),
-    Category('অডিও', Icons.audiotrack, () => AudioPage()),
-    Category('রুকইয়াহ', Icons.health_and_safety, () => AyatPage()),
-    Category('হিজামা', Icons.local_hospital, () => AyatPage()),
-    Category('নিরাপত্তার দুআ', Icons.local_hospital_outlined, () => AyatPage()),
-    Category('মাসনুন দুআ', Icons.settings_system_daydream, () => AyatPage()),
-    Category('মাসায়েল/ফাতওয়া', Icons.question_answer, () => AyatPage()),
-    Category('বিবিধ', Icons.bookmark_added_rounded, () => AyatPage()),
+  List<Screen> screens = [
+    Screen('আয়াত', FlutterIslamicIcons.quran, () => const AyatCategories()),
+    Screen('অডিও', Icons.audiotrack, () => const AyatCategories()),
+    Screen('রুকইয়াহ', Icons.health_and_safety, () => const AyatCategories()),
+    Screen('হিজামা', Icons.local_hospital, () => const AyatCategories()),
+    Screen('নিরাপত্তার দুআ', Icons.local_hospital_outlined, () => const AyatCategories()),
+    Screen('মাসনুন দুআ', Icons.settings_system_daydream, () => const AyatCategories()),
+    Screen('মাসায়েল/ফাতওয়া', Icons.question_answer, () => const AyatCategories()),
+    Screen('বিবিধ', Icons.bookmark_added_rounded, () => const AyatCategories()),
   ];
 
   @override
@@ -44,10 +44,10 @@ class _HomePageState extends State<HomePage> {
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                 ),
-                itemCount: categories.length,
+                itemCount: screens.length,
                 itemBuilder: (context, index) {
-                  return CategoryCard(
-                    category: categories[index],
+                  return ScreenCard(
+                    screen: screens[index],
                   );
                 },
               ),

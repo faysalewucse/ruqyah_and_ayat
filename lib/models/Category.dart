@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Category {
+class Screen {
   final String name;
   final IconData iconData;
   final Widget Function() page;
 
-  Category(this.name, this.iconData, this.page);
+  Screen(this.name, this.iconData, this.page);
 }

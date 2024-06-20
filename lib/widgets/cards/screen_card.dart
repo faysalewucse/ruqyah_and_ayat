@@ -3,10 +3,10 @@ import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 
-class CategoryCard extends StatelessWidget {
-  final Category category;
+class ScreenCard extends StatelessWidget {
+  final Screen screen;
 
-  const CategoryCard({super.key, required this.category});
+  const ScreenCard({super.key, required this.screen});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class CategoryCard extends StatelessWidget {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => category.page(),
+          builder: (context) => screen.page(),
         ),
       ),
       child: Container(
@@ -25,10 +25,10 @@ class CategoryCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(category.iconData, size: 40, color: PRIMARY_COLOR),
+            Icon(screen.iconData, size: 40, color: PRIMARY_COLOR),
             const SizedBox(height: 10),
             Text(
-              category.name,
+              screen.name,
               style: TextStyle(
                 fontSize: 16,
                 color: Theme.of(context).textTheme.headlineSmall?.color

@@ -6,9 +6,9 @@ class Ayat {
   Ayat({required this.title,  required this.verse, required this.category});
 }
 
-class CategoryDropdown{
+class Category{
   final String value;
-  final String text;
+  final String label;
 
-  CategoryDropdown({required this.value, required this.text});
+  Category({required this.value, required this.label});
 }

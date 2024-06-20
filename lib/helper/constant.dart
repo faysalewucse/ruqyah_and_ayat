@@ -11,6 +11,7 @@ const TextStyle(color: GRAY, fontWeight: FontWeight.w800, fontSize: 12);
 //==============box decoration==================//
 BorderRadius rounded2 = BorderRadius.circular(2);
 BorderRadius rounded4 = BorderRadius.circular(4);
+BorderRadius rounded6 = BorderRadius.circular(6);
 BorderRadius rounded8 = BorderRadius.circular(8);
 BorderRadius roundedFull = BorderRadius.circular(50);
 
