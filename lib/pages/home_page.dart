@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
+import 'package:get_storage/get_storage.dart';
+import 'dart:convert' as convert;
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/pages/audio/audio.dart';
@@ -8,6 +9,8 @@ import 'package:rukiyah_and_ayat/pages/ayat/ayat_categories.dart';
 import 'package:rukiyah_and_ayat/pages/under_development.dart';
 import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/screen_card.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,6 +31,12 @@ class _HomePageState extends State<HomePage> {
     Screen('বিবিধ', Icons.bookmark_added_outlined, () => const UnderDevelopment()),
   ];
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkAppVersion();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,10 +81,35 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             verticalGap12,
-            const PrimaryButton(label: "Visit Website")
+            PrimaryButton(label: "ওয়েবসাইট ভিজিট করুন", onTap: (){
+              _launchInBrowser(Uri.parse("https://sunnahcurebd.com/"));
+            },)
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+  checkAppVersion() async {
+    final response = await http.get(Uri.parse("http://192.168.0.106:10000/api/v1"));
+    var jsonResponse =
+    convert.jsonDecode(response.body) as Map<String, dynamic>;
+    final box = GetStorage();
+
+    String currentAppVersion = jsonResponse["payload"]["version"];
+    String? prevAppVersion = box.read("appVersion");
+    if(prevAppVersion != null && prevAppVersion != currentAppVersion){
+
+    }
+    box.write("appVersion", currentAppVersion);
   }
 }
