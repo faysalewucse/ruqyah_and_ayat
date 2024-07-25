@@ -19,19 +19,23 @@ class ScreenCard extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-            color: WHITE,
-            border: Border.all(color: BORDER_COLOR_1),
-            borderRadius: rounded8),
+          color: WHITE,
+          border: Border.all(color: PRIMARY_COLOR_LIGHT),
+          borderRadius: rounded8,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(screen.iconData, size: 40, color: PRIMARY_COLOR),
             const SizedBox(height: 10),
-            Text(
-              screen.name,
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).textTheme.headlineSmall?.color
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text(
+                screen.name,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).textTheme.headlineSmall?.color),
               ),
             ),
           ],

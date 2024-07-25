@@ -6,18 +6,13 @@ import 'package:rukiyah_and_ayat/helper/constant.dart';
 class MyTheme {
   static final lightTheme = ThemeData(
     scaffoldBackgroundColor: SCAFFOLD_BACKGROUND_COLOR,
+    fontFamily: GoogleFonts.tiroBangla().fontFamily,
     primaryColor: PRIMARY_COLOR,
     appBarTheme: AppBarTheme(
-      backgroundColor: WHITE,
+      backgroundColor: PRIMARY_COLOR,
       titleSpacing: 0,
-      titleTextStyle: TextStyle(
-        fontSize: 20,
-        fontFamily: GoogleFonts.tiroBangla().fontFamily,
-        fontWeight: FontWeight.w900,
-        color: BLACK,
-      ),
+      titleTextStyle: GoogleFonts.tiroBangla(fontWeight: FontWeight.w900, fontSize: 24, color: WHITE),
     ),
-    fontFamily: GoogleFonts.tiroBangla().fontFamily,
     textTheme: TextTheme(
       bodySmall: n30014Normal,
       bodyMedium: n30014W500,
