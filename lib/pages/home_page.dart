@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:convert' as convert;
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
-import 'package:rukiyah_and_ayat/pages/audio/audio.dart';
 import 'package:rukiyah_and_ayat/pages/ayat/ayat_categories.dart';
 import 'package:rukiyah_and_ayat/pages/under_development.dart';
 import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/screen_card.dart';
+import 'package:rukiyah_and_ayat/widgets/dialogs/confirmation_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,16 +34,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    checkAppVersion();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkAppVersion();
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("দুআ ও রুকইয়াহ",),
+        title: const Text("দুআ ও রুকইয়াহ"),
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -58,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text("وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ", textAlign: TextAlign.center, style: white18W600),
                   verticalGap12,
-                  Text("আর আমি কুরআন নাযিল করি যা মুমিনদের জন্য শিফা ও রহমত", textAlign: TextAlign.center, style: white18W600,),
+                  Text("আর আমি কুরআন নাযিল করি যা মুমিনদের জন্য শিফা ও রহমত", textAlign: TextAlign.center, style: white18W600),
                   verticalGap12,
                   Text("“সূরাঃ আল-ইসরা (১৭ঃ৮২)”", textAlign: TextAlign.center, style: white14W500),
                 ],
@@ -81,9 +84,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             verticalGap12,
-            PrimaryButton(label: "ওয়েবসাইট ভিজিট করুন", onTap: (){
+            PrimaryButton(label: "ওয়েবসাইট ভিজিট করুন", onTap: () {
               _launchInBrowser(Uri.parse("https://sunnahcurebd.com/"));
-            },)
+            }),
           ],
         ),
       ),
@@ -99,17 +102,45 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  checkAppVersion() async {
-    final response = await http.get(Uri.parse("http://192.168.0.106:10000/api/v1"));
-    var jsonResponse =
-    convert.jsonDecode(response.body) as Map<String, dynamic>;
+  void checkAppVersion() async {
+    final response = await http.get(Uri.parse("https://rukyah-server.onrender.com/api/v1"));
+    var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
     final box = GetStorage();
 
     String currentAppVersion = jsonResponse["payload"]["version"];
-    String? prevAppVersion = box.read("appVersion");
-    if(prevAppVersion != null && prevAppVersion != currentAppVersion){
 
+    String? prevAppVersion = box.read("appVersion");
+    if (prevAppVersion != null && prevAppVersion != currentAppVersion) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showCustomDialog();
+      });
     }
     box.write("appVersion", currentAppVersion);
+  }
+
+  void showCustomDialog() {
+    showDialog<void>(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return ConfirmationDialog(
+          title: "নতুন আপডেট",
+          confirmationMessage: 'অ্যাপের নতুন আপডেট পাওয়া গেছে!',
+          cancelText: 'বাতিল',
+          okText: "আপডেট করুন",
+          onOkPressed: () {
+            Get.back();
+            _launchURL('https://play.google.com/store/apps/details?id=us.palooi&hl=bn&gl=US');
+          },
+        );
+      },
+    );
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
