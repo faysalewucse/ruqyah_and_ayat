@@ -12,6 +12,9 @@ class MyTheme {
       backgroundColor: PRIMARY_COLOR,
       titleSpacing: 0,
       titleTextStyle: GoogleFonts.tiroBangla(fontWeight: FontWeight.w900, fontSize: 24, color: WHITE),
+      iconTheme: const IconThemeData(
+        color: WHITE, //change your color here
+      ),
     ),
     textTheme: TextTheme(
       bodySmall: n30014Normal,

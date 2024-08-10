@@ -1,6 +1,7 @@
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/models/Ayat.dart';
 import 'package:rukiyah_and_ayat/widgets/ayat_list_tab.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/ayat_card.dart';
@@ -125,11 +126,14 @@ class _AyatListByCategoryState extends State<AyatListByCategory> {
                       },
                     );
                   },
-                  icon: const Icon(Icons.settings)),
+                  icon: const Icon(Icons.settings, color: WHITE,)),
             )
           ],
-          bottom: const TabBar(
-            tabs: [
+          bottom: TabBar(
+            indicatorColor: WHITE,
+            labelColor: WHITE,
+            unselectedLabelColor: WHITE.withOpacity(0.5),
+            tabs: const [
               Tab(text: "১ম অংশ",),
               Tab(text: "২য় অংশ",),
               Tab(text: "৩য় অংশ",),

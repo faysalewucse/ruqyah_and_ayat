@@ -7,6 +7,7 @@ import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/pages/ayat/ayat_categories.dart';
 import 'package:rukiyah_and_ayat/pages/under_development.dart';
+import 'package:rukiyah_and_ayat/services/version_service.dart';
 import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/screen_card.dart';
 import 'package:rukiyah_and_ayat/widgets/dialogs/confirmation_dialog.dart';
@@ -61,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text("وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ", textAlign: TextAlign.center, style: white18W600),
                   verticalGap12,
-                  Text("আর আমি কুরআন নাযিল করি যা মুমিনদের জন্য শিফা ও রহমত", textAlign: TextAlign.center, style: white18W600),
+                  Text("আর আমি নাযিল করেছি এমন কুরআন, যা মুমিনের জন্য আরোগ্য ও রহমতস্বরূপ", textAlign: TextAlign.center, style: white18W600),
                   verticalGap12,
                   Text("“সূরাঃ আল-ইসরা (১৭ঃ৮২)”", textAlign: TextAlign.center, style: white14W500),
                 ],
@@ -103,8 +104,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void checkAppVersion() async {
-    final response = await http.get(Uri.parse("https://rukyah-server.onrender.com/api/v1"));
-    var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
+    final response = await VersionService.getAppVersion();
+
+    var jsonResponse = response.data as Map<String, dynamic>;
     final box = GetStorage();
 
     String currentAppVersion = jsonResponse["payload"]["version"];
