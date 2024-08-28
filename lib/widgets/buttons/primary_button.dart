@@ -14,7 +14,7 @@ class PrimaryButton extends StatelessWidget {
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(10.0),
-        decoration: rounded6Primary,
+        decoration: rounded20Primary,
         child: Text(label, style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center,),
       ),
     );

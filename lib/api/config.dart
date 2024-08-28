@@ -34,9 +34,12 @@ class Api {
         },
         onError: (DioException error, handler) {
           debugPrint(
-              "${error.response?.statusCode} dioError message====>${error.response?.data["message"]}",
+              "${error.type} dioError message====>${error.response?.data["message"]}",
               wrapWidth: 1024);
-          if (error.type == DioExceptionType.connectionTimeout) {
+          if (error.type == DioExceptionType.connectionError) {
+            showErrorToast(message: 'Server Error');
+          }
+          else if (error.type == DioExceptionType.connectionTimeout) {
             showErrorToast(message: 'Connection Timeout');
           } else if (error.type == DioExceptionType.receiveTimeout) {
             showErrorToast(message: 'Receive Timeout');

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
-import 'package:rukiyah_and_ayat/models/Ayat.dart';
+import 'package:rukiyah_and_ayat/models/Verse.dart';
 
 class AyatCard extends StatelessWidget {
-  final Ayat verse;
+  final Verse verse;
   final String selectedFont;
 
   const AyatCard({super.key, required this.verse, required this.selectedFont});
@@ -13,31 +13,26 @@ class AyatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: WHITE,
-        borderRadius: rounded8,
-        border: Border.all(color: BORDER_COLOR_1)
-      ),
+      margin: const EdgeInsets.only(bottom: 0),
+      // decoration: rounded20White,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: double.infinity,
-            decoration: const BoxDecoration(
-                color: PRIMARY_COLOR_LIGHT,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-            ),
+            // decoration: const BoxDecoration(
+            //     color: PRIMARY_COLOR,
+            //     borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            // ),
             padding: const EdgeInsets.all(8.0),
             child: Text(
               verse.title,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
           const SizedBox(height: 5,),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
             child: Text(
               verse.verse,
               textDirection: TextDirection.rtl,

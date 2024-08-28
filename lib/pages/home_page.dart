@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'dart:convert' as convert;
+import 'package:rukiyah_and_ayat/api/api_urls.dart';
+import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
-import 'package:rukiyah_and_ayat/models/Category.dart';
+import 'package:rukiyah_and_ayat/models/Screen.dart';
 import 'package:rukiyah_and_ayat/pages/ayat/ayat_categories.dart';
 import 'package:rukiyah_and_ayat/pages/under_development.dart';
+import 'package:rukiyah_and_ayat/router/routes.dart';
 import 'package:rukiyah_and_ayat/services/version_service.dart';
+import 'package:rukiyah_and_ayat/utils/common_functions.dart';
+import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/screen_card.dart';
 import 'package:rukiyah_and_ayat/widgets/dialogs/confirmation_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,14 +27,46 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Screen> screens = [
-    Screen('আয়াত', FlutterIslamicIcons.quran, () => const AyatCategories()),
-    Screen('অডিও', Icons.audiotrack_outlined, () => const UnderDevelopment()),
-    Screen('রুকইয়াহ', Icons.health_and_safety_outlined, () => const UnderDevelopment()),
-    Screen('হিজামা', Icons.local_hospital_outlined, () => const UnderDevelopment()),
-    Screen('নিরাপত্তার দুআ', Icons.shield_moon_outlined, () => const UnderDevelopment()),
-    Screen('মাসনুন দুআ', FlutterIslamicIcons.tasbihHand, () => const UnderDevelopment()),
-    Screen('মাসায়েল', Icons.question_answer_outlined, () => const UnderDevelopment()),
-    Screen('বিবিধ', Icons.bookmark_added_outlined, () => const UnderDevelopment()),
+    Screen(
+      'আয়াত',
+      FlutterIslamicIcons.quran,
+      categorySection,
+    ),
+    Screen(
+      'অডিও',
+      PhosphorIcons.music_notes_thin,
+      underDevelopment,
+    ),
+    Screen(
+      'রুকইয়াহ',
+      PhosphorIcons.first_aid_kit_thin,
+      underDevelopment,
+    ),
+    Screen(
+      'হিজামা',
+      PhosphorIcons.first_aid_thin,
+      underDevelopment,
+    ),
+    Screen(
+      'নিরাপত্তার দুআ',
+      PhosphorIcons.shield_plus_thin,
+      underDevelopment,
+    ),
+    Screen(
+      'মাসনুন দুআ',
+      FlutterIslamicIcons.tasbihHand,
+      underDevelopment,
+    ),
+    Screen(
+      'মাসায়েল',
+      PhosphorIcons.question_thin,
+      underDevelopment,
+    ),
+    Screen(
+      'বিবিধ',
+      PhosphorIcons.bookmarks_thin,
+      underDevelopment,
+    ),
   ];
 
   @override
@@ -45,8 +81,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text("দুআ ও রুকইয়াহ"),
+        title: const Padding(
+          padding: EdgeInsets.only(left: 18.0),
+          child: Text(
+            "রুকইয়াহ ও আয়াত",
+          ),
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -54,27 +94,41 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-              decoration: rounded6Primary,
+              padding:
+                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+              decoration: rounded20Primary,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ", textAlign: TextAlign.center, style: white18W600),
+                  const Icon(
+                    FlutterIslamicIcons.quran2,
+                    color: WHITE,
+                    size: 50,
+                  ),
+                  24.kH,
+                  Text(
+                      "وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ",
+                      textAlign: TextAlign.center,
+                      style: white16W600Arabic),
                   verticalGap12,
-                  Text("আর আমি নাযিল করেছি এমন কুরআন, যা মুমিনের জন্য আরোগ্য ও রহমতস্বরূপ", textAlign: TextAlign.center, style: white18W600),
+                  Text(
+                      "আর আমি নাযিল করেছি এমন কুরআন, যা মুমিনের জন্য আরোগ্য ও রহমতস্বরূপ",
+                      textAlign: TextAlign.center,
+                      style: white16W600),
                   verticalGap12,
-                  Text("“সূরাঃ আল-ইসরা (১৭ঃ৮২)”", textAlign: TextAlign.center, style: white14W500),
+                  Text("“সূরাঃ আল-ইসরা (১৭ঃ৮২)”",
+                      textAlign: TextAlign.center, style: white14W500),
                 ],
               ),
             ),
-            verticalGap12,
+            16.kH,
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
                 ),
                 itemCount: screens.length,
                 itemBuilder: (context, index) {
@@ -85,22 +139,15 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             verticalGap12,
-            PrimaryButton(label: "ওয়েবসাইট ভিজিট করুন", onTap: () {
-              _launchInBrowser(Uri.parse("https://sunnahcurebd.com/"));
-            }),
+            PrimaryButton(
+                label: "ওয়েবসাইট ভিজিট করুন",
+                onTap: () {
+                  launchInBrowser(Uri.parse(WEBSITE_URL));
+                }),
           ],
         ),
       ),
     );
-  }
-
-  Future<void> _launchInBrowser(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.externalApplication,
-    )) {
-      throw Exception('Could not launch $url');
-    }
   }
 
   void checkAppVersion() async {
@@ -131,7 +178,8 @@ class _HomePageState extends State<HomePage> {
           okText: "আপডেট করুন",
           onOkPressed: () {
             Get.back();
-            _launchURL('https://play.google.com/store/apps/details?id=us.palooi&hl=bn&gl=US');
+            _launchURL(
+                'https://play.google.com/store/apps/details?id=us.palooi&hl=bn&gl=US');
           },
         );
       },

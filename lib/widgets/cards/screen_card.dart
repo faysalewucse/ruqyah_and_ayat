@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
-import 'package:rukiyah_and_ayat/models/Category.dart';
+import 'package:rukiyah_and_ayat/models/Screen.dart';
 
 class ScreenCard extends StatelessWidget {
   final Screen screen;
@@ -11,17 +12,12 @@ class ScreenCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => screen.page(),
-        ),
-      ),
+      onTap: () => Get.toNamed(screen.route),
       child: Container(
         decoration: BoxDecoration(
           color: WHITE,
           border: Border.all(color: PRIMARY_COLOR_LIGHT),
-          borderRadius: rounded8,
+          borderRadius: rounded20,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 
+double deviceHeight = 0;
+double deviceWidth = 0;
 String AUTH_TOKEN = "token";
 
 //=============text style======================//
@@ -16,6 +18,7 @@ BorderRadius rounded2 = BorderRadius.circular(2);
 BorderRadius rounded4 = BorderRadius.circular(4);
 BorderRadius rounded6 = BorderRadius.circular(6);
 BorderRadius rounded8 = BorderRadius.circular(8);
+BorderRadius rounded20 = BorderRadius.circular(20);
 BorderRadius roundedFull = BorderRadius.circular(50);
 
 //===============gaps========================//
@@ -98,6 +101,10 @@ TextStyle n20014W500 =  GoogleFonts.tiroBangla(
 
 TextStyle white14W500 =  GoogleFonts.tiroBangla(
     color: WHITE, fontSize: 14, fontWeight: FontWeight.w500);
+TextStyle white16W600 =  GoogleFonts.tiroBangla(
+    color: WHITE, fontSize: 16, fontWeight: FontWeight.w600,);
+TextStyle white16W600Arabic =  GoogleFonts.amiri(
+    color: WHITE, fontSize: 16, fontWeight: FontWeight.w600,);
 TextStyle white18W600 =  GoogleFonts.tiroBangla(
     color: WHITE, fontSize: 18, fontWeight: FontWeight.w600);
 TextStyle megebtaSeed20W500 =  GoogleFonts.tiroBangla(
@@ -115,4 +122,6 @@ BoxBorder boxBorderN50 = Border.all(color: NEUTRAL_N50);
 BoxDecoration rounded2White = BoxDecoration(color: WHITE, borderRadius: rounded2);
 BoxDecoration rounded6White = BoxDecoration(color: WHITE, borderRadius: rounded6);
 BoxDecoration rounded6Primary = BoxDecoration(color: PRIMARY_COLOR, borderRadius: rounded6);
+BoxDecoration rounded20Primary = BoxDecoration(color: PRIMARY_COLOR, borderRadius: rounded20);
+BoxDecoration rounded20White = BoxDecoration(color: WHITE, borderRadius: rounded20);
 BoxDecoration rounded6PrimaryLight = BoxDecoration(color: PRIMARY_COLOR_LIGHT, borderRadius: rounded6);

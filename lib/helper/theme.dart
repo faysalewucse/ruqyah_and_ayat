@@ -11,7 +11,7 @@ class MyTheme {
     appBarTheme: AppBarTheme(
       backgroundColor: PRIMARY_COLOR,
       titleSpacing: 0,
-      titleTextStyle: GoogleFonts.tiroBangla(fontWeight: FontWeight.w900, fontSize: 24, color: WHITE),
+      titleTextStyle: GoogleFonts.tiroBangla(fontWeight: FontWeight.w900, fontSize: 20, color: WHITE),
       iconTheme: const IconThemeData(
         color: WHITE, //change your color here
       ),

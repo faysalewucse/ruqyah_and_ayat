@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
-import 'package:rukiyah_and_ayat/models/Ayat.dart';
+import 'package:rukiyah_and_ayat/helper/constant.dart';
+import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/pages/ayat/ayat_list_by_category.dart';
-import 'package:rukiyah_and_ayat/pages/home_page.dart';
 
 class AyatCategoryCard extends StatelessWidget {
   final Category category;
@@ -24,8 +24,8 @@ class AyatCategoryCard extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: WHITE,
-          border: Border(left: BorderSide(color: PRIMARY_COLOR.withOpacity(0.5), width: 6)),
-          borderRadius: BorderRadius.circular(6.0)
+          // border: Border(left: BorderSide(color: PRIMARY_COLOR.withOpacity(0.5), width: 6)),
+          borderRadius: rounded20
         ),
         child: Text(
           category.label,

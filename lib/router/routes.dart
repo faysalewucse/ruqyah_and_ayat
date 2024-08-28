@@ -1,2 +1,13 @@
 const String initialScreen = "/";
 const String homeScreen = "/home";
+const String categorySection = "/category-section";
+const String categories = "/categories";
+const String verses = "/verses";
+const String audio = "/audio";
+const String ruqyah = "/ruqyah";
+const String hijama = "/hijama";
+const String securityDua = "/security-dua";
+const String masnunDua = "/masnun-dua";
+const String masayel = "/masayel";
+const String bibidh = "/bibidh";
+const String underDevelopment = "/under-development";

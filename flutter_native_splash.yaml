@@ -1,0 +1,7 @@
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+
+  color: "#e5e5f2"
+  image: "assets/icons/dua.png"
