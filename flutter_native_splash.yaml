@@ -4,5 +4,5 @@ flutter_native_splash:
   web: false
 
   color: "#000080"
-  image: "assets/icons/dua.png"
+  image: "assets/images/splash_screen_image.png"
   branding: "assets/images/company_text.png"
