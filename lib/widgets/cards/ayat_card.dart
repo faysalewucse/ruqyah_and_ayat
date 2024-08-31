@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
@@ -8,7 +10,9 @@ class AyatCard extends StatelessWidget {
   final Verse verse;
   final String selectedFont;
 
-  const AyatCard({super.key, required this.verse, required this.selectedFont});
+  AyatCard({super.key, required this.verse, required this.selectedFont});
+
+  final keeperController = Get.find<KeeperController>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,25 +24,25 @@ class AyatCard extends StatelessWidget {
         children: [
           Container(
             width: double.infinity,
-            // decoration: const BoxDecoration(
-            //     color: PRIMARY_COLOR,
-            //     borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-            // ),
             padding: const EdgeInsets.all(8.0),
             child: Text(
               verse.title,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
           const SizedBox(height: 5,),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            child: Text(
+            child: Obx(() => Text(
               verse.verse,
               textDirection: TextDirection.rtl,
               textAlign: TextAlign.justify,
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
+              style: TextStyle(
+                color: Theme.of(context).textTheme.titleSmall?.color,
+                fontSize: Theme.of(context).textTheme.titleSmall?.fontSize,
+                fontFamily: keeperController.ayatListFontFamily.value,
+              ),
+            )),
           ),
         ],
       ),

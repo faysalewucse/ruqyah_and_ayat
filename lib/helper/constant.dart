@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 
+const String appName = "রুকইয়াহ ও আয়াত";
 double deviceHeight = 0;
 double deviceWidth = 0;
 String AUTH_TOKEN = "token";
@@ -46,71 +47,72 @@ SizedBox horizontalGap24 = const SizedBox(width: 24);
 SizedBox horizontalGap32 = const SizedBox(width: 32);
 
 //=====================textStyle================
-TextStyle n30014Normal =  GoogleFonts.tiroBangla(
+TextStyle n30014Normal = const TextStyle(
     color: NEUTRAL_N300, fontSize: 14, fontWeight: FontWeight.normal); //done
-TextStyle n30014W500 =  GoogleFonts.tiroBangla(
+TextStyle n30014W500 = const TextStyle(
     color: NEUTRAL_N300, fontSize: 14, fontWeight: FontWeight.w500);
-TextStyle n30012W500 =  GoogleFonts.tiroBangla(
+TextStyle n30012W500 = const TextStyle(
     color: NEUTRAL_N300, fontSize: 12, fontWeight: FontWeight.normal);
-TextStyle n50014W400 =  GoogleFonts.tiroBangla(
+TextStyle n50014W400 = const TextStyle(
     color: NEUTRAL_N500, fontSize: 14, fontWeight: FontWeight.normal);
-TextStyle n70018Normal =  GoogleFonts.tiroBangla(
+TextStyle n70018Normal = const TextStyle(
     color: NEUTRAL_N700, fontSize: 18, fontWeight: FontWeight.normal);
-TextStyle white18Normal =  GoogleFonts.tiroBangla(
+TextStyle white18Normal = const TextStyle(
     color: WHITE, fontSize: 18, fontWeight: FontWeight.normal);
-TextStyle n30016W500 =  GoogleFonts.tiroBangla(
+TextStyle n30016W500 = const TextStyle(
     color: NEUTRAL_N300, fontSize: 16, fontWeight: FontWeight.w500); //done
-TextStyle n30022Normal =  GoogleFonts.tiroBangla(
+TextStyle n30022Normal = const TextStyle(
     color: NEUTRAL_N300, fontSize: 22, fontWeight: FontWeight.normal); //done
-TextStyle n70012Normal =  GoogleFonts.tiroBangla(
+TextStyle n70012Normal = const TextStyle(
     color: NEUTRAL_N700, fontSize: 12, fontWeight: FontWeight.normal); //done
-TextStyle n70012W500 =  GoogleFonts.tiroBangla(
+TextStyle n70012W500 = const TextStyle(
     color: NEUTRAL_N700, fontSize: 12, fontWeight: FontWeight.w500); //done
-TextStyle n70014Normal =  GoogleFonts.tiroBangla(
+TextStyle n70014Normal = const TextStyle(
     color: NEUTRAL_N700, fontSize: 14, fontWeight: FontWeight.normal); //done
-TextStyle n70014W500 =  GoogleFonts.tiroBangla(
+TextStyle n70014W500 = const TextStyle(
     color: NEUTRAL_N700, fontSize: 14, fontWeight: FontWeight.w500); //done
-TextStyle n70016W500 =  GoogleFonts.tiroBangla(
+TextStyle n70016W500 = const TextStyle(
     color: NEUTRAL_N700, fontSize: 16, fontWeight: FontWeight.w500); //done
-TextStyle n70016W500LineThrough =  GoogleFonts.tiroBangla(
+TextStyle n70016W500LineThrough = const TextStyle(
     color: NEUTRAL_N700,
     fontSize: 16,
     fontWeight: FontWeight.w500,
     decoration: TextDecoration.lineThrough); //done
-TextStyle n30016W500LineThrough =  GoogleFonts.tiroBangla(
+TextStyle n30016W500LineThrough = const TextStyle(
     color: NEUTRAL_N300,
     fontSize: 16,
     fontWeight: FontWeight.w500,
     decoration: TextDecoration.lineThrough); //done
-TextStyle e50016W500 =  GoogleFonts.tiroBangla(
+TextStyle e50016W500 = const TextStyle(
     color: ERROR_500, fontSize: 16, fontWeight: FontWeight.w500); //done
-TextStyle n70020W500 =  GoogleFonts.tiroBangla(
+TextStyle n70020W500 = const TextStyle(
     color: NEUTRAL_N700, fontSize: 20, fontWeight: FontWeight.w500);
-TextStyle n70024W500 =  GoogleFonts.tiroBangla(
+TextStyle n70024W500 = const TextStyle(
     color: NEUTRAL_N700, fontSize: 24, fontWeight: FontWeight.w500);
-TextStyle primary14W500 =  GoogleFonts.tiroBangla(
+TextStyle primary14W500 = const TextStyle(
     color: PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.w500);
-TextStyle primary18W500 =  GoogleFonts.tiroBangla(
+TextStyle primary18W500 = const TextStyle(
     color: PRIMARY_COLOR, fontSize: 18, fontWeight: FontWeight.w500);
-TextStyle primary20W500 =  GoogleFonts.tiroBangla(
+TextStyle primary20W500 = const TextStyle(
     color: PRIMARY_COLOR, fontSize: 20, fontWeight: FontWeight.w500);
-TextStyle n10014W500 =  GoogleFonts.tiroBangla(
+TextStyle n10014W500 = const TextStyle(
     color: NEUTRAL_N100, fontSize: 14, fontWeight: FontWeight.w500);
-TextStyle n20014W500 =  GoogleFonts.tiroBangla(
+TextStyle n20014W500 = const TextStyle(
     color: NEUTRAL_N200, fontSize: 14, fontWeight: FontWeight.w500);
 
-TextStyle white14W500 =  GoogleFonts.tiroBangla(
+TextStyle white14W500 = const TextStyle(
     color: WHITE, fontSize: 14, fontWeight: FontWeight.w500);
-TextStyle white16W600 =  GoogleFonts.tiroBangla(
-    color: WHITE, fontSize: 16, fontWeight: FontWeight.w600,);
-TextStyle white16W600Arabic =  GoogleFonts.amiri(
-    color: WHITE, fontSize: 16, fontWeight: FontWeight.w600,);
-TextStyle white18W600 =  GoogleFonts.tiroBangla(
+TextStyle white16W600 = const TextStyle(
+    color: WHITE, fontSize: 16, fontWeight: FontWeight.w600);
+TextStyle white16W600Arabic = GoogleFonts.ibmPlexSansArabic(
+    color: WHITE, fontSize: 16, fontWeight: FontWeight.w600);
+TextStyle white18W600 = const TextStyle(
     color: WHITE, fontSize: 18, fontWeight: FontWeight.w600);
-TextStyle megebtaSeed20W500 =  GoogleFonts.tiroBangla(
+TextStyle megebtaSeed20W500 = const TextStyle(
     color: PRIMARY_COLOR, fontSize: 20, fontWeight: FontWeight.w500);
-TextStyle megebtaSeed14W500 =  GoogleFonts.tiroBangla(
+TextStyle megebtaSeed14W500 = const TextStyle(
     color: PRIMARY_COLOR, fontSize: 14, fontWeight: FontWeight.w500);
+
 
 //========================borders==================//
 OutlineInputBorder outlineBorder2N30 = OutlineInputBorder(

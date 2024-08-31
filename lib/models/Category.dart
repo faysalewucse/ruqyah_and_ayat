@@ -1,8 +1,22 @@
-class Category {
+import 'package:hive/hive.dart';
+
+part 'Category.g.dart'; // This is for code generation
+
+@HiveType(typeId: 0) // Unique ID for the Category type
+class Category extends HiveObject {
+  @HiveField(0)
   String id; // Mapped from _id in JSON
+
+  @HiveField(1)
   String value;
+
+  @HiveField(2)
   String label;
+
+  @HiveField(3)
   int categoryIndex;
+
+  @HiveField(4)
   int index;
 
   Category({

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
-import 'package:rukiyah_and_ayat/pages/ayat/ayat_list_by_category.dart';
+import 'package:rukiyah_and_ayat/router/routes.dart';
 
 class AyatCategoryCard extends StatelessWidget {
   final Category category;
@@ -13,12 +14,7 @@ class AyatCategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AyatListByCategory(category: category),
-          ),
-        );
+        Get.toNamed(ayatList, arguments: category);
       },
       child: Container(
         padding: const EdgeInsets.all(16.0),

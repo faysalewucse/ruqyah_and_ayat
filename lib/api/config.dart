@@ -37,7 +37,7 @@ class Api {
               "${error.type} dioError message====>${error.response?.data["message"]}",
               wrapWidth: 1024);
           if (error.type == DioExceptionType.connectionError) {
-            showErrorToast(message: 'Server Error');
+            showErrorToast(message: 'Network Error');
           }
           else if (error.type == DioExceptionType.connectionTimeout) {
             showErrorToast(message: 'Connection Timeout');

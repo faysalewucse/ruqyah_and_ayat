@@ -3,7 +3,9 @@ import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rukiyah_and_ayat/api/api_urls.dart';
+import 'package:rukiyah_and_ayat/controllers/data_controller.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/Screen.dart';
@@ -26,6 +28,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   List<Screen> screens = [
     Screen(
       'আয়াত',
@@ -35,37 +39,37 @@ class _HomePageState extends State<HomePage> {
     Screen(
       'অডিও',
       PhosphorIcons.music_notes_thin,
-      underDevelopment,
+      audio,
     ),
     Screen(
       'রুকইয়াহ',
       PhosphorIcons.first_aid_kit_thin,
-      underDevelopment,
+      ruqyah,
     ),
     Screen(
       'হিজামা',
       PhosphorIcons.first_aid_thin,
-      underDevelopment,
+      hijama,
     ),
     Screen(
       'নিরাপত্তার দুআ',
       PhosphorIcons.shield_plus_thin,
-      underDevelopment,
+      securityDua,
     ),
     Screen(
       'মাসনুন দুআ',
       FlutterIslamicIcons.tasbihHand,
-      underDevelopment,
+      masnunDua,
     ),
     Screen(
       'মাসায়েল',
       PhosphorIcons.question_thin,
-      underDevelopment,
+      masayel,
     ),
     Screen(
       'বিবিধ',
       PhosphorIcons.bookmarks_thin,
-      underDevelopment,
+      bibidh,
     ),
   ];
 
@@ -80,12 +84,74 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Padding(
           padding: EdgeInsets.only(left: 18.0),
           child: Text(
-            "রুকইয়াহ ও আয়াত",
+            appName,
           ),
+        ),
+        leading: IconButton(
+          icon: const Icon(PhosphorIcons.list),
+          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            SizedBox(
+              height: 200.0,
+              child: DrawerHeader(
+                decoration: const BoxDecoration(
+                  color: PRIMARY_COLOR,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset("assets/icons/dua.png", width: deviceHeight * 0.08,),
+                    Text(
+                      appName,
+                      style: Theme.of(context).appBarTheme.titleTextStyle,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            ...screens.map(
+              (Screen screen) => ListTile(
+                leading: Icon(screen.iconData, color: PRIMARY_COLOR,),
+                title: Text(screen.name),
+                onTap: () {
+                  Get.back();
+                  Get.toNamed(screen.route);
+                },
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(PhosphorIcons.warning_circle),
+              title: const Text('Report Problem'),
+              onTap: () {
+                // Handle report problem action
+              },
+            ),
+            ListTile(
+              leading: const Icon(PhosphorIcons.share_network),
+              title: const Text('Share'),
+              onTap: () {
+                // Handle share action
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.apps),
+              title: const Text('More Apps'),
+              onTap: () {
+                // Handle more apps action
+              },
+            ),
+          ],
         ),
       ),
       body: Container(

@@ -1,30 +1,33 @@
 import 'package:get/get.dart';
-import 'package:rukiyah_and_ayat/helper/toast.dart';
+import 'package:rukiyah_and_ayat/helper/global_variables.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
-import 'package:rukiyah_and_ayat/models/Verse.dart';
-import 'package:rukiyah_and_ayat/services/category_service.dart';
 
 class CategoryController extends GetxController {
-
-  final getCategoriesLoading = false.obs;
   final categories = <Category>[].obs;
 
-  Future<void> getAllCategories({required int categoryIndex}) async {
-    try{
-      getCategoriesLoading(true);
-      final response = await CategoryService.getAllCategories(categoryIndex: categoryIndex);
+  @override
+  void onInit() {
+    super.onInit();
+    _loadCategoriesFromHive();
+  }
 
-      List<Category> responseCategories = [];
-      for(var category in response.data["categories"]){
-        responseCategories.add(Category.fromJson(category));
-      }
-      categories(responseCategories);
+  Future<void> _loadCategoriesFromHive() async {
+    final savedCategories = categoryBox.values.toList();
+    if (savedCategories.isNotEmpty) {
+      categories(savedCategories);
+    } else {
+      // Optionally handle the case where there is no cached data
+      print("No categories found in local storage.");
     }
-    catch(e){
-      print(e);
-    }
-    finally{
-      getCategoriesLoading(false);
+  }
+
+  Future<void> loadCategoriesByCategoryIndex({required int categoryIndex}) async {
+    final filteredCategories = categoryBox.values.where((category) => category.categoryIndex == categoryIndex).toList();
+    if (filteredCategories.isNotEmpty) {
+      categories(filteredCategories);
+    } else {
+      // Optionally handle the case where no matching data is available
+      print("No categories found for the specified index.");
     }
   }
 }

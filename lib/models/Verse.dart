@@ -1,6 +1,16 @@
-class Verse {
+import 'package:hive/hive.dart';
+
+part 'Verse.g.dart'; // For code generation
+
+@HiveType(typeId: 1) // Unique ID for the Verse type
+class Verse extends HiveObject {
+  @HiveField(0)
   final String title;
+
+  @HiveField(1)
   final String verse;
+
+  @HiveField(2)
   final String category;
 
   Verse({
@@ -9,7 +19,7 @@ class Verse {
     required this.category,
   });
 
-  // Convert a Ayat instance to a JSON object
+  // Convert a Verse instance to a JSON object
   Map<String, dynamic> toJson() {
     return {
       'title': title,
@@ -18,7 +28,7 @@ class Verse {
     };
   }
 
-  // Create an Ayat instance from a JSON object
+  // Create a Verse instance from a JSON object
   factory Verse.fromJson(Map<String, dynamic> json) {
     return Verse(
       title: json['title'],

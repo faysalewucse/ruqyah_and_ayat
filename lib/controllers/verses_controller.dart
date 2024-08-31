@@ -1,30 +1,35 @@
 import 'package:get/get.dart';
-import 'package:rukiyah_and_ayat/helper/toast.dart';
+import 'package:rukiyah_and_ayat/helper/global_variables.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
-import 'package:rukiyah_and_ayat/services/verses_service.dart';
 
 class VersesController extends GetxController {
+  final verses = <Verse>[].obs;
 
-  final getVersesByCategoryLoading = false.obs;
+  @override
+  void onInit() {
+    super.onInit();
+    _loadVersesFromHive();
+  }
 
-  Future<List<Verse>> getVersesByCategory({required String categoryId}) async {
-    try{
-      getVersesByCategoryLoading(true);
-      final response = await VersesService.getVersesByCategory(categoryId: categoryId);
-
-      List<Verse> responseVerses = [];
-      for(var verse in response.data["verses"]){
-        responseVerses.add(Verse.fromJson(verse));
-      }
-
-      return responseVerses;
+  Future<void> _loadVersesFromHive() async {
+    final savedVerses = versesBox.values.toList();
+    if (savedVerses.isNotEmpty) {
+      verses(savedVerses);
+    } else {
+      // Optionally handle the case where there is no cached data
+      print("No categories found in local storage.");
     }
-    catch(e){
-      print(e);
+  }
+
+  Future<List<Verse>> loadVersesByCategory({required String categoryId}) async {
+    final filteredVerses = versesBox.values.where((verse) => verse.category == categoryId).toList();
+    if (filteredVerses.isNotEmpty) {
+      verses(filteredVerses);
+      return verses;
+    } else {
+      // Optionally handle the case where no matching data is available
+      print("No categories found for the specified index.");
       return [];
-    }
-    finally{
-      getVersesByCategoryLoading(false);
     }
   }
 }

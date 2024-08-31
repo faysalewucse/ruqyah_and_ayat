@@ -3,5 +3,6 @@ flutter_native_splash:
   ios: true
   web: false
 
-  color: "#e5e5f2"
+  color: "#000080"
   image: "assets/icons/dua.png"
+  branding: "assets/images/company_text.png"

@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
+import 'package:rukiyah_and_ayat/models/Article.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
+import 'package:rukiyah_and_ayat/pages/article/article_screen.dart';
+import 'package:rukiyah_and_ayat/pages/article/article_titles.dart';
 import 'package:rukiyah_and_ayat/pages/ayat/ayat_categories.dart';
 import 'package:rukiyah_and_ayat/pages/ayat/ayat_list_by_category.dart';
 import 'package:rukiyah_and_ayat/pages/ayat/category_section.dart';
@@ -27,6 +30,14 @@ final List<GetPage<dynamic>> routePages = [
           );
         }),
     GetPage(
+        name: ayatList,
+        page: () {
+          Category category = Get.arguments as Category;
+          return AyatListByCategory(
+            category: category,
+          );
+        }),
+    GetPage(
       name: verses,
       page: () {
         Category category = Get.arguments as Category;
@@ -39,7 +50,14 @@ final List<GetPage<dynamic>> routePages = [
     ),
     GetPage(
       name: ruqyah,
-      page: () => const UnderDevelopment(title: "রুকইয়াহ"),
+      page: () => const ArticleTitles(),
+    ),
+    GetPage(
+      name: fullArticle,
+      page: () {
+        Article article = Get.arguments as Article;
+        return ArticleScreen(article: article);
+      },
     ),
     GetPage(
       name: hijama,
