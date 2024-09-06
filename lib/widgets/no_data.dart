@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 
@@ -12,7 +13,9 @@ class NoData extends StatelessWidget {
     return Center(
       child: Container(
         height: deviceHeight * 0.3,
-        decoration: rounded20White,
+        decoration: BoxDecoration(
+          color: Theme.of(context).indicatorColor
+        ),
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

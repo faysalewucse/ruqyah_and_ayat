@@ -38,6 +38,7 @@ class _AyatCategoriesState extends State<AyatCategories> {
         () => categoryController.categories.isEmpty
                 ? const NoData(text:  "কোনো ক্যাটাগরী খুজে পাওয়া যায়নি",)
                 : Container(
+          color: Theme.of(context).canvasColor,
                     height: MediaQuery.of(context).size.height,
                     padding: const EdgeInsets.all(16.0),
                     child: ListView.separated(

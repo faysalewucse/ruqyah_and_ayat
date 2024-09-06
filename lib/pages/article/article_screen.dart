@@ -15,7 +15,7 @@ class ArticleScreen extends StatelessWidget {
     // Check if the publishedDate is valid and parse it
     DateTime publishDate;
     try {
-      publishDate = DateTime.parse(article.publishedDate.toString()).toLocal();
+      publishDate = DateTime.parse(article.createdAt.toString()).toLocal();
     } catch (e) {
       publishDate =
           DateTime.now(); // Fallback to the current date if parsing fails
@@ -29,7 +29,7 @@ class ArticleScreen extends StatelessWidget {
         title: Text(article.title),
       ),
       body: Container(
-        color: WHITE,
+        color: Theme.of(context).scaffoldBackgroundColor,
         padding: const EdgeInsets.all(10.0), // Add padding here
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -6,8 +6,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rukiyah_and_ayat/api/api_urls.dart';
 import 'package:rukiyah_and_ayat/controllers/data_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
+import 'package:rukiyah_and_ayat/models/Config.dart';
 import 'package:rukiyah_and_ayat/models/Screen.dart';
 import 'package:rukiyah_and_ayat/pages/ayat/ayat_categories.dart';
 import 'package:rukiyah_and_ayat/pages/under_development.dart';
@@ -28,6 +31,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _controller = Get.find<KeeperController>();
+  final networkController = Get.find<NetworkController>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<Screen> screens = [
@@ -77,8 +82,16 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      checkAppVersion();
+      if (networkController.hasConnection.isTrue) {
+        checkAppVersion();
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -92,6 +105,22 @@ class _HomePageState extends State<HomePage> {
             appName,
           ),
         ),
+        actions: [
+          IconButton(
+            padding: const EdgeInsets.only(right: 10),
+            onPressed: () {
+              _controller.switchTheme();
+              Get.changeThemeMode(_controller.currentTheme.value);
+            },
+            icon: Obx(
+              () => Icon(
+                _controller.currentTheme.value == ThemeMode.dark
+                    ? PhosphorIcons.sun
+                    : PhosphorIcons.moon,
+              ),
+            ),
+          )
+        ],
         leading: IconButton(
           icon: const Icon(PhosphorIcons.list),
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
@@ -104,13 +133,16 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 200.0,
               child: DrawerHeader(
-                decoration: const BoxDecoration(
-                  color: PRIMARY_COLOR,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset("assets/icons/dua.png", width: deviceHeight * 0.08,),
+                    Image.asset(
+                      "assets/icons/dua.png",
+                      width: deviceHeight * 0.08,
+                    ),
                     Text(
                       appName,
                       style: Theme.of(context).appBarTheme.titleTextStyle,
@@ -121,7 +153,10 @@ class _HomePageState extends State<HomePage> {
             ),
             ...screens.map(
               (Screen screen) => ListTile(
-                leading: Icon(screen.iconData, color: PRIMARY_COLOR,),
+                leading: Icon(
+                  screen.iconData,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
+                ),
                 title: Text(screen.name),
                 onTap: () {
                   Get.back();
@@ -155,6 +190,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Container(
+        color: Theme.of(context).canvasColor,
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +198,9 @@ class _HomePageState extends State<HomePage> {
             Container(
               padding:
                   const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-              decoration: rounded20Primary,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: rounded20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -206,10 +244,11 @@ class _HomePageState extends State<HomePage> {
             ),
             verticalGap12,
             PrimaryButton(
-                label: "ওয়েবসাইট ভিজিট করুন",
-                onTap: () {
-                  launchInBrowser(Uri.parse(WEBSITE_URL));
-                }),
+              label: "ওয়েবসাইট ভিজিট করুন",
+              onTap: () {
+                launchInBrowser(Uri.parse(WEBSITE_URL));
+              },
+            ),
           ],
         ),
       ),
@@ -217,21 +256,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   void checkAppVersion() async {
-    final response = await VersionService.getAppVersion();
+    try {
+      final response = await VersionService.getAppConfig();
 
-    var jsonResponse = response.data as Map<String, dynamic>;
-    final box = GetStorage();
+      // Parse the response data into a List of Config objects
+      List<dynamic> jsonResponse = response.data as List<dynamic>;
+      List<Config> configs = jsonResponse.map((json) => Config.fromJson(json)).toList();
 
-    String currentAppVersion = jsonResponse["payload"]["version"];
+      if (configs.isNotEmpty) {
+        Config latestConfig = configs.first;
+        String currentAppVersion = latestConfig.appVersion;
 
-    String? prevAppVersion = box.read("appVersion");
-    if (prevAppVersion != null && prevAppVersion != currentAppVersion) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showCustomDialog();
-      });
+        print("Config => $latestConfig");
+        print("Version => ${packageInfo.version}");
+      }
+    } catch (error) {
+      // Handle any errors
+      print("Error checking app version: $error");
     }
-    box.write("appVersion", currentAppVersion);
   }
+
 
   void showCustomDialog() {
     showDialog<void>(

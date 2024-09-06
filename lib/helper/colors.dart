@@ -12,6 +12,7 @@ const Color RED = Colors.red;
 const Color BLUE = Color(0xff4796FF);
 const Color REWARD_POINTS = Color(0xffFFCC3A);
 const Color SCAFFOLD_BACKGROUND_COLOR = Color(0xffe5e5f2);
+const Color DARK_SCAFFOLD_BACKGROUND_COLOR = Color(0xff1e1e1e);
 const Color BG_GRAY_1 = Color(0xffF1F1F1);
 Color BORDER_COLOR_1 = Color(0xff000000).withOpacity(0.1);
 const Color NEW_ERROR_COLOR = Color(0xffD9333F);

@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
+import 'package:rukiyah_and_ayat/helper/dialog_helper.dart';
 import 'package:rukiyah_and_ayat/helper/global_variables.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
@@ -13,6 +14,7 @@ import 'package:rukiyah_and_ayat/services/category_service.dart';
 import 'package:rukiyah_and_ayat/helper/toast.dart';
 import 'package:rukiyah_and_ayat/services/verses_service.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
+import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 import 'package:rukiyah_and_ayat/widgets/custom_loader.dart';
 
 class DataController extends GetxController {
@@ -33,27 +35,15 @@ class DataController extends GetxController {
   }
 
   Future<void> fetchAndSaveCategories() async {
-    if (!networkController.hasConnection.value) {
-      Get.defaultDialog(
-        title: 'No Internet Connection',
-        content: const Text(
-          'You need an internet connection to download the app data for the first time.',
-        ),
-        confirm: ElevatedButton(
-          onPressed: () {
-            Get.back();
-          },
-          child: const Text('OK'),
-        ),
-      );
-      return;
+    final savedCategories = categoryBox.values.toList();
+    final savedVerses = versesBox.values.toList();
+    final savedArticles = articlesBox.values.toList();
+
+    if (!networkController.hasConnection.value && (savedCategories.isEmpty || savedVerses.isEmpty || savedArticles.isEmpty)) {
+      return DialogHelper.showNoInternetDialog();
     }
 
     try {
-      final savedCategories = categoryBox.values.toList();
-      final savedVerses = versesBox.values.toList();
-      final savedArticles = articlesBox.values.toList();
-
       if (savedCategories.isEmpty || savedVerses.isEmpty || savedArticles.isEmpty) {
         isLoading(true);
 

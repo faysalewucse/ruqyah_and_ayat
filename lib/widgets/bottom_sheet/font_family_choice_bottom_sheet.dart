@@ -29,7 +29,7 @@ class FontFamilyChoiceBottomSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          BottomSheetHeader(),
+          const BottomSheetHeader(),
           24.kH,
           const Text(
             'ফন্ট পরিবর্তন করুন',
@@ -42,6 +42,28 @@ class FontFamilyChoiceBottomSheet extends StatelessWidget {
               children: [
                 const Divider(),
                 ListTile(
+                  title: const Text(
+                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِلَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
+                    style: TextStyle(fontFamily: "AlMushaf", fontSize: 22),
+                  ),
+                  onTap: () {
+                    onChanged("AlMushaf");
+                  },
+                  selected: selectedFont == "AlMushaf",
+                ),
+                const Divider(),
+                ListTile(
+                  title: const Text(
+                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِلَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
+                    style: TextStyle(fontFamily: "AlMajeed", fontSize: 20),
+                  ),
+                  onTap: () {
+                    onChanged("AlMajeed");
+                  },
+                  selected: selectedFont == "AlMajeed",
+                ),
+                const Divider(),
+                ListTile(
                   title: Text(
                     'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِلَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
                     style: GoogleFonts.ibmPlexSansArabic(),
@@ -50,127 +72,6 @@ class FontFamilyChoiceBottomSheet extends StatelessWidget {
                     onChanged(GoogleFonts.ibmPlexSansArabic().fontFamily);
                   },
                   selected: selectedFont == GoogleFonts.ibmPlexSansArabic().fontFamily,
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: GoogleFonts.amiri(),
-                  ),
-                  onTap: () {
-                    onChanged(GoogleFonts.amiri().fontFamily);
-                  },
-                  selected: selectedFont == GoogleFonts.amiri().fontFamily,
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: GoogleFonts.lateef(),
-                  ),
-                  onTap: () {
-                    onChanged(GoogleFonts.lateef().fontFamily);
-                  },
-                  selected: selectedFont == GoogleFonts.lateef().fontFamily,
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: GoogleFonts.reemKufi(),
-                  ),
-                  onTap: () {
-                    onChanged(GoogleFonts.reemKufi().fontFamily);
-                  },
-                  selected: selectedFont == GoogleFonts.reemKufi().fontFamily,
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: GoogleFonts.tajawal(),
-                  ),
-                  onTap: () {
-                    onChanged(GoogleFonts.tajawal().fontFamily);
-                  },
-                  selected: selectedFont == GoogleFonts.tajawal().fontFamily,
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: GoogleFonts.elMessiri(),
-                  ),
-                  onTap: () {
-                    onChanged(GoogleFonts.elMessiri().fontFamily);
-                  },
-                  selected: selectedFont == GoogleFonts.elMessiri().fontFamily,
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: GoogleFonts.cairo(),
-                  ),
-                  onTap: () {
-                    onChanged(GoogleFonts.cairo().fontFamily);
-                  },
-                  selected: selectedFont == GoogleFonts.cairo().fontFamily,
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: GoogleFonts.almarai(),
-                  ),
-                  onTap: () {
-                    onChanged(GoogleFonts.almarai().fontFamily);
-                  },
-                  selected: selectedFont == GoogleFonts.almarai().fontFamily,
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: GoogleFonts.harmattan(),
-                  ),
-                  onTap: () {
-                    onChanged(GoogleFonts.harmattan().fontFamily);
-                  },
-                  selected: selectedFont == GoogleFonts.harmattan().fontFamily,
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: GoogleFonts.notoNaskhArabic(),
-                  ),
-                  onTap: () {
-                    onChanged(GoogleFonts.notoNaskhArabic().fontFamily);
-                  },
-                  selected: selectedFont == GoogleFonts.notoNaskhArabic().fontFamily,
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: GoogleFonts.lalezar(),
-                  ),
-                  onTap: () {
-                    onChanged(GoogleFonts.lalezar().fontFamily);
-                  },
-                  selected: selectedFont == GoogleFonts.lalezar().fontFamily,
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: GoogleFonts.changa(),
-                  ),
-                  onTap: () {
-                    onChanged(GoogleFonts.changa().fontFamily);
-                  },
-                  selected: selectedFont == GoogleFonts.changa().fontFamily,
                 ),
                 const Divider(),
               ],

@@ -38,8 +38,8 @@ class AyatCard extends StatelessWidget {
               textDirection: TextDirection.rtl,
               textAlign: TextAlign.justify,
               style: TextStyle(
-                color: Theme.of(context).textTheme.titleSmall?.color,
-                fontSize: Theme.of(context).textTheme.titleSmall?.fontSize,
+                color: Theme.of(context).textTheme.titleLarge?.color,
+                fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
                 fontFamily: keeperController.ayatListFontFamily.value,
               ),
             )),

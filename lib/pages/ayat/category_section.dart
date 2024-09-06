@@ -20,7 +20,8 @@ class CategorySection extends StatelessWidget {
       appBar: AppBar(
         title: const Text("আয়াত"),
       ),
-      body: Padding(
+      body: Container(
+        color: Theme.of(context).canvasColor,
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +29,7 @@ class CategorySection extends StatelessWidget {
             Container(
               padding:
               const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-              decoration: rounded20Primary,
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: rounded20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -62,7 +63,7 @@ class CategorySection extends StatelessWidget {
                     onPressed: () {
                       Get.toNamed(categories, arguments: index+1);
                     },
-                    color: WHITE,
+                    color: Theme.of(context).cardColor,
                     elevation: 1.0,
                     shape: RoundedRectangleBorder(
                       borderRadius:
@@ -73,10 +74,7 @@ class CategorySection extends StatelessWidget {
                     child: Center(
                       child: Text(
                         parts[index],
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.headlineLarge,
                       ),
                     ),
                   );

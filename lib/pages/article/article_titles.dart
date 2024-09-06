@@ -32,21 +32,24 @@ class _ArticleTitlesState extends State<ArticleTitles> {
         title: const Text("আর্টিক্যাল সমুহ"),
       ),
       body: Obx(
-            () => articleController.articles.isEmpty
-            ? const NoData(text:  "কোনো আর্টিক্যাল খুজে পাওয়া যায়নি",)
+        () => articleController.articles.isEmpty
+            ? const NoData(
+                text: "কোনো আর্টিক্যাল খুজে পাওয়া যায়নি",
+              )
             : Container(
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.all(16.0),
-          child: ListView.separated(
-            itemBuilder: (_, index) => ArticleTitleCard(
-              article: articleController.articles[index],
-            ),
-            separatorBuilder: (_, i) => const SizedBox(
-              height: 12,
-            ),
-            itemCount: articleController.articles.length,
-          ),
-        ),
+                color: Theme.of(context).canvasColor,
+                height: MediaQuery.of(context).size.height,
+                padding: const EdgeInsets.all(16.0),
+                child: ListView.separated(
+                  itemBuilder: (_, index) => ArticleTitleCard(
+                    article: articleController.articles[index],
+                  ),
+                  separatorBuilder: (_, i) => const SizedBox(
+                    height: 12,
+                  ),
+                  itemCount: articleController.articles.length,
+                ),
+              ),
       ),
     );
   }

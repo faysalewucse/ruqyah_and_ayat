@@ -19,12 +19,20 @@ class Category extends HiveObject {
   @HiveField(4)
   int index;
 
+  @HiveField(5)
+  DateTime createdAt;
+
+  @HiveField(6)
+  DateTime updatedAt;
+
   Category({
     required this.id,
     required this.value,
     required this.label,
     required this.categoryIndex,
     required this.index,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   // Factory method to create an instance of Category from JSON
@@ -35,6 +43,8 @@ class Category extends HiveObject {
       label: json['label'] as String,
       categoryIndex: json['categoryIndex'] as int,
       index: json['index'] as int,
+      createdAt: DateTime.parse(json['createdAt'] as String), // Assuming ISO 8601 string format
+      updatedAt: DateTime.parse(json['updatedAt'] as String), // Assuming ISO 8601 string format
     );
   }
 
@@ -46,6 +56,8 @@ class Category extends HiveObject {
       'label': label,
       'categoryIndex': categoryIndex,
       'index': index,
+      'createdAt': createdAt.toIso8601String(), // Convert DateTime to ISO 8601 string
+      'updatedAt': updatedAt.toIso8601String(), // Convert DateTime to ISO 8601 string
     };
   }
 }

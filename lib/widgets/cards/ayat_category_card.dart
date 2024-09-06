@@ -13,16 +13,15 @@ class AyatCategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Get.toNamed(ayatList, arguments: category);
       },
       child: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: WHITE,
-          // border: Border(left: BorderSide(color: PRIMARY_COLOR.withOpacity(0.5), width: 6)),
-          borderRadius: rounded20
-        ),
+            color: Theme.of(context).cardColor,
+            // border: Border(left: BorderSide(color: Theme.of(context).primaryColor.withOpacity(0.5), width: 6)),
+            borderRadius: rounded20),
         child: Text(
           category.label,
           // textAlign: TextAlign.center,

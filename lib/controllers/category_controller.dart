@@ -16,8 +16,7 @@ class CategoryController extends GetxController {
     if (savedCategories.isNotEmpty) {
       categories(savedCategories);
     } else {
-      // Optionally handle the case where there is no cached data
-      print("No categories found in local storage.");
+      categories([]);
     }
   }
 
@@ -26,8 +25,7 @@ class CategoryController extends GetxController {
     if (filteredCategories.isNotEmpty) {
       categories(filteredCategories);
     } else {
-      // Optionally handle the case where no matching data is available
-      print("No categories found for the specified index.");
+      categories([]);
     }
   }
 }

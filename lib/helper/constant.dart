@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 
 const String appName = "রুকইয়াহ ও আয়াত";
 double deviceHeight = 0;
 double deviceWidth = 0;
+late PackageInfo packageInfo;
 String AUTH_TOKEN = "token";
 
 //=============text style======================//
@@ -127,3 +129,4 @@ BoxDecoration rounded6Primary = BoxDecoration(color: PRIMARY_COLOR, borderRadius
 BoxDecoration rounded20Primary = BoxDecoration(color: PRIMARY_COLOR, borderRadius: rounded20);
 BoxDecoration rounded20White = BoxDecoration(color: WHITE, borderRadius: rounded20);
 BoxDecoration rounded6PrimaryLight = BoxDecoration(color: PRIMARY_COLOR_LIGHT, borderRadius: rounded6);
+BoxDecoration rounded20PrimaryLight = BoxDecoration(color: PRIMARY_COLOR_LIGHT, borderRadius: rounded20);

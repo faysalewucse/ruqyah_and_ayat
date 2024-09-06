@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/Screen.dart';
 
@@ -15,14 +14,13 @@ class ScreenCard extends StatelessWidget {
       onTap: () => Get.toNamed(screen.route),
       child: Container(
         decoration: BoxDecoration(
-          color: WHITE,
-          border: Border.all(color: PRIMARY_COLOR_LIGHT),
+          color: Theme.of(context).cardColor,
           borderRadius: rounded20,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(screen.iconData, size: 40, color: PRIMARY_COLOR),
+            Icon(screen.iconData, size: 40, color:Theme.of(context).textTheme.headlineSmall?.color),
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),

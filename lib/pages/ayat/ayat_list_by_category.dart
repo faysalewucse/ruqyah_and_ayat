@@ -62,10 +62,10 @@ class _AyatListByCategoryState extends State<AyatListByCategory> {
                     return Obx(
                           () => FontFamilyChoiceBottomSheet(
                         onChanged: (newValue) {
-                          keeperController.ayatListFontFamily.value = newValue;
+                          keeperController.ayatListFontFamily.value = newValue ?? "";
                           Get.back();
                         },
-                        selectedFont: keeperController.ayatListFontFamily.value!,
+                        selectedFont: keeperController.ayatListFontFamily.value,
                       ),
                     );
                   },
@@ -80,7 +80,7 @@ class _AyatListByCategoryState extends State<AyatListByCategory> {
         ],
       ),
       body: Container(
-        color: WHITE,
+        color: Theme.of(context).scaffoldBackgroundColor,
         padding: const EdgeInsets.all(16.0),
         child: verses.isEmpty
             ? const NoData(
@@ -89,7 +89,7 @@ class _AyatListByCategoryState extends State<AyatListByCategory> {
             : ListView.separated(
           itemCount: verses.length,
           separatorBuilder: (_, i) => const SizedBox(
-            height: 16,
+            height: 40,
             child: Divider(),
           ),
           itemBuilder: (context, index) => AyatCard(

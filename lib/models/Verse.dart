@@ -13,10 +13,18 @@ class Verse extends HiveObject {
   @HiveField(2)
   final String category;
 
+  @HiveField(3)
+  final DateTime createdAt;
+
+  @HiveField(4)
+  final DateTime updatedAt;
+
   Verse({
     required this.title,
     required this.verse,
     required this.category,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   // Convert a Verse instance to a JSON object
@@ -25,6 +33,8 @@ class Verse extends HiveObject {
       'title': title,
       'verse': verse,
       'category': category,
+      'createdAt': createdAt.toIso8601String(), // Convert DateTime to ISO 8601 string
+      'updatedAt': updatedAt.toIso8601String(), // Convert DateTime to ISO 8601 string
     };
   }
 
@@ -34,6 +44,8 @@ class Verse extends HiveObject {
       title: json['title'],
       verse: json['verse'],
       category: json['category'],
+      createdAt: DateTime.parse(json['createdAt']), // Assuming ISO 8601 string format
+      updatedAt: DateTime.parse(json['updatedAt']), // Assuming ISO 8601 string format
     );
   }
 }

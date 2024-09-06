@@ -1,44 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'Verse.dart';
+part of 'Config.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class VerseAdapter extends TypeAdapter<Verse> {
+class ConfigAdapter extends TypeAdapter<Config> {
   @override
-  final int typeId = 1;
+  final int typeId = 3;
 
   @override
-  Verse read(BinaryReader reader) {
+  Config read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Verse(
-      title: fields[0] as String,
-      verse: fields[1] as String,
-      category: fields[2] as String,
-      createdAt: fields[3] as DateTime,
-      updatedAt: fields[4] as DateTime,
+    return Config(
+      appVersion: fields[0] as String,
+      releaseNotes: fields[1] as String,
+      dataUpdatedAt: fields[2] as DateTime,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Verse obj) {
+  void write(BinaryWriter writer, Config obj) {
     writer
-      ..writeByte(5)
-      ..writeByte(0)
-      ..write(obj.title)
-      ..writeByte(1)
-      ..write(obj.verse)
-      ..writeByte(2)
-      ..write(obj.category)
       ..writeByte(3)
-      ..write(obj.createdAt)
-      ..writeByte(4)
-      ..write(obj.updatedAt);
+      ..writeByte(0)
+      ..write(obj.appVersion)
+      ..writeByte(1)
+      ..write(obj.releaseNotes)
+      ..writeByte(2)
+      ..write(obj.dataUpdatedAt);
   }
 
   @override
@@ -47,7 +41,7 @@ class VerseAdapter extends TypeAdapter<Verse> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is VerseAdapter &&
+      other is ConfigAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

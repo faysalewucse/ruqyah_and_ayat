@@ -15,7 +15,7 @@ class UnderDevelopment extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.settings, size: 100, color: PRIMARY_COLOR,),
+            Icon(Icons.settings, size: 100, color: Theme.of(context).primaryColor,),
             verticalGap12,
             Text("$title সেকশনের কাজ চলমান", style: Theme.of(context).textTheme.displayLarge,),
             Text("খুব শীঘ্রই উম্নুক্ত করা হবে", style: Theme.of(context).textTheme.displayLarge,)

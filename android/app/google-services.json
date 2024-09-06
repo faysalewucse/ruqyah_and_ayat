@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "522919043157",
+    "project_id": "ruqyah-and-ayat-app",
+    "storage_bucket": "ruqyah-and-ayat-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522919043157:android:efb655bdee1656b3edf4dc",
+        "android_client_info": {
+          "package_name": "com.sunnahcurebd.rukiyah_and_ayat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgsisng3FfaKBZYum0twILpuJh5npYMB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
