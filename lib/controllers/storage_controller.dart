@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 
@@ -18,6 +19,14 @@ class StorageController{
 
   void setOnBoardVisitedTrue(){
     storage.write("visited", true);
+  }
+
+  void saveThemeMode(String themeMode){
+    storage.write("themeMode", themeMode);
+  }
+
+  String getThemeMode(){
+    return storage.read("themeMode") ?? "light";
   }
 
   bool hasOnBoardVisited(){

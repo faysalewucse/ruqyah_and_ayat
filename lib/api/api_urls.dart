@@ -5,6 +5,11 @@ const String ROOT_API_URL = "https://rukyah-server.vercel.app/api/$API_VERSION";
 
 //Website
 const WEBSITE_URL = "https://sunnahcurebd.com/";
+const yaqeenTechSolutionsPlayStoreUrl = "https://play.google.com/store/apps/developer?id=Yaqeen+Tech+Solutions";
+const reportProblemGoogleForm = "https://forms.gle/zB2kCortFX6xEL1K9";
+
+//Play Store
+const playStoreAppLink = 'https://play.google.com/store/apps/details?id=com.sunnahcurebd.rukiyah_and_ayat';
 //config
 const APP_CONFIG_API_URL = "$ROOT_API_URL/config";
 //Category

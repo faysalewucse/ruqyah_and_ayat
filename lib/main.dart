@@ -6,8 +6,12 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:rukiyah_and_ayat/api/firebase_api.dart';
 import 'package:rukiyah_and_ayat/bindings.dart';
+import 'package:rukiyah_and_ayat/controllers/data_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/storage_controller.dart';
 import 'package:rukiyah_and_ayat/firebase_options.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/helper/global_variables.dart';
@@ -26,6 +30,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseApi().initNotification();
+
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await GetStorage.init();
   await Hive.initFlutter();
@@ -34,11 +40,14 @@ void main() async {
   Hive.registerAdapter(VerseAdapter());
   Hive.registerAdapter(ArticleAdapter());
 
-  Get.put(KeeperController());
-
   categoryBox = await Hive.openBox<Category>('categories');
   versesBox = await Hive.openBox<Verse>('verses');
   articlesBox = await Hive.openBox<Article>('articles');
+
+  Get.put(StorageController());
+  Get.put(NetworkController());
+  Get.put(KeeperController());
+  Get.put(DataController());
 
   runApp(const MyApp());
 }

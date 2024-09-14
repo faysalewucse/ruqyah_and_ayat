@@ -4,12 +4,14 @@ import 'package:rukiyah_and_ayat/controllers/category_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/data_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/storage_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/verses_controller.dart';
 
 class MyBindings implements Bindings {
   @override
   void dependencies() {
     // Initialize NetworkController first
+    Get.put(StorageController());
     Get.put(NetworkController());
 
     // Put DataController asynchronously and trigger the remaining controllers after DataController is ready

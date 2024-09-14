@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
@@ -12,36 +10,6 @@ import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 import 'package:rukiyah_and_ayat/widgets/custom_loader.dart';
 
 class DialogHelper {
-  //show error dialog
-  static void showErrorDialog({String title = 'Error', String? description = 'Something went wrong'}) {
-    Get.dialog(
-      Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: Get.textTheme.headline4,
-              ),
-              Text(
-                description ?? '',
-                style: Get.textTheme.headline6,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (Get.isDialogOpen!) Get.back();
-                },
-                child: const Text('Okay'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   static void showNoInternetDialog() {
     Get.dialog(
       barrierDismissible: false,

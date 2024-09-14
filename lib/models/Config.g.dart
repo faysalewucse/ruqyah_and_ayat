@@ -19,7 +19,7 @@ class ConfigAdapter extends TypeAdapter<Config> {
     return Config(
       appVersion: fields[0] as String,
       releaseNotes: fields[1] as String,
-      dataUpdatedAt: fields[2] as DateTime,
+      dataVersion: fields[2] as String,
     );
   }
 
@@ -32,7 +32,7 @@ class ConfigAdapter extends TypeAdapter<Config> {
       ..writeByte(1)
       ..write(obj.releaseNotes)
       ..writeByte(2)
-      ..write(obj.dataUpdatedAt);
+      ..write(obj.dataVersion);
   }
 
   @override

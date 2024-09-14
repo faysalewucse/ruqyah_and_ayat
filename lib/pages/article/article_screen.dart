@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
@@ -36,8 +36,9 @@ class ArticleScreen extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: Html(
-                  data: article.content,
+                child: HtmlWidget(
+                  article.content,
+                  textStyle: const TextStyle(fontSize: 18),
                 ),
               ),
             ),

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,16 +30,23 @@ class CategorySection extends StatelessWidget {
           children: [
             Container(
               padding:
-              const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: rounded20),
+                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: rounded20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                      "فَلَمَّا أَلْقَوْا قَالَ مُوسَىٰ مَا جِئْتُم بِهِ السِّحْرُ ۖ إِنَّ اللَّهَ سَيُبْطِلُهُ ۖ إِنَّ اللَّهَ لَا يُصْلِحُ عَمَلَ الْمُفْسِدِينَ",
-                      textAlign: TextAlign.center,
-                      style: white16W600Arabic),
+                    "فَلَمَّا أَلْقَوْا قَالَ مُوسَىٰ مَا جِئْتُم بِهِ السِّحْرُ ۖ إِنَّ اللَّهَ سَيُبْطِلُهُ ۖ إِنَّ اللَّهَ لَا يُصْلِحُ عَمَلَ الْمُفْسِدِينَ",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: "AlMushaf",
+                      color: WHITE,
+                      fontSize: 24,
+                    ),
+                  ),
                   verticalGap12,
                   Text(
                       "অতঃপর তারা (ফেরাউনের হায়ার করা জাদুকররা ) যখন (লাঠি ও রশি) নিক্ষেপ করল তখন মূসা বলল, ‘তোমরা যা এনেছো তা জাদু, নিশ্চয়ই আল্লাহ্ একে অসার করে দিবেন। আল্লাহ্ অবশ্যই অশান্তি সৃষ্টিকারীদের কর্ম সার্থক করেন না।’",
@@ -61,7 +70,7 @@ class CategorySection extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return MaterialButton(
                     onPressed: () {
-                      Get.toNamed(categories, arguments: index+1);
+                      Get.toNamed(categories, arguments: index + 1);
                     },
                     color: Theme.of(context).cardColor,
                     elevation: 1.0,
@@ -84,7 +93,7 @@ class CategorySection extends StatelessWidget {
             PrimaryButton(
                 label: "ওয়েবসাইট ভিজিট করুন",
                 onTap: () {
-                  launchInBrowser(Uri.parse(WEBSITE_URL));
+                  launchInBrowser(WEBSITE_URL);
                 }),
           ],
         ),

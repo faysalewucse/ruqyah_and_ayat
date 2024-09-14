@@ -1,8 +1,8 @@
 import 'package:url_launcher/url_launcher.dart';
 
-Future<void> launchInBrowser(Uri url) async {
+Future<void> launchInBrowser(String url) async {
   if (!await launchUrl(
-    url,
+    Uri.parse(url),
     mode: LaunchMode.externalApplication,
   )) {
     throw Exception('Could not launch $url');

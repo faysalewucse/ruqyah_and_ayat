@@ -11,12 +11,12 @@ class Config extends HiveObject {
   final String releaseNotes;
 
   @HiveField(2)
-  final DateTime dataUpdatedAt;
+  final String dataVersion;
 
   Config({
     required this.appVersion,
     required this.releaseNotes,
-    required this.dataUpdatedAt,
+    required this.dataVersion,
   });
 
   // Convert to JSON
@@ -24,7 +24,7 @@ class Config extends HiveObject {
     return {
       'appVersion': appVersion,
       'releaseNotes': releaseNotes,
-      'dataUpdatedAt': dataUpdatedAt.toIso8601String(),
+      'dataVersion': dataVersion,
     };
   }
 
@@ -33,7 +33,7 @@ class Config extends HiveObject {
     return Config(
       appVersion: json['appVersion'] as String,
       releaseNotes: json['releaseNotes'] as String,
-      dataUpdatedAt: DateTime.parse(json['dataUpdatedAt']),
+      dataVersion: json['dataVersion'] as String,
     );
   }
 }

@@ -1,19 +1,19 @@
 name: rukiyah_and_ayat
 description: A new Flutter project.
 
-version: 0.0.9+7
+version: 1.0.8+9
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ^3.5.2
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
-  google_fonts: ^4.0.4
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1
   flutter_islamic_icons: ^1.0.2
-  excel: 2.1.0
+  excel: ^4.0.6
   url_launcher: ^6.3.0
   get_storage: ^2.1.1
   get: ^4.6.6
@@ -26,18 +26,21 @@ dependencies:
   path_provider: ^2.1.4
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  connectivity_plus:
-  flutter_html:
-  firebase_core:
+  connectivity_plus: ^6.0.5
+  flutter_widget_from_html: ^0.15.2
+  firebase_core: ^3.4.0
   intl: ^0.19.0
   package_info_plus: ^8.0.2
+  firebase_messaging: ^15.1.0
+  flutter_local_notifications: ^17.2.2
+  share_plus: ^10.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
   flutter_launcher_icons: ^0.13.1
   hive_generator: ^2.0.0
   build_runner: ^2.0.0
@@ -59,9 +62,30 @@ flutter:
     - assets/fonts/
 
   fonts:
+    - family: MeQuran
+      fonts:
+        - asset: assets/fonts/me_quran.ttf
     - family: AlMajeed
       fonts:
         - asset: assets/fonts/al_majeed_quranic_font.ttf
     - family: AlMushaf
       fonts:
         - asset: assets/fonts/al_mushaf_quranic_font.ttf
+    - family: AlQalamKolkata
+      fonts:
+        - asset: assets/fonts/al_qalam_kolkata_qurani_font.ttf
+    - family: AlQalamMajid
+      fonts:
+        - asset: assets/fonts/al_qalam_quran_majid_font.ttf
+    - family: Noorehira
+      fonts:
+        - asset: assets/fonts/noorehira_regular.ttf
+    - family: Noorehuda
+      fonts:
+        - asset: assets/fonts/noorehuda_regular.ttf
+    - family: QuranRegular
+      fonts:
+        - asset: assets/fonts/quran_regular.ttf
+    - family: UthmanTahaNaskh
+      fonts:
+        - asset: assets/fonts/uthman_taha_naskh_font.ttf

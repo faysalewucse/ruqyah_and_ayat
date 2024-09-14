@@ -8,6 +8,7 @@ import 'package:rukiyah_and_ayat/widgets/bottom_sheet/bottom_sheet_header.dart';
 class FontFamilyChoiceBottomSheet extends StatelessWidget {
   final Function(String?) onChanged;
   final String selectedFont;
+
   const FontFamilyChoiceBottomSheet({
     super.key,
     required this.onChanged,
@@ -16,6 +17,9 @@ class FontFamilyChoiceBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String arabicText =
+        'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِلَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ';
+
     return Container(
       height: deviceHeight * 0.5,
       padding: const EdgeInsets.all(16.0),
@@ -42,20 +46,10 @@ class FontFamilyChoiceBottomSheet extends StatelessWidget {
               children: [
                 const Divider(),
                 ListTile(
-                  title: const Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِلَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: TextStyle(fontFamily: "AlMushaf", fontSize: 22),
-                  ),
-                  onTap: () {
-                    onChanged("AlMushaf");
-                  },
-                  selected: selectedFont == "AlMushaf",
-                ),
-                const Divider(),
-                ListTile(
-                  title: const Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِلَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
-                    style: TextStyle(fontFamily: "AlMajeed", fontSize: 20),
+                  title: Text(
+                    arabicText,
+                    style:
+                        const TextStyle(fontFamily: "AlMajeed", fontSize: 20),
                   ),
                   onTap: () {
                     onChanged("AlMajeed");
@@ -65,13 +59,110 @@ class FontFamilyChoiceBottomSheet extends StatelessWidget {
                 const Divider(),
                 ListTile(
                   title: Text(
-                    'لَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِلَا إِلٰهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ',
+                    arabicText,
+                    style:
+                    const TextStyle(fontFamily: "AlMushaf", fontSize: 22),
+                  ),
+                  onTap: () {
+                    onChanged("AlMushaf");
+                  },
+                  selected: selectedFont == "AlMushaf",
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text(
+                    arabicText,
+                    style:
+                    const TextStyle(fontFamily: "MeQuran", fontSize: 22),
+                  ),
+                  onTap: () {
+                    onChanged("MeQuran");
+                  },
+                  selected: selectedFont == "MeQuran",
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text(
+                    arabicText,
                     style: GoogleFonts.ibmPlexSansArabic(),
                   ),
                   onTap: () {
                     onChanged(GoogleFonts.ibmPlexSansArabic().fontFamily);
                   },
-                  selected: selectedFont == GoogleFonts.ibmPlexSansArabic().fontFamily,
+                  selected: selectedFont ==
+                      GoogleFonts.ibmPlexSansArabic().fontFamily,
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text(
+                    arabicText,
+                    style: const TextStyle(
+                        fontFamily: "AlQalamKolkata", fontSize: 20),
+                  ),
+                  onTap: () {
+                    onChanged("AlQalamKolkata");
+                  },
+                  selected: selectedFont == "AlQalamKolkata",
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text(
+                    arabicText,
+                    style: const TextStyle(
+                        fontFamily: "AlQalamMajid", fontSize: 20),
+                  ),
+                  onTap: () {
+                    onChanged("AlQalamMajid");
+                  },
+                  selected: selectedFont == "AlQalamMajid",
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text(
+                    arabicText,
+                    style:
+                        const TextStyle(fontFamily: "NooreHira", fontSize: 20),
+                  ),
+                  onTap: () {
+                    onChanged("NooreHira");
+                  },
+                  selected: selectedFont == "NooreHira",
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text(
+                    arabicText,
+                    style:
+                        const TextStyle(fontFamily: "NooreHuda", fontSize: 20),
+                  ),
+                  onTap: () {
+                    onChanged("NooreHuda");
+                  },
+                  selected: selectedFont == "NooreHuda",
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text(
+                    arabicText,
+                    style: const TextStyle(
+                        fontFamily: "QuranRegular", fontSize: 20),
+                  ),
+                  onTap: () {
+                    onChanged("QuranRegular");
+                  },
+                  selected: selectedFont == "QuranRegular",
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text(
+                    arabicText,
+                    style:
+                        const TextStyle(fontFamily: "UthmanTaha", fontSize: 20),
+                  ),
+                  onTap: () {
+                    onChanged("UthmanTaha");
+                  },
+                  selected: selectedFont == "UthmanTaha",
                 ),
                 const Divider(),
               ],

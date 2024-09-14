@@ -14,7 +14,6 @@ import 'package:rukiyah_and_ayat/services/category_service.dart';
 import 'package:rukiyah_and_ayat/helper/toast.dart';
 import 'package:rukiyah_and_ayat/services/verses_service.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
-import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 import 'package:rukiyah_and_ayat/widgets/custom_loader.dart';
 
 class DataController extends GetxController {
@@ -22,11 +21,9 @@ class DataController extends GetxController {
 
   final isLoading = false.obs;
 
-  @override
-  void onInit() async {
-    super.onInit();
+  Future<void> initDataController() async {
     await _initHive();  // Initialize Hive
-    await fetchAndSaveCategories(); // Ensure data is fetched after Hive is initialized
+    await fetchAndSaveData(); // Ensure data is fetched after Hive is initialized
   }
 
   Future<void> _initHive() async {
@@ -34,17 +31,26 @@ class DataController extends GetxController {
     Hive.init(appDocDir.path);
   }
 
-  Future<void> fetchAndSaveCategories() async {
+  Future<void> updateData() async {
+    await categoryBox.clear();
+    await versesBox.clear();
+    await articlesBox.clear();
+    await fetchAndSaveData();
+  }
+
+  Future<void> fetchAndSaveData() async {
     final savedCategories = categoryBox.values.toList();
     final savedVerses = versesBox.values.toList();
     final savedArticles = articlesBox.values.toList();
 
-    if (!networkController.hasConnection.value && (savedCategories.isEmpty || savedVerses.isEmpty || savedArticles.isEmpty)) {
+    print("Has connection: ${networkController.hasConnection}");
+
+    if (networkController.hasConnection.isFalse) {
       return DialogHelper.showNoInternetDialog();
     }
 
     try {
-      if (savedCategories.isEmpty || savedVerses.isEmpty || savedArticles.isEmpty) {
+      if (savedCategories.isEmpty || savedVerses.isEmpty || savedArticles.isEmpty ) {
         isLoading(true);
 
         Get.defaultDialog(
@@ -100,7 +106,7 @@ class DataController extends GetxController {
       print(e);
     } finally {
       isLoading(false); // End loading
-      Get.back(); // Close the dialog
+      if(Get.isDialogOpen ?? false) Get.back(); // Close the dialog
     }
   }
 }

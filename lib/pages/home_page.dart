@@ -21,18 +21,20 @@ import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/screen_card.dart';
 import 'package:rukiyah_and_ayat/widgets/dialogs/confirmation_dialog.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final _controller = Get.find<KeeperController>();
+  final _keeperController = Get.find<KeeperController>();
   final networkController = Get.find<NetworkController>();
+  final dataController = Get.find<DataController>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<Screen> screens = [
@@ -40,11 +42,6 @@ class _HomePageState extends State<HomePage> {
       'আয়াত',
       FlutterIslamicIcons.quran,
       categorySection,
-    ),
-    Screen(
-      'অডিও',
-      PhosphorIcons.music_notes_thin,
-      audio,
     ),
     Screen(
       'রুকইয়াহ',
@@ -55,6 +52,11 @@ class _HomePageState extends State<HomePage> {
       'হিজামা',
       PhosphorIcons.first_aid_thin,
       hijama,
+    ),
+    Screen(
+      'অডিও',
+      PhosphorIcons.music_notes_thin,
+      audio,
     ),
     Screen(
       'নিরাপত্তার দুআ',
@@ -81,16 +83,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (networkController.hasConnection.isTrue) {
-        checkAppVersion();
-      }
-    });
+    if (networkController.hasConnection.isTrue) {
+      checkAppVersion();
+    }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _keeperController.dispose();
     super.dispose();
   }
 
@@ -109,12 +109,12 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             padding: const EdgeInsets.only(right: 10),
             onPressed: () {
-              _controller.switchTheme();
-              Get.changeThemeMode(_controller.currentTheme.value);
+              _keeperController.switchTheme();
+              Get.changeThemeMode(_keeperController.currentTheme.value);
             },
             icon: Obx(
               () => Icon(
-                _controller.currentTheme.value == ThemeMode.dark
+                _keeperController.currentTheme.value == ThemeMode.dark
                     ? PhosphorIcons.sun
                     : PhosphorIcons.moon,
               ),
@@ -169,21 +169,21 @@ class _HomePageState extends State<HomePage> {
               leading: const Icon(PhosphorIcons.warning_circle),
               title: const Text('Report Problem'),
               onTap: () {
-                // Handle report problem action
+                launchInBrowser(reportProblemGoogleForm);
               },
             ),
             ListTile(
               leading: const Icon(PhosphorIcons.share_network),
               title: const Text('Share'),
               onTap: () {
-                // Handle share action
+                _onShare(context);
               },
             ),
             ListTile(
               leading: const Icon(Icons.apps),
               title: const Text('More Apps'),
               onTap: () {
-                // Handle more apps action
+                launchInBrowser(yaqeenTechSolutionsPlayStoreUrl);
               },
             ),
           ],
@@ -211,10 +211,15 @@ class _HomePageState extends State<HomePage> {
                     size: 50,
                   ),
                   24.kH,
-                  Text(
-                      "وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ",
-                      textAlign: TextAlign.center,
-                      style: white16W600Arabic),
+                  const Text(
+                    "وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: "AlMushaf",
+                      color: WHITE,
+                      fontSize: 24,
+                    ),
+                  ),
                   verticalGap12,
                   Text(
                       "আর আমি নাযিল করেছি এমন কুরআন, যা মুমিনের জন্য আরোগ্য ও রহমতস্বরূপ",
@@ -246,7 +251,7 @@ class _HomePageState extends State<HomePage> {
             PrimaryButton(
               label: "ওয়েবসাইট ভিজিট করুন",
               onTap: () {
-                launchInBrowser(Uri.parse(WEBSITE_URL));
+                launchInBrowser(WEBSITE_URL);
               },
             ),
           ],
@@ -255,29 +260,46 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  _onShare(BuildContext context) async {
+    final box = context.findRenderObject() as RenderBox?;
+
+    await Share.share(
+      playStoreAppLink,
+      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+    );
+  }
+
   void checkAppVersion() async {
     try {
       final response = await VersionService.getAppConfig();
 
-      // Parse the response data into a List of Config objects
-      List<dynamic> jsonResponse = response.data as List<dynamic>;
-      List<Config> configs = jsonResponse.map((json) => Config.fromJson(json)).toList();
+      List<dynamic> jsonResponse = response.data["configs"] as List<dynamic>;
+      List<Config> configs =
+          jsonResponse.map((json) => Config.fromJson(json)).toList();
 
       if (configs.isNotEmpty) {
         Config latestConfig = configs.first;
-        String currentAppVersion = latestConfig.appVersion;
 
-        print("Config => $latestConfig");
-        print("Version => ${packageInfo.version}");
+        final box = GetStorage();
+        String dataVersion =
+            box.read("dataVersion") ?? latestConfig.dataVersion;
+
+        if (latestConfig.dataVersion != dataVersion) {
+          await dataController.updateData();
+        }
+
+        if (packageInfo.version != latestConfig.appVersion) {
+          showAppUpdateDialog();
+        }
+
+        box.write("dataVersion", latestConfig.dataVersion);
       }
     } catch (error) {
-      // Handle any errors
-      print("Error checking app version: $error");
+      print("Error checking app version or data: $error");
     }
   }
 
-
-  void showCustomDialog() {
+  void showAppUpdateDialog() {
     showDialog<void>(
       context: Get.context!,
       builder: (BuildContext context) {
@@ -288,19 +310,10 @@ class _HomePageState extends State<HomePage> {
           okText: "আপডেট করুন",
           onOkPressed: () {
             Get.back();
-            _launchURL(
-                'https://play.google.com/store/apps/details?id=us.palooi&hl=bn&gl=US');
+            launchInBrowser(playStoreAppLink);
           },
         );
       },
     );
-  }
-
-  void _launchURL(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }
