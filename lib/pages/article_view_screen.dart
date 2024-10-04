@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:intl/intl.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 
-class ArticleScreen extends StatelessWidget {
+class ArticleViewScreen extends StatelessWidget {
   final Article article;
 
-  const ArticleScreen({super.key, required this.article});
+  const ArticleViewScreen({super.key, required this.article});
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +35,11 @@ class ArticleScreen extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: HtmlWidget(
-                  article.content,
-                  textStyle: const TextStyle(fontSize: 18),
+                child: SelectionArea(
+                  child: HtmlWidget(
+                    article.content,
+                    textStyle: const TextStyle(fontSize: 18),
+                  ),
                 ),
               ),
             ),

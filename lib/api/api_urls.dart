@@ -18,3 +18,13 @@ const GET_VERSES_BY_CATEGORY = "$ROOT_API_URL/verses";
 
 //Articles
 const GET_ALL_ARTICLES = "$ROOT_API_URL/articles";
+
+//Hijama
+const GET_ALL_HIJAMA_ARTICLES = "$ROOT_API_URL/hijama";
+
+//Masnun Dua
+const GET_ALL_MASNUN_DUAS = "$ROOT_API_URL/masnun-dua";
+const GET_ALL_MASNUN_DUA_CATEGORIES = "$ROOT_API_URL/masnun-dua-categories";
+
+//Hijama
+const GET_ALL_NIRAPOTTAR_DUAS = "$ROOT_API_URL/nirapottar-dua";

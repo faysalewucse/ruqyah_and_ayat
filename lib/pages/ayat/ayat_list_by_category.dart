@@ -7,8 +7,9 @@ import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/ayat_card.dart';
-import 'package:rukiyah_and_ayat/widgets/bottom_sheet/font_family_choice_bottom_sheet.dart';
+import 'package:rukiyah_and_ayat/widgets/settings/settings.dart';
 import 'package:rukiyah_and_ayat/widgets/no_data.dart';
+import 'package:side_sheet/side_sheet.dart';
 
 class AyatListByCategory extends StatefulWidget {
   final Category category;
@@ -22,7 +23,6 @@ class AyatListByCategory extends StatefulWidget {
 class _AyatListByCategoryState extends State<AyatListByCategory> {
   final keeperController = Get.find<KeeperController>();
   final versesController = Get.find<VersesController>();
-  String selectedFont = 'Amiri'; // Default font
   List<Verse> verses = []; // Initialize with an empty list
 
   void _initCall() async {
@@ -49,26 +49,10 @@ class _AyatListByCategoryState extends State<AyatListByCategory> {
             padding: const EdgeInsets.only(right: 16.0),
             child: IconButton(
               onPressed: () {
-                showModalBottomSheet(
+                SideSheet.right(
                   context: context,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      topRight: Radius.circular(20.0),
-                    ),
-                  ),
-                  isScrollControlled: true,
-                  builder: (context) {
-                    return Obx(
-                          () => FontFamilyChoiceBottomSheet(
-                        onChanged: (newValue) {
-                          keeperController.ayatListFontFamily.value = newValue ?? "";
-                          Get.back();
-                        },
-                        selectedFont: keeperController.ayatListFontFamily.value,
-                      ),
-                    );
-                  },
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  body: const Settings(),
                 );
               },
               icon: const Icon(
@@ -84,19 +68,21 @@ class _AyatListByCategoryState extends State<AyatListByCategory> {
         padding: const EdgeInsets.all(16.0),
         child: verses.isEmpty
             ? const NoData(
-          text: "কোনো আয়াত খুজে পাওয়া যায়নি",
-        )
+                text: "কোনো আয়াত খুজে পাওয়া যায়নি",
+              )
             : ListView.separated(
-          itemCount: verses.length,
-          separatorBuilder: (_, i) => const SizedBox(
-            height: 40,
-            child: Divider(),
-          ),
-          itemBuilder: (context, index) => AyatCard(
-            verse: verses[index],
-            selectedFont: selectedFont,
-          ),
-        ),
+                itemCount: verses.length,
+                separatorBuilder: (_, i) => const SizedBox(
+                  height: 40,
+                  child: Divider(),
+                ),
+                itemBuilder: (context, index) => Obx(
+                  ()=> AyatCard(
+                    verse: verses[index],
+                    selectedFont: keeperController.arabicFontFamily.value,
+                  ),
+                ),
+              ),
       ),
     );
   }

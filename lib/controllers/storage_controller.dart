@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 
@@ -27,6 +26,22 @@ class StorageController{
 
   String getThemeMode(){
     return storage.read("themeMode") ?? "light";
+  }
+
+  // Font Family LocalStorage Services
+  void saveDefaultFontFamily(String fontFamily){
+    storage.write("fontFamily", fontFamily);
+  }
+  String getDefaultFontFamily(){
+    return storage.read("fontFamily") ?? "NooreHuda";
+  }
+
+  // Font Size LocalStorage Services
+  void saveDefaultFontSize(double fontSize){
+    storage.write("fontSize", fontSize);
+  }
+  double getDefaultFontSize(){
+    return storage.read("fontSize") ?? 32.0;
   }
 
   bool hasOnBoardVisited(){

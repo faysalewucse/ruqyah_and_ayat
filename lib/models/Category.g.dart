@@ -19,7 +19,7 @@ class CategoryAdapter extends TypeAdapter<Category> {
     return Category(
       id: fields[0] as String,
       label: fields[2] as String,
-      categoryIndex: fields[3] as int,
+      categoryIndex: fields[3] as int?,
       index: fields[4] as int,
       createdAt: fields[5] as DateTime,
       updatedAt: fields[6] as DateTime,

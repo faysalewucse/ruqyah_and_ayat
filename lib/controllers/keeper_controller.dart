@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:rukiyah_and_ayat/controllers/storage_controller.dart';
 
 class KeeperController extends GetxController {
   final storageController = Get.find<StorageController>();
 
-  final ayatListFontFamily = "AlMajeed".obs;
+  late Rx<String> arabicFontFamily;
+  late Rx<double> arabicFontSize;
   late Rx<ThemeMode> currentTheme;
 
   @override
@@ -15,6 +15,8 @@ class KeeperController extends GetxController {
     super.onInit();
     ThemeMode themeMode = storageController.getThemeMode() == "light" ? ThemeMode.light : ThemeMode.dark;
     currentTheme = themeMode.obs;
+    arabicFontFamily = storageController.getDefaultFontFamily().obs;
+    arabicFontSize = storageController.getDefaultFontSize().obs;
   }
   // function to switch between themes
   void switchTheme() {

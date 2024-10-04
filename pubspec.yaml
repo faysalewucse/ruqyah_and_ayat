@@ -1,7 +1,7 @@
 name: rukiyah_and_ayat
 description: A new Flutter project.
 
-version: 1.0.8+9
+version: 1.0.9+10
 
 environment:
   sdk: ^3.5.2
@@ -34,6 +34,8 @@ dependencies:
   firebase_messaging: ^15.1.0
   flutter_local_notifications: ^17.2.2
   share_plus: ^10.0.0
+  side_sheet: ^1.0.4
+  html: ^0.15.4
 
 dev_dependencies:
   flutter_test:
@@ -48,9 +50,9 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icons/dua.png"
+  image_path: "assets/icons/app_icon.png"
   min_sdk_android: 21
-  adaptive_icon_background: "#5f02b0"
+  adaptive_icon_background: "#000080"
 
 flutter:
 

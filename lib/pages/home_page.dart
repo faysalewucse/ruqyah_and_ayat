@@ -54,19 +54,19 @@ class _HomePageState extends State<HomePage> {
       hijama,
     ),
     Screen(
-      'অডিও',
-      PhosphorIcons.music_notes_thin,
-      audio,
-    ),
-    Screen(
-      'নিরাপত্তার দুআ',
-      PhosphorIcons.shield_plus_thin,
+      'হেফাজতের মাসনুন আমল',
+      PhosphorIcons.shield_thin,
       securityDua,
     ),
     Screen(
       'মাসনুন দুআ',
       FlutterIslamicIcons.tasbihHand,
-      masnunDua,
+      masnunDuaCategories,
+    ),
+    Screen(
+      'অডিও',
+      PhosphorIcons.music_notes_thin,
+      audio,
     ),
     Screen(
       'মাসায়েল',
@@ -99,11 +99,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.only(left: 18.0),
-          child: Text(
-            appName,
-          ),
+        titleSpacing: 0,
+        title: const Text(
+          appName,
         ),
         actions: [
           IconButton(
@@ -127,10 +125,10 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
+        child: Column(
+          children: [
             SizedBox(
+              width: deviceWidth,
               height: 200.0,
               child: DrawerHeader(
                 decoration: BoxDecoration(
@@ -139,10 +137,15 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      "assets/icons/dua.png",
-                      width: deviceHeight * 0.08,
+                    Obx(
+                          () => Image.asset(
+                        _keeperController.currentTheme.value == ThemeMode.dark
+                            ? "assets/icons/app_icon_dark.png"
+                            : "assets/icons/app_icon.png",
+                        width: deviceHeight * 0.08,
+                      ),
                     ),
+                    8.kH,
                     Text(
                       appName,
                       style: Theme.of(context).appBarTheme.titleTextStyle,
@@ -151,40 +154,81 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            ...screens.map(
-              (Screen screen) => ListTile(
-                leading: Icon(
-                  screen.iconData,
-                  color: Theme.of(context).textTheme.titleLarge?.color,
-                ),
-                title: Text(screen.name),
-                onTap: () {
-                  Get.back();
-                  Get.toNamed(screen.route);
-                },
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  ...screens.map(
+                        (Screen screen) => ListTile(
+                      dense: true,
+                      leading: Icon(
+                        screen.iconData,
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
+                      title: Text(
+                        screen.name,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      onTap: () {
+                        Get.back();
+                        Get.toNamed(screen.route);
+                      },
+                    ),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(PhosphorIcons.warning_circle),
+                    title: Text(
+                      'সমস্যা জানান',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    onTap: () {
+                      launchInBrowser(reportProblemGoogleForm);
+                    },
+                  ),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(PhosphorIcons.share_network),
+                    title: Text(
+                      'শেয়ার করুন',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    onTap: () {
+                      _onShare(context);
+                    },
+                  ),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(Icons.apps),
+                    title: Text(
+                      'আরো অ্যাপ দেখুন',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    onTap: () {
+                      launchInBrowser(yaqeenTechSolutionsPlayStoreUrl);
+                    },
+                  ),
+                ],
               ),
             ),
             const Divider(),
-            ListTile(
-              leading: const Icon(PhosphorIcons.warning_circle),
-              title: const Text('Report Problem'),
-              onTap: () {
-                launchInBrowser(reportProblemGoogleForm);
-              },
-            ),
-            ListTile(
-              leading: const Icon(PhosphorIcons.share_network),
-              title: const Text('Share'),
-              onTap: () {
-                _onShare(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.apps),
-              title: const Text('More Apps'),
-              onTap: () {
-                launchInBrowser(yaqeenTechSolutionsPlayStoreUrl);
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                children: [
+                  Text(
+                    "Powered by",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    "YAQEEN TECH SOLUTIONS",
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -195,41 +239,45 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: rounded20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    FlutterIslamicIcons.quran2,
-                    color: WHITE,
-                    size: 50,
+            Stack(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 24.0, horizontal: 16.0),
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: rounded20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // const Icon(
+                      //   FlutterIslamicIcons.quran2,
+                      //   color: WHITE,
+                      //   size: 50,
+                      // ),
+                      // 24.kH,
+                      const Text(
+                        "وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: "AlMushaf",
+                          color: WHITE,
+                          fontSize: 24,
+                        ),
+                      ),
+                      verticalGap12,
+                      Text(
+                          "আর আমি নাযিল করেছি এমন কুরআন, যা মুমিনের জন্য আরোগ্য ও রহমতস্বরূপ",
+                          textAlign: TextAlign.center,
+                          style: white16W600),
+                      verticalGap12,
+                      Text("“সূরাঃ আল-ইসরা (১৭ঃ৮২)”",
+                          textAlign: TextAlign.center, style: white14W500),
+                    ],
                   ),
-                  24.kH,
-                  const Text(
-                    "وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: "AlMushaf",
-                      color: WHITE,
-                      fontSize: 24,
-                    ),
-                  ),
-                  verticalGap12,
-                  Text(
-                      "আর আমি নাযিল করেছি এমন কুরআন, যা মুমিনের জন্য আরোগ্য ও রহমতস্বরূপ",
-                      textAlign: TextAlign.center,
-                      style: white16W600),
-                  verticalGap12,
-                  Text("“সূরাঃ আল-ইসরা (১৭ঃ৮২)”",
-                      textAlign: TextAlign.center, style: white14W500),
-                ],
-              ),
+                ),
+              ],
             ),
             16.kH,
             Expanded(
@@ -284,12 +332,10 @@ class _HomePageState extends State<HomePage> {
         String dataVersion =
             box.read("dataVersion") ?? latestConfig.dataVersion;
 
-        if (latestConfig.dataVersion != dataVersion) {
-          await dataController.updateData();
-        }
-
         if (packageInfo.version != latestConfig.appVersion) {
           showAppUpdateDialog();
+        } else if (latestConfig.dataVersion != dataVersion) {
+          await dataController.updateData();
         }
 
         box.write("dataVersion", latestConfig.dataVersion);
@@ -304,8 +350,8 @@ class _HomePageState extends State<HomePage> {
       context: Get.context!,
       builder: (BuildContext context) {
         return ConfirmationDialog(
-          title: "নতুন আপডেট",
-          confirmationMessage: 'অ্যাপের নতুন আপডেট পাওয়া গেছে!',
+          title: "অ্যাপ আপডেট",
+          confirmationMessage: 'নতুন সব বৈশিষ্ট্য এবং উন্নত পারফরম্যান্স পেতে এখনই আপনার অ্যাপটি আপডেট করুন।',
           cancelText: 'বাতিল',
           okText: "আপডেট করুন",
           onOkPressed: () {

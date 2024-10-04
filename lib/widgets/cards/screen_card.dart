@@ -20,7 +20,7 @@ class ScreenCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(screen.iconData, size: 40, color:Theme.of(context).textTheme.headlineSmall?.color),
+            Icon(screen.iconData, size: 40, color:Theme.of(context).textTheme.headlineSmall?.color,),
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),

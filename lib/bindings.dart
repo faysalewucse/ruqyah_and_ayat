@@ -2,7 +2,10 @@ import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/article_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/category_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/data_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/hijama_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/masnun_dua_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/nirapottar_dua_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/storage_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/verses_controller.dart';
@@ -24,7 +27,10 @@ class MyBindings implements Bindings {
       Get.put(KeeperController());
       Get.put(CategoryController());
       Get.put(VersesController());
-      Get.put(ArticleController());
+      Get.put(RuqyahController());
+      Get.put(HijamaController());
+      Get.put(MasnunDuaController());
+      Get.put(NirapottarDuaController());
     });
   }
 }

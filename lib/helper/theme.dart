@@ -21,6 +21,7 @@ class MyTheme {
         color: WHITE, //change your color here
       ),
     ),
+    sliderTheme: SliderThemeData(overlayShape: SliderComponentShape.noOverlay),
     textTheme: TextTheme(
       bodySmall: n30014Normal,
       bodyMedium: n30014W500,

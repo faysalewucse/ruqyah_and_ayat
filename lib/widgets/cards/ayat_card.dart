@@ -33,16 +33,19 @@ class AyatCard extends StatelessWidget {
           const SizedBox(height: 5,),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            child: Obx(() => Text(
-              verse.verse,
-              textDirection: TextDirection.rtl,
-              textAlign: TextAlign.justify,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.titleLarge?.color,
-                fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
-                fontFamily: keeperController.ayatListFontFamily.value,
-              ),
-            )),
+            child: Obx(() =>
+                Text(
+                  verse.verse,
+                  textDirection: TextDirection.rtl,
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(
+                    color: Get.isDarkMode ? Theme.of(context).iconTheme.color : Theme.of(context).primaryColor,
+                    fontSize: keeperController.arabicFontSize.value,
+                    fontFamily: keeperController.arabicFontFamily.value,
+                    letterSpacing: 0,
+                  ),
+                ),
+            ),
           ),
         ],
       ),
