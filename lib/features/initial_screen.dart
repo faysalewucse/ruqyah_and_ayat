@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/data_controller.dart';
-import 'package:rukiyah_and_ayat/pages/home_page.dart';
+import 'package:rukiyah_and_ayat/features/home_page.dart';
 
 class InitialScreen extends StatefulWidget {
   const InitialScreen({super.key});

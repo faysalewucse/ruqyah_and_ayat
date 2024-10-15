@@ -3,7 +3,7 @@ import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/masnun_dua_controller.dart';
-import 'package:rukiyah_and_ayat/controllers/verses_controller.dart';
+import 'package:rukiyah_and_ayat/features/ayat/controllers/verses_controller.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
@@ -12,6 +12,8 @@ import 'package:rukiyah_and_ayat/widgets/cards/masnun_dua_card.dart';
 import 'package:rukiyah_and_ayat/widgets/settings/settings.dart';
 import 'package:rukiyah_and_ayat/widgets/no_data.dart';
 import 'package:side_sheet/side_sheet.dart';
+
+import '../../utils/constants/app_colors.dart';
 
 class MasnunDuasByCategory extends StatefulWidget {
   final Category category;
@@ -55,7 +57,7 @@ class _MasnunDuasByCategoryState extends State<MasnunDuasByCategory> {
               },
               icon: const Icon(
                 PhosphorIcons.sliders_horizontal,
-                color: WHITE,
+                color: AppColors.white,
               ),
             ),
           )

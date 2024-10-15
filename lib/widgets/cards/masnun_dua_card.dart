@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/masnun-dua/masnun_dua.dart';
+import 'package:rukiyah_and_ayat/utils/constants/app_colors.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 
 class MasnunDuaCard extends StatelessWidget {
@@ -18,7 +19,7 @@ class MasnunDuaCard extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
-            border: Border.all(color: BORDER_COLOR_1),
+            border: Border.all(color: AppColors.borderColor1),
             borderRadius: rounded20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

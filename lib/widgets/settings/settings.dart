@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
-import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
-import 'package:rukiyah_and_ayat/widgets/bottom_sheet/bottom_sheet_header.dart';
 import 'package:rukiyah_and_ayat/widgets/settings/font_settings.dart';
+import '../../utils/constants/app_colors.dart';
 
 class Settings extends StatelessWidget {
   const Settings({
@@ -34,7 +31,7 @@ class Settings extends StatelessWidget {
                   onTap: (){
                     Get.back();
                   },
-                  child: const Icon(PhosphorIcons.caret_circle_left, color: BLACK, size: 30,)),
+                  child: const Icon(PhosphorIcons.caret_circle_left, color: AppColors.black, size: 30,)),
               12.kW,
               const Text(
                 'সেটিংস',

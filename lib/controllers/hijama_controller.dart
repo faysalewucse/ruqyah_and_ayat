@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:rukiyah_and_ayat/helper/global_variables.dart';
+import 'package:rukiyah_and_ayat/helper/hive_boxes.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 

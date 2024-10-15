@@ -1,7 +1,7 @@
 // import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 // import 'package:audioplayers/audioplayers.dart';
 // import 'package:flutter/material.dart';
-// import 'package:rukiyah_and_ayat/pages/audio/audio.dart';
+// import 'package:rukiyah_and_ayat/features/audio/audio_player.dart';
 //
 // class AudioTrackCard extends StatelessWidget {
 //   final AudioPlayer player;

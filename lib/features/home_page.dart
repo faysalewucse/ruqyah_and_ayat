@@ -4,6 +4,7 @@ import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:rukiyah_and_ayat/api/api_urls.dart';
 import 'package:rukiyah_and_ayat/controllers/data_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
@@ -12,17 +13,20 @@ import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/Config.dart';
 import 'package:rukiyah_and_ayat/models/Screen.dart';
-import 'package:rukiyah_and_ayat/pages/ayat/ayat_categories.dart';
-import 'package:rukiyah_and_ayat/pages/under_development.dart';
+import 'package:rukiyah_and_ayat/features/ayat/ayat_categories.dart';
+import 'package:rukiyah_and_ayat/features/under_development.dart';
 import 'package:rukiyah_and_ayat/router/routes.dart';
 import 'package:rukiyah_and_ayat/services/version_service.dart';
 import 'package:rukiyah_and_ayat/utils/common_functions.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
+import 'package:rukiyah_and_ayat/widgets/animated_progress_loader.dart';
 import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/screen_card.dart';
 import 'package:rukiyah_and_ayat/widgets/dialogs/confirmation_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../utils/constants/app_colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -66,7 +70,7 @@ class _HomePageState extends State<HomePage> {
     Screen(
       'অডিও',
       PhosphorIcons.music_notes_thin,
-      audio,
+      audioCategories,
     ),
     Screen(
       'মাসায়েল',
@@ -105,7 +109,6 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            padding: const EdgeInsets.only(right: 10),
             onPressed: () {
               _keeperController.switchTheme();
               Get.changeThemeMode(_keeperController.currentTheme.value);
@@ -138,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Obx(
-                          () => Image.asset(
+                      () => Image.asset(
                         _keeperController.currentTheme.value == ThemeMode.dark
                             ? "assets/icons/app_icon_dark.png"
                             : "assets/icons/app_icon.png",
@@ -159,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                 padding: EdgeInsets.zero,
                 children: <Widget>[
                   ...screens.map(
-                        (Screen screen) => ListTile(
+                    (Screen screen) => ListTile(
                       dense: true,
                       leading: Icon(
                         screen.iconData,
@@ -178,7 +181,10 @@ class _HomePageState extends State<HomePage> {
                   const Divider(),
                   ListTile(
                     dense: true,
-                    leading: const Icon(PhosphorIcons.warning_circle),
+                    leading: Icon(
+                      PhosphorIcons.warning_circle_thin,
+                      color: Theme.of(context).textTheme.titleLarge?.color,
+                    ),
                     title: Text(
                       'সমস্যা জানান',
                       style: Theme.of(context).textTheme.bodyLarge,
@@ -189,7 +195,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ListTile(
                     dense: true,
-                    leading: const Icon(PhosphorIcons.share_network),
+                    leading: Icon(
+                      PhosphorIcons.share_network_thin,
+                      color: Theme.of(context).textTheme.titleLarge?.color,
+                    ),
                     title: Text(
                       'শেয়ার করুন',
                       style: Theme.of(context).textTheme.bodyLarge,
@@ -200,7 +209,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ListTile(
                     dense: true,
-                    leading: const Icon(Icons.apps),
+                    leading: Icon(
+                      PhosphorIcons.google_play_logo_thin,
+                      color: Theme.of(context).textTheme.titleLarge?.color,
+                    ),
                     title: Text(
                       'আরো অ্যাপ দেখুন',
                       style: Theme.of(context).textTheme.bodyLarge,
@@ -253,7 +265,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       // const Icon(
                       //   FlutterIslamicIcons.quran2,
-                      //   color: WHITE,
+                      //   color: AppColors.white,
                       //   size: 50,
                       // ),
                       // 24.kH,
@@ -261,10 +273,10 @@ class _HomePageState extends State<HomePage> {
                         "وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontFamily: "AlMushaf",
-                          color: WHITE,
-                          fontSize: 24,
-                        ),
+                            fontFamily: "NooreHuda",
+                            color: AppColors.white,
+                            fontSize: 26,
+                            letterSpacing: 0),
                       ),
                       verticalGap12,
                       Text(
@@ -351,7 +363,8 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext context) {
         return ConfirmationDialog(
           title: "অ্যাপ আপডেট",
-          confirmationMessage: 'নতুন সব বৈশিষ্ট্য এবং উন্নত পারফরম্যান্স পেতে এখনই আপনার অ্যাপটি আপডেট করুন।',
+          confirmationMessage:
+              'নতুন সব বৈশিষ্ট্য এবং উন্নত পারফরম্যান্স পেতে এখনই আপনার অ্যাপটি আপডেট করুন।',
           cancelText: 'বাতিল',
           okText: "আপডেট করুন",
           onOkPressed: () {

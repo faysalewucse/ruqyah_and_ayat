@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 
+import '../../utils/constants/app_colors.dart';
+
 class BottomSheetHeader extends StatelessWidget {
   const BottomSheetHeader({super.key});
 
@@ -11,7 +13,7 @@ class BottomSheetHeader extends StatelessWidget {
       height: 6,
       width: deviceWidth * 0.3,
       decoration: BoxDecoration(
-        color: GRAY,
+        color: AppColors.gray,
         borderRadius: BorderRadius.circular(50),
       ),
     );

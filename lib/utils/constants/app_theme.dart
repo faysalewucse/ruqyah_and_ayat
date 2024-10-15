@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
+import 'package:rukiyah_and_ayat/utils/constants/app_colors.dart';
 
-class MyTheme {
+class AppTheme {
   static final lightTheme = ThemeData(
-    scaffoldBackgroundColor: WHITE,
-    canvasColor: SCAFFOLD_BACKGROUND_COLOR,
+    scaffoldBackgroundColor: AppColors.white,
+    canvasColor: AppColors.scaffoldBackgroundColor,
     fontFamily: GoogleFonts.hindSiliguri().fontFamily,
-    primaryColor: PRIMARY_COLOR,
-    cardColor: WHITE,
-    indicatorColor: PRIMARY_COLOR_LIGHT,
+    primaryColor: AppColors.primaryColor,
+    cardColor: AppColors.white,
+    indicatorColor: AppColors.primaryColorLight,
     brightness: Brightness.light,
     appBarTheme: AppBarTheme(
-      backgroundColor: PRIMARY_COLOR,
+      backgroundColor: AppColors.primaryColor,
       titleSpacing: 0,
       titleTextStyle: GoogleFonts.hindSiliguri(
-          fontWeight: FontWeight.w700, fontSize: 20, color: WHITE),
+          fontWeight: FontWeight.w700, fontSize: 20, color: AppColors.white),
       iconTheme: const IconThemeData(
-        color: WHITE, //change your color here
+        color: AppColors.white, //change your color here
       ),
     ),
     sliderTheme: SliderThemeData(overlayShape: SliderComponentShape.noOverlay),
@@ -42,20 +42,20 @@ class MyTheme {
   );
 
   static final darkTheme = ThemeData(
-    scaffoldBackgroundColor: DARK_SCAFFOLD_BACKGROUND_COLOR,
-    canvasColor: DARK_SCAFFOLD_BACKGROUND_COLOR,
+    scaffoldBackgroundColor: AppColors.darkScaffoldBackgroundColor,
+    canvasColor: AppColors.darkScaffoldBackgroundColor,
     fontFamily: GoogleFonts.hindSiliguri().fontFamily,
-    primaryColor: BLACK,
-    cardColor: BLACK,
-    indicatorColor: BLACK,
+    primaryColor: AppColors.black,
+    cardColor: AppColors.black,
+    indicatorColor: AppColors.black,
     brightness: Brightness.dark,
     appBarTheme: AppBarTheme(
-      backgroundColor: BLACK,
+      backgroundColor: AppColors.black,
       titleSpacing: 0,
       titleTextStyle: GoogleFonts.hindSiliguri(
-          fontWeight: FontWeight.w700, fontSize: 20, color: WHITE),
+          fontWeight: FontWeight.w700, fontSize: 20, color: AppColors.white),
       iconTheme: const IconThemeData(
-        color: WHITE, //change your color here
+        color: AppColors.white, //change your color here
       ),
     ),
     textTheme: TextTheme(

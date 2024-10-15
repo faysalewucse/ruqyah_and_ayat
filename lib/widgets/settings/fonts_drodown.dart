@@ -3,6 +3,8 @@ import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 
+import '../../utils/constants/app_colors.dart';
+
 class FontSelectorDropdown extends StatefulWidget {
   final String selectedFont;
   final ValueChanged<String> onChanged;
@@ -46,10 +48,10 @@ class FontSelectorDropdownState extends State<FontSelectorDropdown> {
           borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
         ),
         enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: GRAY, width: 1.5),
+          borderSide: BorderSide(color: AppColors.gray, width: 1.5),
         ),
         focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: PRIMARY_COLOR, width: 2.0),
+          borderSide: BorderSide(color: AppColors.primaryColor, width: 2.0),
         ),
       ),
       onChanged: (String? newValue) {

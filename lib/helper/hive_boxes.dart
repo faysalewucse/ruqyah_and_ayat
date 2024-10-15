@@ -2,6 +2,8 @@ import 'package:hive/hive.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
+import 'package:rukiyah_and_ayat/models/audio/audio.dart';
+import 'package:rukiyah_and_ayat/models/audio/audio_category.dart';
 import 'package:rukiyah_and_ayat/models/masnun-dua/masnun_dua.dart';
 
 late Box<Category> categoryBox;
@@ -11,3 +13,4 @@ late Box<Article> hijamasBox;
 late Box<MasnunDua> masnunDuaBox;
 late Box<Category> masnunDuaCategoriesBox;
 late Box<Article> nirapottarDuaBox;
+late Box<AudioCategory> audioBox;

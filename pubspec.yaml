@@ -36,6 +36,11 @@ dependencies:
   share_plus: ^10.0.0
   side_sheet: ^1.0.4
   html: ^0.15.4
+  youtube_explode_dart: ^2.3.0+1
+  just_audio: ^0.9.41
+  liquid_progress_indicator_v2: ^0.5.0
+  accordion: ^2.6.0
+  bangla_converter: ^0.0.2
 
 dev_dependencies:
   flutter_test:

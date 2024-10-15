@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rukiyah_and_ayat/controllers/nirapottar_dua_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/article_controller.dart';
 import 'package:rukiyah_and_ayat/widgets/article/article_title_card.dart';
 import 'package:rukiyah_and_ayat/widgets/no_data.dart';
 
-class NirapottarDuaTitles extends StatefulWidget {
-  const NirapottarDuaTitles({super.key});
+class RuqyahTitles extends StatefulWidget {
+  const RuqyahTitles({super.key});
 
   @override
-  State<NirapottarDuaTitles> createState() => _NirapottarDuaTitlesState();
+  State<RuqyahTitles> createState() => _RuqyahTitlesState();
 }
 
-class _NirapottarDuaTitlesState extends State<NirapottarDuaTitles> {
-  final nirapottarDuaController = Get.find<NirapottarDuaController>();
+class _RuqyahTitlesState extends State<RuqyahTitles> {
+  final articleController = Get.find<RuqyahController>();
 
   _initCall() async {
-    await nirapottarDuaController.loadNirapottarDuaArticlesFromLocal();
+    await articleController.loadArticlesFromLocal();
   }
 
   @override
@@ -29,10 +29,10 @@ class _NirapottarDuaTitlesState extends State<NirapottarDuaTitles> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("হেফাজতের মাসনুন আমল"),
+        title: const Text("আর্টিক্যাল সমুহ"),
       ),
       body: Obx(
-        () => nirapottarDuaController.nirapottarDuas.isEmpty
+        () => articleController.ruqyahs.isEmpty
             ? const NoData(
                 text: "কোনো আর্টিক্যাল খুজে পাওয়া যায়নি",
               )
@@ -42,12 +42,13 @@ class _NirapottarDuaTitlesState extends State<NirapottarDuaTitles> {
                 padding: const EdgeInsets.all(16.0),
                 child: ListView.separated(
                   itemBuilder: (_, index) => ArticleTitleCard(
-                    article: nirapottarDuaController.nirapottarDuas[index],
+                    article: articleController.ruqyahs[index],
+                    index: index,
                   ),
                   separatorBuilder: (_, i) => const SizedBox(
                     height: 12,
                   ),
-                  itemCount: nirapottarDuaController.nirapottarDuas.length,
+                  itemCount: articleController.ruqyahs.length,
                 ),
               ),
       ),

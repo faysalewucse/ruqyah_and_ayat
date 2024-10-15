@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
-import 'package:rukiyah_and_ayat/controllers/verses_controller.dart';
+import 'package:rukiyah_and_ayat/features/ayat/controllers/verses_controller.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
+import 'package:rukiyah_and_ayat/utils/constants/app_colors.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/ayat_card.dart';
 import 'package:rukiyah_and_ayat/widgets/settings/settings.dart';
 import 'package:rukiyah_and_ayat/widgets/no_data.dart';
@@ -57,7 +58,7 @@ class _AyatListByCategoryState extends State<AyatListByCategory> {
               },
               icon: const Icon(
                 PhosphorIcons.sliders_horizontal,
-                color: WHITE,
+                color: AppColors.white,
               ),
             ),
           )

@@ -1,18 +1,21 @@
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
-import 'package:rukiyah_and_ayat/pages/article_view_screen.dart';
-import 'package:rukiyah_and_ayat/pages/ayat/ayat_categories.dart';
-import 'package:rukiyah_and_ayat/pages/ayat/ayat_list_by_category.dart';
-import 'package:rukiyah_and_ayat/pages/ayat/category_section.dart';
-import 'package:rukiyah_and_ayat/pages/hijama/hijama_titles.dart';
-import 'package:rukiyah_and_ayat/pages/home_page.dart';
-import 'package:rukiyah_and_ayat/pages/initial_screen.dart';
-import 'package:rukiyah_and_ayat/pages/masnun-dua/masnun-duas.dart';
-import 'package:rukiyah_and_ayat/pages/masnun-dua/masnun_dua_categories.dart';
-import 'package:rukiyah_and_ayat/pages/nirapottar-dua/nirapottar_dua_titles.dart';
-import 'package:rukiyah_and_ayat/pages/ruqyah/ruqyah_titles.dart';
-import 'package:rukiyah_and_ayat/pages/under_development.dart';
+import 'package:rukiyah_and_ayat/models/audio/audio.dart';
+import 'package:rukiyah_and_ayat/widgets/article/article_view_screen.dart';
+import 'package:rukiyah_and_ayat/features/audio/audio_player.dart';
+import 'package:rukiyah_and_ayat/features/audio/audio_categories.dart';
+import 'package:rukiyah_and_ayat/features/ayat/ayat_categories.dart';
+import 'package:rukiyah_and_ayat/features/ayat/ayat_list_by_category.dart';
+import 'package:rukiyah_and_ayat/features/ayat/category_section.dart';
+import 'package:rukiyah_and_ayat/features/hijama/hijama_titles.dart';
+import 'package:rukiyah_and_ayat/features/home_page.dart';
+import 'package:rukiyah_and_ayat/features/initial_screen.dart';
+import 'package:rukiyah_and_ayat/features/masnun-dua/masnun-duas.dart';
+import 'package:rukiyah_and_ayat/features/masnun-dua/masnun_dua_categories.dart';
+import 'package:rukiyah_and_ayat/features/nirapottar-dua/nirapottar_dua_titles.dart';
+import 'package:rukiyah_and_ayat/features/ruqyah/ruqyah_titles.dart';
+import 'package:rukiyah_and_ayat/features/under_development.dart';
 import 'package:rukiyah_and_ayat/router/routes.dart';
 
 final List<GetPage<dynamic>> routePages = [
@@ -49,8 +52,15 @@ final List<GetPage<dynamic>> routePages = [
       },
     ),
     GetPage(
-      name: audio,
-      page: () => const UnderDevelopment(title: "অডিও"),
+      name: audioCategories,
+      page: () => const AudioCategories(),
+    ),
+    GetPage(
+      name: playAudio,
+      page: () {
+        Audio audio = Get.arguments as Audio;
+        return RuqyahPlayer(audio: audio);
+      },
     ),
     GetPage(
       name: ruqyah,

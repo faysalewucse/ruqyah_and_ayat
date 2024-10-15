@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 import 'package:rukiyah_and_ayat/widgets/custom_loader.dart';
+
+import '../utils/constants/app_colors.dart';
 
 class DialogHelper {
   static void showNoInternetDialog() {
@@ -22,7 +23,7 @@ class DialogHelper {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(PhosphorIcons.wifi_slash, color: PRIMARY_COLOR, size: 50,),
+              const Icon(PhosphorIcons.wifi_slash, color: AppColors.primaryColor, size: 50,),
               20.kH,
               Text("ইন্টারনেট সংযোগ নেই", style: primary20W500),
               const Text("প্রথমবার অ্যাপ ডাটা ডাউনলোড করার জন্য আপনার ইন্টারনেট সংযোগ থাকতে হবে।", textAlign: TextAlign.center,),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/storage_controller.dart';
 import 'package:rukiyah_and_ayat/helper/colors.dart';
+import 'package:rukiyah_and_ayat/utils/constants/app_colors.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 import 'package:rukiyah_and_ayat/widgets/settings/fonts_drodown.dart';
 
@@ -19,7 +19,7 @@ class FontSettings extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(border: Border.all(color: PRIMARY_COLOR_LIGHT)),
+      decoration: BoxDecoration(border: Border.all(color: AppColors.primaryColorLight)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -47,7 +47,7 @@ class FontSettings extends StatelessWidget {
               children: [
                 Expanded(
                   child: Slider(
-                    activeColor: PRIMARY_COLOR,
+                    activeColor: AppColors.primaryColor,
                     min: 5,
                     max: 50,
                     value: keeperController.arabicFontSize.value,

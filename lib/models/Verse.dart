@@ -14,15 +14,19 @@ class Verse extends HiveObject {
   final String category;
 
   @HiveField(3)
-  final DateTime createdAt;
+  final int index;
 
   @HiveField(4)
+  final DateTime createdAt;
+
+  @HiveField(5)
   final DateTime updatedAt;
 
   Verse({
     required this.title,
     required this.verse,
     required this.category,
+    required this.index,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -33,8 +37,9 @@ class Verse extends HiveObject {
       'title': title,
       'verse': verse,
       'category': category,
-      'createdAt': createdAt.toIso8601String(), // Convert DateTime to ISO 8601 string
-      'updatedAt': updatedAt.toIso8601String(), // Convert DateTime to ISO 8601 string
+      'index': index,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 
@@ -44,8 +49,9 @@ class Verse extends HiveObject {
       title: json['title'],
       verse: json['verse'],
       category: json['category'],
-      createdAt: DateTime.parse(json['createdAt']), // Assuming ISO 8601 string format
-      updatedAt: DateTime.parse(json['updatedAt']), // Assuming ISO 8601 string format
+      index: json['index'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 }

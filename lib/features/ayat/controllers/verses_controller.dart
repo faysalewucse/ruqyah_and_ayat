@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:rukiyah_and_ayat/helper/global_variables.dart';
+import 'package:rukiyah_and_ayat/helper/hive_boxes.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
 
 class VersesController extends GetxController {
@@ -17,18 +17,18 @@ class VersesController extends GetxController {
       verses(savedVerses);
     } else {
       // Optionally handle the case where there is no cached data
-      print("No categories found in local storage.");
+      print("কোনো ক্যাটাগরী খুজে পাওয়া যায়নি");
     }
   }
 
   Future<List<Verse>> loadVersesByCategory({required String categoryId}) async {
-    final filteredVerses = versesBox.values.where((verse) => verse.category == categoryId).toList();
+    final filteredVerses = versesBox.values.where((verse) => verse.category == categoryId).toList()..sort((a, b) => a.index.compareTo(b.index));
     if (filteredVerses.isNotEmpty) {
       verses(filteredVerses);
       return verses;
     } else {
       // Optionally handle the case where no matching data is available
-      print("No categories found for the specified index.");
+      print("কোনো ক্যাটাগরী খুজে পাওয়া যায়নি");
       return [];
     }
   }

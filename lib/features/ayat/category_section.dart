@@ -10,6 +10,7 @@ import 'package:rukiyah_and_ayat/helper/colors.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/router/routes.dart';
 import 'package:rukiyah_and_ayat/utils/common_functions.dart';
+import 'package:rukiyah_and_ayat/utils/constants/app_colors.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 
@@ -42,10 +43,10 @@ class CategorySection extends StatelessWidget {
                     "فَلَمَّا أَلْقَوْا قَالَ مُوسَىٰ مَا جِئْتُم بِهِ السِّحْرُ ۖ إِنَّ اللَّهَ سَيُبْطِلُهُ ۖ إِنَّ اللَّهَ لَا يُصْلِحُ عَمَلَ الْمُفْسِدِينَ",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: "AlMushaf",
-                      color: WHITE,
-                      fontSize: 24,
-                    ),
+                        fontFamily: "NooreHuda",
+                        color: AppColors.white,
+                        fontSize: 24,
+                        letterSpacing: 0,),
                   ),
                   verticalGap12,
                   Text(

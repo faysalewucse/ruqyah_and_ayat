@@ -44,6 +44,7 @@ class _HijamaArticleTitlesState extends State<HijamaArticleTitles> {
                 child: ListView.separated(
                   itemBuilder: (_, index) => ArticleTitleCard(
                     article: hijamaController.hijamaArticles[index],
+                    index: index,
                   ),
                   separatorBuilder: (_, i) => const SizedBox(
                     height: 12,

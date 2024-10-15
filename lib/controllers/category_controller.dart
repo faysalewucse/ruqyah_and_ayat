@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:rukiyah_and_ayat/helper/global_variables.dart';
+import 'package:rukiyah_and_ayat/helper/hive_boxes.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 
 class CategoryController extends GetxController {
@@ -21,7 +21,10 @@ class CategoryController extends GetxController {
   }
 
   Future<void> loadCategoriesByCategoryIndex({required int categoryIndex}) async {
-    final filteredCategories = categoryBox.values.where((category) => category.categoryIndex == categoryIndex).toList();
+    final filteredCategories = categoryBox.values
+        .where((category) => category.categoryIndex == categoryIndex)
+        .toList()
+      ..sort((a, b) => a.index.compareTo(b.index));
     if (filteredCategories.isNotEmpty) {
       categories(filteredCategories);
     } else {

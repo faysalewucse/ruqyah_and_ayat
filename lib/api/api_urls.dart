@@ -28,3 +28,6 @@ const GET_ALL_MASNUN_DUA_CATEGORIES = "$ROOT_API_URL/masnun-dua-categories";
 
 //Hijama
 const GET_ALL_NIRAPOTTAR_DUAS = "$ROOT_API_URL/nirapottar-dua";
+
+//Audio
+const GET_ALL_AUDIOS = "$ROOT_API_URL/audio";

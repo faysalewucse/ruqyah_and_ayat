@@ -13,11 +13,13 @@ import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/storage_controller.dart';
 import 'package:rukiyah_and_ayat/firebase_options.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
-import 'package:rukiyah_and_ayat/helper/global_variables.dart';
-import 'package:rukiyah_and_ayat/helper/theme.dart';
+import 'package:rukiyah_and_ayat/helper/hive_boxes.dart';
+import 'package:rukiyah_and_ayat/utils/constants/app_theme.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
+import 'package:rukiyah_and_ayat/models/audio/audio.dart';
+import 'package:rukiyah_and_ayat/models/audio/audio_category.dart';
 import 'package:rukiyah_and_ayat/models/masnun-dua/masnun_dua.dart';
 import 'package:rukiyah_and_ayat/router/Routers.dart';
 import 'package:rukiyah_and_ayat/router/routes.dart';
@@ -40,6 +42,8 @@ void main() async {
   Hive.registerAdapter(VerseAdapter());
   Hive.registerAdapter(ArticleAdapter());
   Hive.registerAdapter(MasnunDuaAdapter());
+  Hive.registerAdapter(AudioAdapter());
+  Hive.registerAdapter(AudioCategoryAdapter());
 
   categoryBox = await Hive.openBox<Category>('categories');
   versesBox = await Hive.openBox<Verse>('verses');
@@ -48,6 +52,7 @@ void main() async {
   masnunDuaBox = await Hive.openBox<MasnunDua>('masnunDuas');
   masnunDuaCategoriesBox = await Hive.openBox<Category>('masnunDuaCategories');
   nirapottarDuaBox = await Hive.openBox<Article>('nirapottarDuas');
+  audioBox = await Hive.openBox<AudioCategory>('audios');
 
   Get.put(StorageController());
   Get.put(NetworkController());
@@ -71,8 +76,8 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         title: 'Ruqyah & Ayaat',
         debugShowCheckedModeBanner: false,
-        theme: MyTheme.lightTheme,
-        darkTheme: MyTheme.darkTheme,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
         themeMode: controller.currentTheme.value,
         initialRoute: initialScreen,
         getPages: routePages,
