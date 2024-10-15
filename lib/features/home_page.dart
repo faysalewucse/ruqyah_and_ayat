@@ -9,7 +9,7 @@ import 'package:rukiyah_and_ayat/api/api_urls.dart';
 import 'package:rukiyah_and_ayat/controllers/data_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
+
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/Config.dart';
 import 'package:rukiyah_and_ayat/models/Screen.dart';

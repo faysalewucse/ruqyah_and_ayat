@@ -3,7 +3,7 @@ import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/features/ayat/controllers/verses_controller.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
+
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
 import 'package:rukiyah_and_ayat/utils/constants/app_colors.dart';

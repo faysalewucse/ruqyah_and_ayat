@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
+
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/masnun-dua/masnun_dua.dart';
 import 'package:rukiyah_and_ayat/utils/constants/app_colors.dart';

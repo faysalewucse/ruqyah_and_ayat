@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/api/api_urls.dart';
 import 'package:rukiyah_and_ayat/data/data.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
+
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/router/routes.dart';
 import 'package:rukiyah_and_ayat/utils/common_functions.dart';

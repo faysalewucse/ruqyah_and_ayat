@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
+
 import 'package:rukiyah_and_ayat/utils/constants/app_colors.dart';
 
 class AnimatedLiquidLinearProgressIndicator extends StatefulWidget {

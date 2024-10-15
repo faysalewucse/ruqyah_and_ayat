@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/masnun_dua_controller.dart';
 import 'package:rukiyah_and_ayat/features/ayat/controllers/verses_controller.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
+
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/ayat_card.dart';

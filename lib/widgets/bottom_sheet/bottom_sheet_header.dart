@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
+
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 
 import '../../utils/constants/app_colors.dart';

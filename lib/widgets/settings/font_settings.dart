@@ -3,7 +3,7 @@ import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/storage_controller.dart';
-import 'package:rukiyah_and_ayat/helper/colors.dart';
+
 import 'package:rukiyah_and_ayat/utils/constants/app_colors.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 import 'package:rukiyah_and_ayat/widgets/settings/fonts_drodown.dart';
