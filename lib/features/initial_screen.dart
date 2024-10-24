@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
-import 'package:rukiyah_and_ayat/controllers/data_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/data_controller/data_controller.dart';
 import 'package:rukiyah_and_ayat/features/home_page.dart';
 
 class InitialScreen extends StatefulWidget {
@@ -15,8 +15,9 @@ class _InitialScreenState extends State<InitialScreen> {
   final dataController = Get.find<DataController>();
 
   void _initCall() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 1));
     FlutterNativeSplash.remove();
+    print("This called again");
     await dataController.initDataController();
   }
 

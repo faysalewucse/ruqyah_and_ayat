@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +18,7 @@ class AyatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       margin: const EdgeInsets.only(bottom: 0),
       // decoration: rounded20White,
@@ -35,7 +38,7 @@ class AyatCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
             child: Obx(() =>
                 Text(
-                  verse.verse,
+                  getEncodedVerse(verse.verse), // Ensure the verse is correctly encoded
                   textDirection: TextDirection.rtl,
                   textAlign: TextAlign.justify,
                   style: TextStyle(
@@ -51,4 +54,11 @@ class AyatCard extends StatelessWidget {
       ),
     );
   }
+}
+
+
+String getEncodedVerse(String verse) {
+  // Encode the verse into UTF-8 bytes, then decode it back to a string (just to ensure it's in the correct format).
+  List<int> encodedBytes = utf8.encode(verse);
+  return utf8.decode(encodedBytes);
 }

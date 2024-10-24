@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/article_controller.dart';
 import 'package:rukiyah_and_ayat/features/audio/controllers/audio_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/category_controller.dart';
-import 'package:rukiyah_and_ayat/controllers/data_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/data_controller/data_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/hijama_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/masnun_dua_controller.dart';

@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:rukiyah_and_ayat/api/api_urls.dart';
-import 'package:rukiyah_and_ayat/controllers/data_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/data_controller/data_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
 
@@ -330,31 +330,97 @@ class _HomePageState extends State<HomePage> {
   }
 
   void checkAppVersion() async {
-    try {
-      final response = await VersionService.getAppConfig();
+    // try {
+    final response = await VersionService.getAppConfig();
 
-      List<dynamic> jsonResponse = response.data["configs"] as List<dynamic>;
-      List<Config> configs =
-          jsonResponse.map((json) => Config.fromJson(json)).toList();
+    List<dynamic> jsonResponse = response.data["configs"] as List<dynamic>;
 
-      if (configs.isNotEmpty) {
-        Config latestConfig = configs.first;
+    Config latestConfig = Config.fromJson(jsonResponse.first);
 
-        final box = GetStorage();
-        String dataVersion =
-            box.read("dataVersion") ?? latestConfig.dataVersion;
+    final box = GetStorage();
 
-        if (packageInfo.version != latestConfig.appVersion) {
-          showAppUpdateDialog();
-        } else if (latestConfig.dataVersion != dataVersion) {
-          await dataController.updateData();
+    // previous data versions variables
+    String dataVersion = box.read("dataVersion") ?? latestConfig.dataVersion;
+    String ayatDataVersion =
+        box.read("ayatDataVersion") ?? latestConfig.ayatDataVersion;
+    String categoryDataVersion =
+        box.read("categoryDataVersion") ?? latestConfig.categoryDataVersion;
+    String ruqyahDataVersion =
+        box.read("ruqyahDataVersion") ?? latestConfig.ruqyahDataVersion;
+    String hijamaDataVersion =
+        box.read("hijamaDataVersion") ?? latestConfig.hijamaDataVersion;
+    String nirapottarDataVersion =
+        box.read("nirapottarDataVersion") ?? latestConfig.nirapottarDataVersion;
+    String masnunDuaDataVersion =
+        box.read("masnunDuaDataVersion") ?? latestConfig.masnunDuaDataVersion;
+    String masnunDuaCategoryDataVersion =
+        box.read("masnunDuaCategoryDataVersion") ??
+            latestConfig.masnunDuaCategoryDataVersion;
+    String audioDataVersion =
+        box.read("audioDataVersion") ?? latestConfig.audioDataVersion;
+    String masayelDataVersion =
+        box.read("masayelDataVersion") ?? latestConfig.masayelDataVersion;
+    String bibidhDataVersion =
+        box.read("bibidhDataVersion") ?? latestConfig.bibidhDataVersion;
+
+    if (packageInfo.version != latestConfig.appVersion) {
+      showAppUpdateDialog();
+    } else {
+      // Check and update each data version
+      if (latestConfig.dataVersion != dataVersion) {
+        await dataController.updateData();
+      } else {
+        List<String> updates = [];
+        if (latestConfig.ayatDataVersion != ayatDataVersion) {
+          updates.add("verses");
         }
-
-        box.write("dataVersion", latestConfig.dataVersion);
+        if (latestConfig.categoryDataVersion != categoryDataVersion) {
+          updates.add("categories");
+        }
+        if (latestConfig.ruqyahDataVersion != ruqyahDataVersion) {
+          updates.add("articles");
+        }
+        if (latestConfig.hijamaDataVersion != hijamaDataVersion) {
+          updates.add("hijamas");
+        }
+        if (latestConfig.nirapottarDataVersion != nirapottarDataVersion) {
+          updates.add("nirapottarDuas");
+        }
+        if (latestConfig.masnunDuaDataVersion != masnunDuaDataVersion) {
+          updates.add("masnunDuas");
+        }
+        if (latestConfig.masnunDuaCategoryDataVersion !=
+            masnunDuaCategoryDataVersion) {
+          updates.add("masnunDuaCategories");
+        }
+        if (latestConfig.audioDataVersion != audioDataVersion) {
+          updates.add("audios");
+        }
+        // if (latestConfig.masayelDataVersion != masayelDataVersion) {
+        //    updates.add("masayel");
+        // }
+        // if (latestConfig.bibidhDataVersion != bibidhDataVersion) {
+        //    updates.add("bibidh");
+        // }
+        if(updates.isNotEmpty){
+          await dataController.updateSomeData(updates);
+        }
       }
-    } catch (error) {
-      print("Error checking app version or data: $error");
+
+      box.write("dataVersion", latestConfig.dataVersion);
+      box.write("ayatDataVersion", latestConfig.ayatDataVersion);
+      box.write("categoryDataVersion", latestConfig.categoryDataVersion);
+      box.write("ruqyahDataVersion", latestConfig.ruqyahDataVersion);
+      box.write("hijamaDataVersion", latestConfig.hijamaDataVersion);
+      box.write("nirapottarDataVersion", latestConfig.nirapottarDataVersion);
+      box.write("masnunDuaDataVersion", latestConfig.masnunDuaDataVersion);
+      box.write("masnunDuaCategoryDataVersion",
+          latestConfig.masnunDuaCategoryDataVersion);
+      box.write("audioDataVersion", latestConfig.audioDataVersion);
     }
+    // } catch (error) {
+    //   print("Error checking app version or data: $error");
+    // }
   }
 
   void showAppUpdateDialog() {

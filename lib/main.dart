@@ -7,7 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rukiyah_and_ayat/api/firebase_api.dart';
 import 'package:rukiyah_and_ayat/bindings.dart';
-import 'package:rukiyah_and_ayat/controllers/data_controller.dart';
+import 'package:rukiyah_and_ayat/controllers/data_controller/data_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/storage_controller.dart';

@@ -33,7 +33,7 @@ class StorageController{
     storage.write("fontFamily", fontFamily);
   }
   String getDefaultFontFamily(){
-    return storage.read("fontFamily") ?? "NooreHuda";
+    return storage.read("fontFamily") ?? "AlQalamMajid";
   }
 
   // Font Size LocalStorage Services
@@ -41,7 +41,7 @@ class StorageController{
     storage.write("fontSize", fontSize);
   }
   double getDefaultFontSize(){
-    return storage.read("fontSize") ?? 32.0;
+    return storage.read("fontSize") ?? 24.0;
   }
 
   bool hasOnBoardVisited(){

@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rukiyah_and_ayat/features/audio/helper/audio_helper.dart';
+import 'package:rukiyah_and_ayat/features/audio/widgets/audio_player_shimmer.dart';
 
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/audio/audio.dart';
@@ -35,10 +37,14 @@ class RuqyahPlayerState extends State<RuqyahPlayer> {
   StreamSubscription<Duration>? _positionSubscription;
   StreamSubscription<Duration?>? _durationSubscription;
 
+  late PlayerController _audioPlayerController;
+
   @override
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
+
+    // _audioPlayerController = PlayerController();
 
     // Listen to the player's position and duration changes
     _positionSubscription = _audioPlayer.positionStream.listen((position) {
@@ -46,6 +52,7 @@ class RuqyahPlayerState extends State<RuqyahPlayer> {
         setState(() {
           _currentPosition = position;
         });
+        // _audioPlayerController.seekTo(_currentPosition.inMilliseconds); // Update waveform position
       }
     });
 
@@ -69,6 +76,7 @@ class RuqyahPlayerState extends State<RuqyahPlayer> {
     _durationSubscription?.cancel();
 
     _audioPlayer.dispose();
+    // _audioPlayerController.dispose();
     super.dispose();
   }
 
@@ -80,120 +88,129 @@ class RuqyahPlayerState extends State<RuqyahPlayer> {
       ),
       body: Center(
         child: _loading
-            ? const CustomLoader()
+            ? const AudioPlayerShimmer()
             : Container(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+          color: Theme.of(context).scaffoldBackgroundColor,
+          padding: const EdgeInsets.symmetric(horizontal: 40.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20.0), // Set the border radius
+                child: Image.asset(
+                  Get.isDarkMode ? AppImages.appIconDark : AppImages.appIconLight,
+                  height: deviceHeight * 0.3,
+                  fit: BoxFit.cover, // Optional: Ensures the image fits the container
+                ),
+              ),
+              32.kH,
+              Text(
+                widget.audio.title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w800,
+                  color: Get.isDarkMode ? Theme.of(context).iconTheme.color : Theme.of(context).primaryColor,
+                ),
+              ),
+              20.kH,
+              // Progress bar
+              Slider(
+                min: 0,
+                max: _totalDuration.inSeconds.toDouble(),
+                thumbColor: Theme.of(context).primaryColor,
+                activeColor: Theme.of(context).primaryColor,
+                value: _currentPosition.inSeconds.toDouble(),
+                onChanged: (value) async {
+                  final position = Duration(seconds: value.toInt());
+                  await _audioPlayer.seek(position);
+                },
+              ),
+              // AudioFileWaveforms(
+              //   size: Size(deviceWidth * 0.8, 100), // Width and height of the waveform
+              //   playerController: _audioPlayerController,  // Player controller for the waveform
+              //   playerWaveStyle: const PlayerWaveStyle(
+              //     waveThickness: 4.0,  // Thickness of the waveform
+              //     fixedWaveColor: Colors.blueGrey, // Waveform color
+              //     liveWaveColor: Colors.blue, // Color for the live waveform
+              //   ),
+              // ),
+              // Display the current position and total duration
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0), // Set the border radius
-                      child: Image.asset(
-                        Get.isDarkMode ? AppImages.appIconDark : AppImages.appIconLight,
-                        height: deviceHeight * 0.3,
-                        fit: BoxFit.cover, // Optional: Ensures the image fits the container
-                      ),
-                    ),
-                    32.kH,
-                    Text(
-                      widget.audio.title,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w800,
-                        color: Get.isDarkMode ? Theme.of(context).iconTheme.color : Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    20.kH,
-                    // Progress bar
-                    Slider(
-                      min: 0,
-                      max: _totalDuration.inSeconds.toDouble(),
-                      thumbColor: Theme.of(context).primaryColor,
-                      activeColor: Theme.of(context).primaryColor,
-                      value: _currentPosition.inSeconds.toDouble(),
-                      onChanged: (value) async {
-                        final position = Duration(seconds: value.toInt());
-                        await _audioPlayer.seek(position);
-                      },
-                    ),
-                    // Display the current position and total duration
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(_formatDuration(_currentPosition)),
-                          Text(_formatDuration(_totalDuration)),
-                        ],
-                      ),
-                    ),
-                    // Play/Pause button
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: Opacity(
-                            opacity: _prevAudio != null ? 1 : 0.4,
-                            child: Icon(
-                              PhosphorIcons.skip_back_fill,
-                              size: 40,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          onPressed: () {
-                            if(_prevAudio != null){
-                              _audioPlayer.dispose();
-                              Get.offAndToNamed(playAudio, arguments: _prevAudio);
-                            }
-                          },
-                        ),
-                        IconButton(
-                          icon: Container(
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: roundedFull),
-                            child: Icon(
-                              _isPlaying ? Icons.pause : Icons.play_arrow,
-                              color: AppColors.white,
-                              size: 40,
-                            ),
-                          ),
-                          onPressed: () async {
-                            if (_isPlaying) {
-                              await _audioPlayer.pause();
-                            } else {
-                              await _audioPlayer.play();
-                            }
-                            setState(() {
-                              _isPlaying = !_isPlaying;
-                            });
-                          },
-                        ),
-                        IconButton(
-                          icon: Opacity(
-                            opacity: _nextAudio != null ? 1 : 0.4,
-                            child: Icon(
-                              PhosphorIcons.skip_forward_fill,
-                              size: 40,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          onPressed: () {
-                            if(_nextAudio != null){
-                              _audioPlayer.dispose();
-                              Get.offAndToNamed(playAudio, arguments: _nextAudio);
-                            }
-                          },
-                        ),
-                      ],
-                    ),
+                    Text(_formatDuration(_currentPosition)),
+                    Text(_formatDuration(_totalDuration)),
                   ],
                 ),
               ),
+              // Play/Pause button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: Opacity(
+                      opacity: _prevAudio != null ? 1 : 0.4,
+                      child: Icon(
+                        PhosphorIcons.skip_back_fill,
+                        size: 40,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    onPressed: () {
+                      if(_prevAudio != null){
+                        _audioPlayer.dispose();
+                        Get.offAndToNamed(playAudio, arguments: _prevAudio);
+                      }
+                    },
+                  ),
+                  IconButton(
+                    icon: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: roundedFull),
+                      child: Icon(
+                        _isPlaying ? Icons.pause : Icons.play_arrow,
+                        color: AppColors.white,
+                        size: 40,
+                      ),
+                    ),
+                    onPressed: () async {
+                      if (_isPlaying) {
+                        await _audioPlayer.pause();
+                      } else {
+                        await _audioPlayer.play();
+                      }
+                      setState(() {
+                        _isPlaying = !_isPlaying;
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Opacity(
+                      opacity: _nextAudio != null ? 1 : 0.4,
+                      child: Icon(
+                        PhosphorIcons.skip_forward_fill,
+                        size: 40,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    onPressed: () {
+                      if(_nextAudio != null){
+                        _audioPlayer.dispose();
+                        Get.offAndToNamed(playAudio, arguments: _nextAudio);
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -216,6 +233,9 @@ class RuqyahPlayerState extends State<RuqyahPlayer> {
 
     // Play the audio
     await _audioPlayer.setUrl(audioStreamUrl.toString());
+    // await _audioPlayerController.preparePlayer(
+    //   path: audioStreamUrl.toString(),
+    // );
     _audioPlayer.play();
 
     setState(() {
