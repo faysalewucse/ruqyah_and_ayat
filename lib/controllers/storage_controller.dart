@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 
@@ -25,7 +26,7 @@ class StorageController{
   }
 
   String getThemeMode(){
-    return storage.read("themeMode") ?? "light";
+    return storage.read("themeMode") ?? ThemeMode.system == ThemeMode.light ? "light" : "dark";
   }
 
   // Font Family LocalStorage Services

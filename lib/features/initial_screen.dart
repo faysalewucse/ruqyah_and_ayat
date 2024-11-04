@@ -17,7 +17,6 @@ class _InitialScreenState extends State<InitialScreen> {
   void _initCall() async {
     await Future.delayed(const Duration(seconds: 1));
     FlutterNativeSplash.remove();
-    print("This called again");
     await dataController.initDataController();
   }
 

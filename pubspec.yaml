@@ -23,7 +23,7 @@ dependencies:
   flutter_native_splash: ^2.3.10
   flutter_svg: ^2.0.10+1
   flutter_spinkit: ^5.2.1
-  path_provider: ^2.1.4
+  path_provider: ^2.1.5
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   connectivity_plus: ^6.0.5
@@ -43,6 +43,7 @@ dependencies:
   bangla_converter: ^0.0.2
   shimmer: ^3.0.0
   audio_waveforms: ^1.1.1
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_test:

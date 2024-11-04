@@ -268,14 +268,14 @@ class DataController extends GetxController {
   }
 
   Future<void> _saveDataToHive() async {
-    _saveCategoriesToHive();
-    _saveVersesToHive();
-    _saveArticlesToHive();
-    _saveHijamasToHive();
-    _saveMasnunDuasToHive();
-    _saveMasnunDuaCategoriesToHive();
-    _saveNirapottarDuasToHive();
-    _saveAudiosToHive();
+    await _saveCategoriesToHive();
+    await _saveVersesToHive();
+    await _saveArticlesToHive();
+    await _saveHijamasToHive();
+    await _saveMasnunDuasToHive();
+    await _saveMasnunDuaCategoriesToHive();
+    await _saveNirapottarDuasToHive();
+    await _saveAudiosToHive();
   }
 
   //================== Update Section ===================//
@@ -285,7 +285,7 @@ class DataController extends GetxController {
     print("categories");
     await _clearCategoriesBox();
     await _fetchCategories();
-    _saveCategoriesToHive();
+    await _saveCategoriesToHive();
   }
 
 
@@ -296,7 +296,7 @@ class DataController extends GetxController {
     print("verses");
     await _clearVersesBox();
     await _fetchVerses();
-    _saveVersesToHive();
+    await _saveVersesToHive();
   }
 
 // Updates only articles data
@@ -305,7 +305,7 @@ class DataController extends GetxController {
     print("articles");
     await _clearArticlesBox();
     await _fetchArticles();
-    _saveArticlesToHive();
+    await _saveArticlesToHive();
   }
 
 // Updates only hijamas data
@@ -314,7 +314,7 @@ class DataController extends GetxController {
     print("hijamas");
     await _clearHijamasBox();
     await _fetchHijamas();
-    _saveHijamasToHive();
+    await _saveHijamasToHive();
   }
 
 // Updates only masnun duas data
@@ -323,7 +323,7 @@ class DataController extends GetxController {
     print("masnunDuas");
     await _clearMasnunDuasBox();
     await _fetchMasnunDuas();
-    _saveMasnunDuasToHive();
+    await _saveMasnunDuasToHive();
   }
 
 // Updates only masnun dua categories data
@@ -332,7 +332,7 @@ class DataController extends GetxController {
     print("masnunDuaCategories");
     await _clearMasnunDuaCategoriesBox();
     await _fetchMasnunDuaCategories();
-    _saveMasnunDuaCategoriesToHive();
+    await _saveMasnunDuaCategoriesToHive();
   }
 
 // Updates only nirapottar duas data
@@ -341,16 +341,15 @@ class DataController extends GetxController {
     print("nirapottarDuas");
     await _clearNirapottarDuasBox();
     await _fetchNirapottarDuas();
-    _saveNirapottarDuasToHive();
+    await _saveNirapottarDuasToHive();
   }
 
 // Updates only audios data
   Future<void> updateAudios() async {
     downloadingMessage("অডিওগুলোর কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("audios");
     await _clearAudiosBox();
     await _fetchAudios();
-    _saveAudiosToHive();
+    await _saveAudiosToHive();
   }
 
 
