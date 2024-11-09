@@ -26,7 +26,7 @@ class StorageController{
   }
 
   String getThemeMode(){
-    return storage.read("themeMode") ?? ThemeMode.system == ThemeMode.light ? "light" : "dark";
+    return storage.read("themeMode") ?? "light";
   }
 
   // Font Family LocalStorage Services

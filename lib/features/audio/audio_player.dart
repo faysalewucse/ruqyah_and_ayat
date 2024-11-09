@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
@@ -8,7 +7,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:rukiyah_and_ayat/features/audio/controllers/audio_controller.dart';
 import 'package:rukiyah_and_ayat/features/audio/helper/audio_helper.dart';
 import 'package:rukiyah_and_ayat/features/audio/widgets/audio_player_shimmer.dart';
-
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/audio/audio.dart';
 import 'package:rukiyah_and_ayat/router/routes.dart';
@@ -16,7 +14,6 @@ import 'package:rukiyah_and_ayat/utils/constants/app_colors.dart';
 import 'package:rukiyah_and_ayat/utils/constants/app_images.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
-import 'package:rukiyah_and_ayat/widgets/custom_loader.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class RuqyahPlayer extends StatefulWidget {
