@@ -248,27 +248,33 @@ class RuqyahPlayerState extends State<RuqyahPlayer> {
                 ),
               ),
       ),
-      bottomNavigationBar: Obx(() => !_loading
+      bottomNavigationBar: !_loading
           ? Padding(
               padding: const EdgeInsets.all(8.0),
-              child: PrimaryButton(
-                label: audioController.downloadingAudioLoading.isTrue
-                    ? "ডাউনলোড হচ্ছে..."
-                    : "ডাউনলোড",
-                onTap: () async {
-                  await audioController.downloadAudio(
-                    showPermissionDialog: () => _showPermissionDialog(context),
-                    title: widget.audio.title,
-                    audioUrl: widget.audio.audioUrl,
-                  );
-                },
-                suffix: audioController.downloadingAudioLoading.isTrue ? null : Icon(
-                  PhosphorIcons.download,
-                  color: Theme.of(context).textTheme.headlineMedium?.color,
+              child: Obx(
+                () => PrimaryButton(
+                  label: audioController.downloadingAudioLoading.isTrue
+                      ? "ডাউনলোড হচ্ছে..."
+                      : "ডাউনলোড",
+                  onTap: () async {
+                    await audioController.downloadAudio(
+                      showPermissionDialog: () =>
+                          _showPermissionDialog(context),
+                      title: widget.audio.title,
+                      audioUrl: widget.audio.audioUrl,
+                    );
+                  },
+                  suffix: audioController.downloadingAudioLoading.isTrue
+                      ? null
+                      : Icon(
+                          PhosphorIcons.download,
+                          color:
+                              Theme.of(context).textTheme.headlineMedium?.color,
+                        ),
                 ),
               ),
             )
-          : const SizedBox()),
+          : const SizedBox(),
     );
   }
 
