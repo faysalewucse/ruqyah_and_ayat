@@ -42,7 +42,7 @@ class _NirapottarDuaTitlesState extends State<NirapottarDuaTitles> {
     return Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
       appBar: AppBar(
-        title: const Text("হেফাজতের মাসনুন আমল"),
+        title: const Text("হেফাজতের আমল"),
       ),
       body: Column(
         children: [

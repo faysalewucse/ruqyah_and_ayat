@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
       hijama,
     ),
     Screen(
-      'হেফাজতের মাসনুন আমল',
+      'হেফাজতের আমল',
       PhosphorIcons.shield_thin,
       securityDua,
     ),

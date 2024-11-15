@@ -42,6 +42,13 @@ class RuqyahPlayerState extends State<RuqyahPlayer> {
   @override
   void initState() {
     super.initState();
+    _initializeAudioAndPlay();
+  }
+
+  _initializeAudioAndPlay() async {
+    setState(() {
+      _loading = true;
+    });
     _audioPlayer = AudioPlayer();
 
     // Listen to the player's position and duration changes
@@ -65,8 +72,37 @@ class RuqyahPlayerState extends State<RuqyahPlayer> {
     _prevAudio = AudioHelper().getPreviousAudio(currentAudio: widget.audio);
     _nextAudio = AudioHelper().getNextAudio(currentAudio: widget.audio);
 
-    _playYouTubeAudio();
+    try {
+      await _audioPlayer.setUrl(convertToDirectUrl("https://drive.google.com/file/d/1BjTFha6-9oNHdic-hgg1e2iePUgib2aR/view?usp=drive_link"));
+      _audioPlayer.play();
+      setState(() {
+        _loading = false;
+        _isPlaying = true;
+      });
+    } catch (e) {
+      print("Error playing audio: $e");
+    }
   }
+
+  String convertToDirectUrl(String shareableUrl) {
+    try {
+      // Extract the file ID from the shareable URL
+      final regex = RegExp(r'file/d/([^/]+)/');
+      final match = regex.firstMatch(shareableUrl);
+
+      if (match != null) {
+        final fileId = match.group(1);
+        // Return the direct download URL
+        return 'https://drive.google.com/uc?id=$fileId&export=download';
+      } else {
+        throw Exception('Invalid Google Drive URL');
+      }
+    } catch (e) {
+      print('Error converting URL: $e');
+      return '';
+    }
+  }
+
 
   @override
   void dispose() {
@@ -326,6 +362,18 @@ class RuqyahPlayerState extends State<RuqyahPlayer> {
       _isPlaying = true;
       _loading = false;
     });
+  }
+
+  String extractVideoId(String url) {
+    Uri uri = Uri.parse(url);
+
+    // Check if the URL contains a query parameter 'v' (common in YouTube links)
+    if (uri.queryParameters.containsKey('v')) {
+      return uri.queryParameters['v']!;
+    }
+
+    // Otherwise, extract the video ID from the path (e.g., after 'youtu.be/')
+    return uri.pathSegments.isNotEmpty ? uri.pathSegments.last : '';
   }
 
   String _formatDuration(Duration duration) {
