@@ -1,20 +1,20 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:rukiyah_and_ayat/db/db_helper.dart';
 import 'package:rukiyah_and_ayat/features/audio/controllers/audio_controller.dart';
 import 'package:rukiyah_and_ayat/features/audio/helper/audio_helper.dart';
 import 'package:rukiyah_and_ayat/features/audio/widgets/audio_player_shimmer.dart';
-import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/audio/audio.dart';
 import 'package:rukiyah_and_ayat/router/routes.dart';
 import 'package:rukiyah_and_ayat/utils/constants/app_colors.dart';
 import 'package:rukiyah_and_ayat/utils/constants/app_images.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class RuqyahPlayer extends StatefulWidget {
   final Audio audio;
@@ -22,19 +22,23 @@ class RuqyahPlayer extends StatefulWidget {
   const RuqyahPlayer({super.key, required this.audio});
 
   @override
-  RuqyahPlayerState createState() => RuqyahPlayerState();
+  State<RuqyahPlayer> createState() => _RuqyahPlayerState();
 }
 
-class RuqyahPlayerState extends State<RuqyahPlayer> {
+class _RuqyahPlayerState extends State<RuqyahPlayer> {
   final audioController = Get.find<AudioController>();
-
-  late AudioPlayer _audioPlayer;
+  late final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlaying = false;
+  bool _isLooping = false;
   bool _loading = false;
+  bool alreadyDownloaded = false;
   Duration _totalDuration = Duration.zero;
   Duration _currentPosition = Duration.zero;
-  late Audio? _prevAudio;
-  late Audio? _nextAudio;
+  late final Audio? _prevAudio =
+      AudioHelper().getPreviousAudio(currentAudio: widget.audio);
+  late final Audio? _nextAudio =
+      AudioHelper().getNextAudio(currentAudio: widget.audio);
+  bool _isFavorite = false;
 
   StreamSubscription<Duration>? _positionSubscription;
   StreamSubscription<Duration?>? _durationSubscription;
@@ -45,342 +49,322 @@ class RuqyahPlayerState extends State<RuqyahPlayer> {
     _initializeAudioAndPlay();
   }
 
-  _initializeAudioAndPlay() async {
-    setState(() {
-      _loading = true;
-    });
-    _audioPlayer = AudioPlayer();
-
-    // Listen to the player's position and duration changes
-    _positionSubscription = _audioPlayer.positionStream.listen((position) {
-      if (mounted) {
-        setState(() {
-          _currentPosition = position;
-        });
-        // _audioPlayerController.seekTo(_currentPosition.inMilliseconds); // Update waveform position
-      }
-    });
-
-    _durationSubscription = _audioPlayer.durationStream.listen((duration) {
-      if (mounted) {
-        setState(() {
-          _totalDuration = duration ?? Duration.zero;
-        });
-      }
-    });
-
-    _prevAudio = AudioHelper().getPreviousAudio(currentAudio: widget.audio);
-    _nextAudio = AudioHelper().getNextAudio(currentAudio: widget.audio);
-
-    try {
-      await _audioPlayer.setUrl(convertToDirectUrl("https://drive.google.com/file/d/1BjTFha6-9oNHdic-hgg1e2iePUgib2aR/view?usp=drive_link"));
-      _audioPlayer.play();
-      setState(() {
-        _loading = false;
-        _isPlaying = true;
-      });
-    } catch (e) {
-      print("Error playing audio: $e");
-    }
-  }
-
-  String convertToDirectUrl(String shareableUrl) {
-    try {
-      // Extract the file ID from the shareable URL
-      final regex = RegExp(r'file/d/([^/]+)/');
-      final match = regex.firstMatch(shareableUrl);
-
-      if (match != null) {
-        final fileId = match.group(1);
-        // Return the direct download URL
-        return 'https://drive.google.com/uc?id=$fileId&export=download';
-      } else {
-        throw Exception('Invalid Google Drive URL');
-      }
-    } catch (e) {
-      print('Error converting URL: $e');
-      return '';
-    }
-  }
-
-
   @override
   void dispose() {
     _positionSubscription?.cancel();
     _durationSubscription?.cancel();
-
     _audioPlayer.dispose();
-    // _audioPlayerController.dispose();
     super.dispose();
+  }
+
+  Future<void> _checkFavoriteStatus() async {
+    bool favorite = await isFavorite(
+        AudioHelper().getCurrentIndex(currentAudio: widget.audio));
+    setState(() {
+      _isFavorite = favorite;
+    });
+  }
+
+  Future<void> _toggleFavorite() async {
+    if (_isFavorite) {
+      await removeFromFavorites(
+          AudioHelper().getCurrentIndex(currentAudio: widget.audio));
+    } else {
+      await addToFavorites(
+          AudioHelper().getCurrentIndex(currentAudio: widget.audio));
+    }
+    setState(() {
+      _isFavorite = !_isFavorite;
+    });
+  }
+
+  Future<bool> isFavorite(int id) async {
+    final dbHelper = DBHelper();
+    return await dbHelper.isFavorite(id);
+  }
+
+  Future<void> removeFromFavorites(int id) async {
+    final dbHelper = DBHelper();
+    await dbHelper.deleteId(id);
+  }
+
+  Future<void> addToFavorites(int id) async {
+    final dbHelper = DBHelper();
+    await dbHelper.insertId(id);
+  }
+
+  Future<void> _initializeAudioAndPlay() async {
+    _checkFavoriteStatus();
+    setState(() => _loading = true);
+
+    _setupAudioListeners();
+
+    try {
+      final localPath = await audioController.getLocalFilePath(widget.audio.title);
+
+      if (localPath != null) {
+        await _playOffline(localPath);
+      } else {
+        await _playOnline(convertToDirectUrl(widget.audio.audioUrl));
+      }
+
+      setState(() {
+        alreadyDownloaded = localPath != null;
+        _isPlaying = true;
+      });
+    } catch (e) {
+      debugPrint("Error initializing audio: $e");
+    } finally {
+      setState(() => _loading = false);
+    }
+  }
+
+  void _setupAudioListeners() {
+    _positionSubscription = _audioPlayer.positionStream.listen((position) {
+      if (mounted) setState(() => _currentPosition = position);
+    });
+
+    _durationSubscription = _audioPlayer.durationStream.listen((duration) {
+      if (mounted) setState(() => _totalDuration = duration ?? Duration.zero);
+    });
+  }
+
+  Future<void> _playOffline(String filePath) async {
+    await _audioPlayer.setFilePath(filePath);
+    _audioPlayer.play();
+  }
+
+  Future<void> _playOnline(String url) async {
+    await _audioPlayer.setUrl(url);
+    _audioPlayer.play();
+  }
+
+  String convertToDirectUrl(String shareableUrl) {
+    final regex = RegExp(r'file/d/([^/]+)/');
+    final match = regex.firstMatch(shareableUrl);
+    if (match == null) throw Exception('Invalid Google Drive URL');
+    final fileId = match.group(1);
+    return 'https://drive.google.com/uc?id=$fileId&export=download';
+  }
+
+  String _formatDuration(Duration duration) {
+    final hours = duration.inHours.toString().padLeft(2, '0');
+    final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return duration.inHours > 0
+        ? '$hours:$minutes:$seconds'
+        : '$minutes:$seconds';
+  }
+
+  Widget _buildProgressBar(BuildContext context) {
+    return Column(
+      children: [
+        Slider(
+          min: 0,
+          max: _totalDuration.inSeconds.toDouble(),
+          thumbColor: Theme.of(context).primaryColor,
+          activeColor: Theme.of(context).primaryColor,
+          value: _currentPosition.inSeconds.toDouble(),
+          onChanged: (value) async {
+            final position = Duration(seconds: value.toInt());
+            await _audioPlayer.seek(position);
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(_formatDuration(_currentPosition)),
+              Text(_formatDuration(_totalDuration)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlayControls(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: CircleAvatar(
+            radius: 24, // Adjust size
+            backgroundColor: _isLooping ? Theme.of(context).primaryColor : Colors.transparent, // Background color
+            child: Icon(
+              PhosphorIcons.repeat,
+              size: 30,
+              color: _isLooping ? Colors.white : Theme.of(context).primaryColor, // Icon color
+            ),
+          ),
+          onPressed: () {
+            setState(() {
+              _isLooping = !_isLooping;
+            });
+            _audioPlayer.setLoopMode(
+              _isLooping ? LoopMode.one : LoopMode.off,
+            );
+          },
+        ),
+
+        IconButton(
+          icon: Opacity(
+            opacity: _prevAudio != null ? 1 : 0.4,
+            child: Icon(PhosphorIcons.skip_back_fill,
+                size: 30, color: Theme.of(context).primaryColor),
+          ),
+          onPressed: () => _navigateToAudio(_prevAudio),
+        ),
+        IconButton(
+          icon: Container(
+            height: 70,
+            width: 70,
+            decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor, shape: BoxShape.circle),
+            child: Icon(
+              _isPlaying ? Icons.pause : Icons.play_arrow,
+              color: AppColors.white,
+              size: 40,
+            ),
+          ),
+          onPressed: () async {
+            if (_isPlaying) {
+              await _audioPlayer.pause();
+            } else {
+              await _audioPlayer.play();
+            }
+            setState(() => _isPlaying = !_isPlaying);
+          },
+        ),
+        IconButton(
+          icon: Opacity(
+            opacity: _nextAudio != null ? 1 : 0.4,
+            child: Icon(PhosphorIcons.skip_forward_fill,
+                size: 30, color: Theme.of(context).primaryColor),
+          ),
+          onPressed: () => _navigateToAudio(_nextAudio),
+        ),
+        IconButton(
+          icon: Icon(_isFavorite ? PhosphorIcons.heart_fill : PhosphorIcons.heart,
+              size: 30, color: _isFavorite ? AppColors.white : Theme.of(context).primaryColor),
+          onPressed: _toggleFavorite,
+        ),
+      ],
+    );
+  }
+
+  void _navigateToAudio(Audio? audio) {
+    if (audio != null) {
+      _audioPlayer.dispose();
+      Get.offAndToNamed(playAudio, arguments: audio);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.audio.title),
-      ),
-      body: Center(
-        child: _loading
-            ? const AudioPlayerShimmer()
-            : Container(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                // padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 32.0),
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20.0),
-                              bottomRight: Radius.circular(20.0))),
-                      child: Center(
-                        child: Image.asset(
-                          AppImages.appLogo,
-                          fit: BoxFit.cover,
-                          scale: 2.5,
-                        ),
+      appBar: AppBar(title: Text(widget.audio.title)),
+      body: _loading
+          ? const AudioPlayerShimmer()
+          : Center(
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 32.0),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0),
                       ),
                     ),
-                    32.kH,
-                    Expanded(
-                        child: Padding(
+                    child: Center(
+                      child: Image.asset(AppImages.appLogo, scale: 2.5),
+                    ),
+                  ),
+                  12.kH,
+                  Expanded(
+                    child: Padding(
                       padding: const EdgeInsets.all(40.0),
-                      child: Center(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                widget.audio.title,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w800,
-                                  color: Get.isDarkMode
-                                      ? Theme.of(context).iconTheme.color
-                                      : Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              32.kH,
-                              // Progress bar
-                              Slider(
-                                min: 0,
-                                max: _totalDuration.inSeconds.toDouble(),
-                                thumbColor: Theme.of(context).primaryColor,
-                                activeColor: Theme.of(context).primaryColor,
-                                value: _currentPosition.inSeconds.toDouble(),
-                                onChanged: (value) async {
-                                  final position =
-                                      Duration(seconds: value.toInt());
-                                  await _audioPlayer.seek(position);
-                                },
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(_formatDuration(_currentPosition)),
-                                    Text(_formatDuration(_totalDuration)),
-                                  ],
-                                ),
-                              ),
-                              // Play/Pause button
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    icon: Icon(
-                                      PhosphorIcons.repeat,
-                                      size: 30,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    onPressed: () {},
-                                  ),
-                                  IconButton(
-                                    icon: Opacity(
-                                      opacity: _prevAudio != null ? 1 : 0.4,
-                                      child: Icon(
-                                        PhosphorIcons.skip_back_fill,
-                                        size: 30,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      if (_prevAudio != null) {
-                                        _audioPlayer.dispose();
-                                        Get.offAndToNamed(playAudio,
-                                            arguments: _prevAudio);
-                                      }
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: Container(
-                                      height: 70,
-                                      width: 70,
-                                      decoration: BoxDecoration(
-                                          color: Theme.of(context).primaryColor,
-                                          borderRadius: roundedFull),
-                                      child: Icon(
-                                        _isPlaying
-                                            ? Icons.pause
-                                            : Icons.play_arrow,
-                                        color: AppColors.white,
-                                        size: 40,
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      if (_isPlaying) {
-                                        await _audioPlayer.pause();
-                                      } else {
-                                        await _audioPlayer.play();
-                                      }
-                                      setState(() {
-                                        _isPlaying = !_isPlaying;
-                                      });
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: Opacity(
-                                      opacity: _nextAudio != null ? 1 : 0.4,
-                                      child: Icon(
-                                        PhosphorIcons.skip_forward_fill,
-                                        size: 30,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      if (_nextAudio != null) {
-                                        _audioPlayer.dispose();
-                                        Get.offAndToNamed(playAudio,
-                                            arguments: _nextAudio);
-                                      }
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: Icon(
-                                      PhosphorIcons.heart,
-                                      size: 30,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    onPressed: () {},
-                                  ),
-                                ],
-                              ),
-                            ],
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            widget.audio.title,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w800,
+                              color: Get.isDarkMode
+                                  ? Theme.of(context).iconTheme.color
+                                  : Theme.of(context).primaryColor,
+                            ),
                           ),
-                        ),
+                          32.kH,
+                          _buildProgressBar(context),
+                          _buildPlayControls(context),
+                        ],
                       ),
-                    ))
-                  ],
-                ),
+                    ),
+                  ),
+                ],
               ),
-      ),
-      bottomNavigationBar: !_loading
+            ),
+      bottomNavigationBar: !_loading && !alreadyDownloaded
           ? Padding(
               padding: const EdgeInsets.all(8.0),
               child: Obx(
-                () => PrimaryButton(
-                  label: audioController.downloadingAudioLoading.isTrue
-                      ? "ডাউনলোড হচ্ছে..."
-                      : "ডাউনলোড",
-                  onTap: () async {
-                    await audioController.downloadAudio(
-                      showPermissionDialog: () =>
-                          _showPermissionDialog(context),
-                      title: widget.audio.title,
-                      audioUrl: widget.audio.audioUrl,
-                    );
-                  },
-                  suffix: audioController.downloadingAudioLoading.isTrue
-                      ? null
-                      : Icon(
-                          PhosphorIcons.download,
-                          color:
-                              Theme.of(context).textTheme.headlineMedium?.color,
-                        ),
+                () => Stack(
+                  children: [
+                    PrimaryButton(
+                      label: audioController.downloadingAudioLoading.isTrue
+                          ? "ডাউনলোড হচ্ছে... (${audioController.downloadingFileSize.toStringAsFixed(2)} MB - ${audioController.downloadingProgress.value.toInt()}%)"
+                          : "ডাউনলোড",
+                      onTap: () async {
+                        if (audioController.downloadingAudioLoading.isFalse) {
+                          await audioController.downloadAudio(
+                            convertToDirectUrl(widget.audio.audioUrl),
+                            widget.audio.title,
+                          );
+                        }
+                      },
+                      suffix: audioController.downloadingAudioLoading.isTrue
+                          ? null
+                          : Icon(
+                              PhosphorIcons.download,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium
+                                  ?.color,
+                            ),
+                    ),
+                    Obx(() => audioController.downloadingAudioLoading.isTrue
+                        ? Positioned.fill(
+                            right: 10,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: GestureDetector(
+                                onTap: () => audioController.cancelDownload(),
+                                child: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColors.white),
+                                  child: const Icon(
+                                    PhosphorIcons.x,
+                                    size: 15,
+                                  ),
+                                ),
+                              ),
+                            ))
+                        : const SizedBox.shrink())
+                  ],
                 ),
               ),
             )
-          : const SizedBox(),
+          : null,
     );
-  }
-
-  void _showPermissionDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Storage Permission Required"),
-        content: const Text(
-            "This app needs storage permission to download audio files. Please grant the permission in settings."),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.of(context).pop();
-              await openAppSettings(); // Open app settings if permission is permanently denied
-            },
-            child: const Text("Go to Settings"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _playYouTubeAudio() async {
-    setState(() {
-      _loading = true;
-    });
-
-    // Initialize YouTube Explode
-    var yt = YoutubeExplode();
-
-    // Get video ID from URL
-    var video = await yt.videos.get(widget.audio.audioUrl);
-
-    // Get the audio stream
-    var manifest = await yt.videos.streamsClient.getManifest(video.id);
-    var audioStreamInfo = manifest.audioOnly.withHighestBitrate();
-    var audioStreamUrl = audioStreamInfo.url;
-
-    // Play the audio
-    await _audioPlayer.setUrl(audioStreamUrl.toString());
-    // await _audioPlayerController.preparePlayer(
-    //   path: audioStreamUrl.toString(),
-    // );
-    _audioPlayer.play();
-
-    setState(() {
-      _isPlaying = true;
-      _loading = false;
-    });
-  }
-
-  String extractVideoId(String url) {
-    Uri uri = Uri.parse(url);
-
-    // Check if the URL contains a query parameter 'v' (common in YouTube links)
-    if (uri.queryParameters.containsKey('v')) {
-      return uri.queryParameters['v']!;
-    }
-
-    // Otherwise, extract the video ID from the path (e.g., after 'youtu.be/')
-    return uri.pathSegments.isNotEmpty ? uri.pathSegments.last : '';
-  }
-
-  String _formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final hours = twoDigits(duration.inHours);
-    final minutes = twoDigits(duration.inMinutes.remainder(60));
-    final seconds = twoDigits(duration.inSeconds.remainder(60));
-    return [if (duration.inHours > 0) hours, minutes, seconds].join(':');
   }
 }

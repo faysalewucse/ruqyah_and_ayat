@@ -49,7 +49,7 @@ class _HijamaArticleTitlesState extends State<HijamaArticleTitles> {
     return Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
       appBar: AppBar(
-        title: const Text("আর্টিক্যাল সমুহ"),
+        title: const Text("হিজামা"),
       ),
       body: Column(
         children: [

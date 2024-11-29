@@ -13,6 +13,7 @@ class AudioCategories extends StatefulWidget {
 
 class _AudioCategoriesState extends State<AudioCategories> {
   final audioController = Get.find<AudioController>();
+  bool favourites = false;
 
   _initCall() async {
     await audioController.loadAudiosFromLocal();

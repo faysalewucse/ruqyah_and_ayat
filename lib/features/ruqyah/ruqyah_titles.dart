@@ -41,7 +41,7 @@ class _RuqyahTitlesState extends State<RuqyahTitles> {
     return Scaffold(
       backgroundColor: Theme.of(context).canvasColor,
       appBar: AppBar(
-        title: const Text("আর্টিক্যাল সমুহ"),
+        title: const Text("রুকইয়াহ"),
       ),
       body: Column(
         children: [

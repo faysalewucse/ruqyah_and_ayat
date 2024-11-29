@@ -7,7 +7,6 @@ class AudioHelper{
 
   Audio? getPreviousAudio({required Audio currentAudio}){
     int currentIndex = getCurrentIndex(currentAudio: currentAudio);
-    print("Current index $currentIndex");
 
     if(currentIndex == 0) return null;
     return audioController.allAudios[currentIndex-1];

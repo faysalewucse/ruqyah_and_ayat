@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rukiyah_and_ayat/api/config.dart';
+import 'package:rukiyah_and_ayat/db/db_helper.dart';
+import 'package:rukiyah_and_ayat/features/audio/helper/audio_helper.dart';
 import 'package:rukiyah_and_ayat/helper/hive_boxes.dart';
 import 'package:rukiyah_and_ayat/helper/toast.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
@@ -16,6 +19,9 @@ class AudioController extends GetxController {
   final audioCategories = <AudioCategory>[].obs;
   final downloadingAudioLoading = false.obs;
   final allAudios = <Audio>[].obs;
+  final downloadingProgress = 0.0.obs;
+  final downloadingFileSize = 0.0.obs;
+  late CancelToken cancelToken;
 
   @override
   void onInit() {
@@ -48,36 +54,58 @@ class AudioController extends GetxController {
     }
   }
 
-  Future<void> downloadAudio(
-      {required VoidCallback showPermissionDialog,
-      required String title,
-      required String audioUrl}) async {
-    // Check and request storage permission
-    if (await Permission.storage.request().isGranted) {
-      // Get the Downloads directory
-      // Define a path in the public music directory
-      Directory? downloadsDir = Directory('/storage/emulated/0/Download/Ruqyah And Ayat');
+  Future<void> downloadAudio(String url, String filename) async {
+    try {
+      cancelToken = CancelToken();
 
-      // Create the directory if it does not exist
-      if (!await downloadsDir.exists()) {
-        await downloadsDir.create(recursive: true);
+      downloadingAudioLoading(true);
+
+      // Get the directory for storing files.
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/$filename';
+
+      // Check if the file already exists.
+      if (File(filePath).existsSync()) {
+        showSuccessToast(message: "ফাইলটি ইতিমধ্যে ডাউনলোড করা হয়েছে।");
+        return; // Exit early if file exists.
       }
 
-      String fileName = "$title.mp3";
-      String filePath = "${downloadsDir.path}/$fileName";
+      // Track progress using Dio's onReceiveProgress.
+      await Api().dio.download(url, filePath,
+          onReceiveProgress: (receivedBytes, totalBytes) {
+        downloadingFileSize(totalBytes / (1024 * 1024));
+        if (totalBytes != -1) {
+          double progress = (receivedBytes / totalBytes) * 100;
+          downloadingProgress(progress);
+          if (progress == 100) {
+            downloadingProgress(0.0);
+            downloadingFileSize(0.0);
+          }
+        }
+      }, cancelToken: cancelToken);
 
-      try {
-        downloadingAudioLoading(true);
-        await Api().dio.download(audioUrl, filePath);
-        showSuccessToast(message: "$title ডাউনলোড করা হয়েছে");
-      } catch (e) {
-        showErrorToast(message: "Downloading failed try again");
-      }
-      finally{
-        downloadingAudioLoading(false);
-      }
-    } else {
-      showPermissionDialog();
+      // Show success message after download completes.
+      showSuccessToast(message: "ডাউনলোড সফল হয়েছে।");
+    } catch (e) {
+      print('Error downloading file: $e');
+      throw Exception('Failed to download file');
+    } finally {
+      downloadingAudioLoading(false);
     }
+  }
+
+  void cancelDownload() {
+    if (!cancelToken.isCancelled) {
+      cancelToken.cancel();
+      showSuccessToast(message: "ডাউনলোডটি বাদ দেয়া হয়েছে");
+      downloadingProgress(0.0);
+      downloadingFileSize(0.0);
+    }
+  }
+
+  Future<String?> getLocalFilePath(String filename) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/$filename';
+    return File(filePath).existsSync() ? filePath : null;
   }
 }
