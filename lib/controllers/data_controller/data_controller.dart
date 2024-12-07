@@ -135,6 +135,7 @@ class DataController extends GetxController {
       if (!_isDataStoredLocally()) {
         _showLoadingDialog();
 
+        await _clearBoxes();
         await _fetchCategories();
         await _updateProgress();
         await _fetchVerses();
@@ -282,7 +283,6 @@ class DataController extends GetxController {
   // Updates only categories data
   Future<void> updateCategories() async {
     downloadingMessage("ক্যাটাগরির কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("categories");
     await _clearCategoriesBox();
     await _fetchCategories();
     await _saveCategoriesToHive();
@@ -293,7 +293,6 @@ class DataController extends GetxController {
   // Updates only verses data
   Future<void> updateVerses() async {
     downloadingMessage("আয়াতের কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("verses");
     await _clearVersesBox();
     await _fetchVerses();
     await _saveVersesToHive();
@@ -302,7 +301,6 @@ class DataController extends GetxController {
 // Updates only articles data
   Future<void> updateArticles() async {
     downloadingMessage("আর্টিকেলগুলোর কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("articles");
     await _clearArticlesBox();
     await _fetchArticles();
     await _saveArticlesToHive();
@@ -311,7 +309,6 @@ class DataController extends GetxController {
 // Updates only hijamas data
   Future<void> updateHijamas() async {
     downloadingMessage("হিজামার কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("hijamas");
     await _clearHijamasBox();
     await _fetchHijamas();
     await _saveHijamasToHive();
@@ -320,7 +317,6 @@ class DataController extends GetxController {
 // Updates only masnun duas data
   Future<void> updateMasnunDuas() async {
     downloadingMessage("মাসনুন দুয়ার কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("masnunDuas");
     await _clearMasnunDuasBox();
     await _fetchMasnunDuas();
     await _saveMasnunDuasToHive();
@@ -329,7 +325,6 @@ class DataController extends GetxController {
 // Updates only masnun dua categories data
   Future<void> updateMasnunDuaCategories() async {
     downloadingMessage("মাসনুন দুয়া ক্যাটাগরির কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("masnunDuaCategories");
     await _clearMasnunDuaCategoriesBox();
     await _fetchMasnunDuaCategories();
     await _saveMasnunDuaCategoriesToHive();
@@ -338,7 +333,6 @@ class DataController extends GetxController {
 // Updates only nirapottar duas data
   Future<void> updateNirapottarDuas() async {
     downloadingMessage("নিরাপত্তার দুয়ার কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("nirapottarDuas");
     await _clearNirapottarDuasBox();
     await _fetchNirapottarDuas();
     await _saveNirapottarDuasToHive();

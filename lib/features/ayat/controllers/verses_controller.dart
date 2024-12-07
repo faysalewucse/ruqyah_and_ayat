@@ -22,14 +22,25 @@ class VersesController extends GetxController {
   }
 
   Future<List<Verse>> loadVersesByCategory({required String categoryId}) async {
-    final filteredVerses = versesBox.values.where((verse) => verse.category == categoryId).toList()..sort((a, b) => a.index.compareTo(b.index));
+    // Filter the verses based on the categoryId
+    final filteredVerses = versesBox.values
+        .where((verse) => verse.category == categoryId)
+        .toList()
+      ..sort((a, b) {
+        // Handle null values for index by treating them as the lowest priority (e.g., placing them at the start or end)
+        final indexA = a.index ?? -1; // Assign a default value for null, e.g., -1
+        final indexB = b.index ?? -1;
+        return indexA.compareTo(indexB);
+      });
+
     if (filteredVerses.isNotEmpty) {
       verses(filteredVerses);
-      return verses;
+      return filteredVerses; // Ensure the filtered list is returned
     } else {
       // Optionally handle the case where no matching data is available
       print("কোনো ক্যাটাগরী খুজে পাওয়া যায়নি");
       return [];
     }
   }
+
 }
