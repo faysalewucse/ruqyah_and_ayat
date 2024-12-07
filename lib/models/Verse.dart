@@ -16,19 +16,12 @@ class Verse extends HiveObject {
   @HiveField(3)
   final int index;
 
-  @HiveField(4)
-  final DateTime createdAt;
-
-  @HiveField(5)
-  final DateTime updatedAt;
 
   Verse({
     required this.title,
     required this.verse,
     required this.category,
     required this.index,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   // Convert a Verse instance to a JSON object
@@ -38,8 +31,6 @@ class Verse extends HiveObject {
       'verse': verse,
       'category': category,
       'index': index,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 
@@ -50,8 +41,6 @@ class Verse extends HiveObject {
       verse: json['verse'],
       category: json['category'],
       index: json['index'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 }

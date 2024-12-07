@@ -22,12 +22,6 @@ class Article extends HiveObject {
   @HiveField(5)
   int index;
 
-  @HiveField(6)
-  DateTime createdAt;  // Replacing publishedDate with createdAt
-
-  @HiveField(7)
-  DateTime updatedAt;  // Adding updatedAt field
-
   Article({
     required this.id,
     required this.title,
@@ -35,8 +29,6 @@ class Article extends HiveObject {
     required this.author,
     required this.tags,
     required this.index,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   // Factory constructor to create an Article instance from JSON
@@ -47,8 +39,6 @@ class Article extends HiveObject {
     author: json['author'],
     tags: List<String>.from(json['tags']),
     index: json['index'],
-    createdAt: DateTime.parse(json['createdAt']),  // Parse createdAt field
-    updatedAt: DateTime.parse(json['updatedAt']),  // Parse updatedAt field
   );
 
   // Method to convert an Article instance to JSON
@@ -59,7 +49,5 @@ class Article extends HiveObject {
     'author': author,
     'tags': tags,
     'index': index,
-    'createdAt': createdAt.toIso8601String(),  // Convert createdAt to ISO string
-    'updatedAt': updatedAt.toIso8601String(),  // Convert updatedAt to ISO string
   };
 }

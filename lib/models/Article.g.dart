@@ -23,15 +23,13 @@ class ArticleAdapter extends TypeAdapter<Article> {
       author: fields[3] as String,
       tags: (fields[4] as List).cast<String>(),
       index: fields[5] as int,
-      createdAt: fields[6] as DateTime,
-      updatedAt: fields[7] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, Article obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -43,11 +41,7 @@ class ArticleAdapter extends TypeAdapter<Article> {
       ..writeByte(4)
       ..write(obj.tags)
       ..writeByte(5)
-      ..write(obj.index)
-      ..writeByte(6)
-      ..write(obj.createdAt)
-      ..writeByte(7)
-      ..write(obj.updatedAt);
+      ..write(obj.index);
   }
 
   @override

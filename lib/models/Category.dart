@@ -16,19 +16,12 @@ class Category extends HiveObject {
   @HiveField(4)
   int index;
 
-  @HiveField(5)
-  DateTime createdAt;
-
-  @HiveField(6)
-  DateTime updatedAt;
 
   Category({
     required this.id,
     required this.label,
     this.categoryIndex,
     required this.index,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
@@ -37,8 +30,6 @@ class Category extends HiveObject {
       label: json['label'] as String,
       categoryIndex: json['categoryIndex'] != null ? json['categoryIndex'] as int : null,
       index: json['index'] as int,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
 
@@ -48,8 +39,6 @@ class Category extends HiveObject {
       'label': label,
       'categoryIndex': categoryIndex,
       'index': index,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 }

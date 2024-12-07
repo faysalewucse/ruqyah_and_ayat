@@ -21,15 +21,13 @@ class VerseAdapter extends TypeAdapter<Verse> {
       verse: fields[1] as String,
       category: fields[2] as String,
       index: fields[3] as int,
-      createdAt: fields[4] as DateTime,
-      updatedAt: fields[5] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, Verse obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
@@ -37,11 +35,7 @@ class VerseAdapter extends TypeAdapter<Verse> {
       ..writeByte(2)
       ..write(obj.category)
       ..writeByte(3)
-      ..write(obj.index)
-      ..writeByte(4)
-      ..write(obj.createdAt)
-      ..writeByte(5)
-      ..write(obj.updatedAt);
+      ..write(obj.index);
   }
 
   @override

@@ -1,11 +1,11 @@
 import 'package:hive/hive.dart';
 
-part 'masnun_dua.g.dart'; // Necessary for code generation
+part 'masnun_dua.g.dart';
 
 @HiveType(typeId: 4)
 class MasnunDua extends HiveObject {
   @HiveField(0)
-  String id;  // This will store the MongoDB _id as a String
+  String id;
 
   @HiveField(1)
   String title;
@@ -22,12 +22,6 @@ class MasnunDua extends HiveObject {
   @HiveField(5)
   int index;
 
-  @HiveField(6)
-  DateTime createdAt;  // Replacing publishedDate with createdAt
-
-  @HiveField(7)
-  DateTime updatedAt;  // Adding updatedAt field
-
   @HiveField(8)
   String category;
 
@@ -39,8 +33,6 @@ class MasnunDua extends HiveObject {
     required this.author,
     required this.tags,
     required this.index,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   // Factory constructor to create an MasnunDua instance from JSON
@@ -52,8 +44,6 @@ class MasnunDua extends HiveObject {
     author: json['author'],
     tags: List<String>.from(json['tags']),
     index: json['index'],
-    createdAt: DateTime.parse(json['createdAt']),  // Parse createdAt field
-    updatedAt: DateTime.parse(json['updatedAt']),  // Parse updatedAt field
   );
 
   // Method to convert an MasnunDua instance to JSON
@@ -65,7 +55,5 @@ class MasnunDua extends HiveObject {
     'author': author,
     'tags': tags,
     'index': index,
-    'createdAt': createdAt.toIso8601String(),  // Convert createdAt to ISO string
-    'updatedAt': updatedAt.toIso8601String(),  // Convert updatedAt to ISO string
   };
 }
