@@ -4,6 +4,6 @@ import 'package:rukiyah_and_ayat/api/config.dart';
 
 class HijamaService{
   static Future<Response> getHijamaArticles () async {
-    return await Api().dio.get(GET_ALL_HIJAMA_ARTICLES);
+    return await Api().dio.get(ApiUrls.getAllHijamaArticles);
   }
 }

@@ -4,6 +4,6 @@ import 'package:rukiyah_and_ayat/api/config.dart';
 
 class ArticlesService{
   static Future<Response> getArticles () async {
-    return await Api().dio.get(GET_ALL_ARTICLES);
+    return await Api().dio.get(ApiUrls.getAllArticles);
   }
 }

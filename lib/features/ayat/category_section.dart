@@ -94,7 +94,7 @@ class CategorySection extends StatelessWidget {
             PrimaryButton(
                 label: "ওয়েবসাইট ভিজিট করুন",
                 onTap: () {
-                  launchInBrowser(WEBSITE_URL);
+                  launchInBrowser(ApiUrls.websiteUrl);
                 }),
           ],
         ),

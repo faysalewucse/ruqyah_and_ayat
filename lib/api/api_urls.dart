@@ -1,33 +1,36 @@
-const String API_VERSION = "v1";
-// const String ROOT_API_URL = "http://api.sunnahcurebd.com/api/$API_VERSION";
-// const String ROOT_API_URL = "http://192.168.0.100:5000/api/$API_VERSION";
-const String ROOT_API_URL = "https://rukyah-server.vercel.app/api/$API_VERSION";
+class ApiUrls {
+  static const String apiVersion = "v1";
 
-//Website
-const WEBSITE_URL = "https://sunnahcurebd.com/";
-const yaqeenTechSolutionsPlayStoreUrl = "https://play.google.com/store/apps/developer?id=Yaqeen+Tech+Solutions";
-const reportProblemGoogleForm = "https://forms.gle/zB2kCortFX6xEL1K9";
+  // Base URLs
+  static const String rootApiUrl = "http://192.168.0.105:5000/api/$apiVersion";
+  // static const String rootApiUrl = "https://rukyah-server.vercel.app/api/$apiVersion";
+  static const String websiteUrl = "https://sunnahcurebd.com/";
+  static const String yaqeenTechSolutionsPlayStoreUrl = "https://play.google.com/store/apps/developer?id=Yaqeen+Tech+Solutions";
+  static const String reportProblemGoogleForm = "https://forms.gle/zB2kCortFX6xEL1K9";
 
-//Play Store
-const playStoreAppLink = 'https://play.google.com/store/apps/details?id=com.sunnahcurebd.rukiyah_and_ayat';
-//config
-const APP_CONFIG_API_URL = "$ROOT_API_URL/config";
-//Category
-const GET_ALL_CATEGORY = "$ROOT_API_URL/categories";
-const GET_VERSES_BY_CATEGORY = "$ROOT_API_URL/verses";
+  // Play Store
+  static const String playStoreAppLink = 'https://play.google.com/store/apps/details?id=com.sunnahcurebd.rukiyah_and_ayat';
 
-//Articles
-const GET_ALL_ARTICLES = "$ROOT_API_URL/articles";
+  // Endpoints
+  static const String appConfigApiUrl = "$rootApiUrl/config";
 
-//Hijama
-const GET_ALL_HIJAMA_ARTICLES = "$ROOT_API_URL/hijama";
+  // Categories
+  static const String getAllCategory = "$rootApiUrl/categories";
+  static const String getVersesByCategory = "$rootApiUrl/verses";
 
-//Masnun Dua
-const GET_ALL_MASNUN_DUAS = "$ROOT_API_URL/masnun-dua";
-const GET_ALL_MASNUN_DUA_CATEGORIES = "$ROOT_API_URL/masnun-dua-categories";
+  // Articles
+  static const String getAllArticles = "$rootApiUrl/articles";
 
-//Hijama
-const GET_ALL_NIRAPOTTAR_DUAS = "$ROOT_API_URL/nirapottar-dua";
+  // Hijama
+  static const String getAllHijamaArticles = "$rootApiUrl/hijama";
 
-//Audio
-const GET_ALL_AUDIOS = "$ROOT_API_URL/audio";
+  // Masnun Dua
+  static const String getAllMasnunDuas = "$rootApiUrl/masnun-dua";
+  static const String getAllMasnunDuaCategories = "$rootApiUrl/masnun-dua-categories";
+
+  // Nirapottar Dua
+  static const String getAllNirapottarDuas = "$rootApiUrl/nirapottar-dua";
+
+  // Audio
+  static const String getAllAudios = "$rootApiUrl/audio";
+}

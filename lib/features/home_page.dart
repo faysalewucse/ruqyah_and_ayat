@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     onTap: () {
-                      launchInBrowser(reportProblemGoogleForm);
+                      launchInBrowser(ApiUrls.reportProblemGoogleForm);
                     },
                   ),
                   ListTile(
@@ -218,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     onTap: () {
-                      launchInBrowser(yaqeenTechSolutionsPlayStoreUrl);
+                      launchInBrowser(ApiUrls.yaqeenTechSolutionsPlayStoreUrl);
                     },
                   ),
                 ],
@@ -311,7 +311,7 @@ class _HomePageState extends State<HomePage> {
             PrimaryButton(
               label: "ওয়েবসাইট ভিজিট করুন",
               onTap: () {
-                launchInBrowser(WEBSITE_URL);
+                launchInBrowser(ApiUrls.websiteUrl);
               },
             ),
           ],
@@ -324,7 +324,7 @@ class _HomePageState extends State<HomePage> {
     final box = context.findRenderObject() as RenderBox?;
 
     await Share.share(
-      playStoreAppLink,
+      ApiUrls.playStoreAppLink,
       sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
     );
   }
@@ -435,7 +435,7 @@ class _HomePageState extends State<HomePage> {
           okText: "আপডেট করুন",
           onOkPressed: () {
             Get.back();
-            launchInBrowser(playStoreAppLink);
+            launchInBrowser(ApiUrls.playStoreAppLink);
           },
         );
       },

@@ -12,7 +12,7 @@ class Api {
   Api() {
     dio = Dio(
       BaseOptions(
-        baseUrl: ROOT_API_URL,
+        baseUrl: ApiUrls.rootApiUrl,
         headers: {
           'Content-Type': 'application/json',
         },

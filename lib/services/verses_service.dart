@@ -4,6 +4,6 @@ import 'package:rukiyah_and_ayat/api/config.dart';
 
 class VersesService{
   static Future<Response> getVerses () async {
-    return await Api().dio.get(GET_VERSES_BY_CATEGORY);
+    return await Api().dio.get(ApiUrls.getVersesByCategory);
   }
 }

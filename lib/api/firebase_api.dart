@@ -24,7 +24,7 @@ class FirebaseApi {
   void handleMessage(RemoteMessage? message) {
     if (message == null) return;
     if (message.notification?.title == "App Update") {
-      launchInBrowser(playStoreAppLink);
+      launchInBrowser(ApiUrls.playStoreAppLink);
     }
   }
 
