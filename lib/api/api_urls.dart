@@ -2,9 +2,10 @@ class ApiUrls {
   static const String apiVersion = "v1";
 
   // Base URLs
-  static const String rootApiUrl = "http://192.168.0.105:5000/api/$apiVersion";
-  // static const String rootApiUrl = "https://rukyah-server.vercel.app/api/$apiVersion";
-  static const String websiteUrl = "https://sunnahcurebd.com/";
+  // static const String rootApiUrl = "http://192.168.0.105:5000/api/$apiVersion";
+  static const String rootApiUrl = "https://rukyah-server.vercel.app/api/$apiVersion";
+  static const String websiteUrl = "https://sunnahcurebd.com";
+  static const String audioBaseUrl = "$websiteUrl/ruqyah-app-audios/Audios";
   static const String yaqeenTechSolutionsPlayStoreUrl = "https://play.google.com/store/apps/developer?id=Yaqeen+Tech+Solutions";
   static const String reportProblemGoogleForm = "https://forms.gle/zB2kCortFX6xEL1K9";
 
