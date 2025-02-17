@@ -29,7 +29,7 @@ class AyatCategoryCard extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
-            // border: Border(left: BorderSide(color: Theme.of(context).primaryColor.withOpacity(0.5), width: 6)),
+            // border: Border(left: BorderSide(color: Theme.of(context).primaryColor.withOpacity( alpha:0.5), width: 6)),
             borderRadius: rounded20),
         child: Row(
           children: [

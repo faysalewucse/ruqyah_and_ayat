@@ -13,6 +13,9 @@ class Audio extends HiveObject {
   @HiveField(2)
   String audioUrl;
 
+  @HiveField(5)
+  String? audioUrlServer;
+
   @HiveField(3)
   String description;
 
@@ -23,6 +26,7 @@ class Audio extends HiveObject {
     required this.id,
     required this.title,
     required this.audioUrl,
+    this.audioUrlServer,
     required this.description,
     required this.index, // Make index required
   });
@@ -33,6 +37,7 @@ class Audio extends HiveObject {
       id: json['_id'] ?? '',
       title: json['title'],
       audioUrl: json['audioUrl'],
+      audioUrlServer: json['audioUrlServer'] ?? "",
       description: json['description'],
       index: json['index'] ?? 0, // Default index to 0 if not provided
     );
@@ -44,6 +49,7 @@ class Audio extends HiveObject {
       '_id': id,
       'title': title,
       'audioUrl': audioUrl,
+      'audioUrlServer': audioUrlServer,
       'description': description,
       'index': index, // Add index to JSON
     };

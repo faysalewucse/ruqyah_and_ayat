@@ -9,7 +9,7 @@
         android:fullBackupContent="false"
         android:label="Ruqyah &amp; Ayat"
         android:usesCleartextTraffic="true">
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

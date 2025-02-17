@@ -28,7 +28,7 @@ class MasnunDuaCard extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               width: deviceWidth,
               decoration: BoxDecoration(
-                color:  Get.isDarkMode ? Theme.of(context).iconTheme.color : Theme.of(context).primaryColor.withOpacity(0.1),
+                color:  Get.isDarkMode ? Theme.of(context).iconTheme.color : Theme.of(context).primaryColor.withOpacity( 0.1),
                 borderRadius: BorderRadius.circular(12.0)
               ),
               child: Text(

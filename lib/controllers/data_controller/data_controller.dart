@@ -54,6 +54,8 @@ class DataController extends GetxController {
   }
 
   Future<void> updateData() async {
+    debugPrint("Updating data");
+
     await _clearBoxes();
     await fetchAndSaveData();
   }
@@ -116,6 +118,8 @@ class DataController extends GetxController {
   }
 
   Future<void> _clearBoxes() async {
+    debugPrint("_clearBoxes");
+
     await categoryBox.clear();
     await versesBox.clear();
     await ruqyahsBox.clear();
@@ -134,6 +138,7 @@ class DataController extends GetxController {
     try {
       if (!_isDataStoredLocally()) {
         _showLoadingDialog();
+        await _clearBoxes();
 
         await _fetchCategories();
         await _updateProgress();

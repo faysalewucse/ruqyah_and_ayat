@@ -34,10 +34,8 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
   bool alreadyDownloaded = false;
   Duration _totalDuration = Duration.zero;
   Duration _currentPosition = Duration.zero;
-  late final Audio? _prevAudio =
-      AudioHelper().getPreviousAudio(currentAudio: widget.audio);
-  late final Audio? _nextAudio =
-      AudioHelper().getNextAudio(currentAudio: widget.audio);
+  late final Audio? _prevAudio = AudioHelper().getPreviousAudio(currentAudio: widget.audio);
+  late final Audio? _nextAudio = AudioHelper().getNextAudio(currentAudio: widget.audio);
   bool _isFavorite = false;
 
   StreamSubscription<Duration>? _positionSubscription;
@@ -58,8 +56,7 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
   }
 
   Future<void> _checkFavoriteStatus() async {
-    bool favorite = await isFavorite(
-        AudioHelper().getCurrentIndex(currentAudio: widget.audio));
+    bool favorite = await isFavorite(AudioHelper().getCurrentIndex(currentAudio: widget.audio));
     setState(() {
       _isFavorite = favorite;
     });
@@ -67,11 +64,9 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
 
   Future<void> _toggleFavorite() async {
     if (_isFavorite) {
-      await removeFromFavorites(
-          AudioHelper().getCurrentIndex(currentAudio: widget.audio));
+      await removeFromFavorites(AudioHelper().getCurrentIndex(currentAudio: widget.audio));
     } else {
-      await addToFavorites(
-          AudioHelper().getCurrentIndex(currentAudio: widget.audio));
+      await addToFavorites(AudioHelper().getCurrentIndex(currentAudio: widget.audio));
     }
     setState(() {
       _isFavorite = !_isFavorite;
@@ -105,7 +100,7 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
       if (localPath != null) {
         await _playOffline(localPath);
       } else {
-        await _playOnline(convertToDirectUrl(widget.audio.audioUrl));
+        await _playOnline(widget.audio.audioUrlServer ?? "");
       }
 
       setState(() {
@@ -135,6 +130,8 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
   }
 
   Future<void> _playOnline(String url) async {
+    debugPrint('audio url => $url');
+
     await _audioPlayer.setUrl(url);
     _audioPlayer.play();
   }
@@ -151,9 +148,7 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
     final hours = duration.inHours.toString().padLeft(2, '0');
     final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
     final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return duration.inHours > 0
-        ? '$hours:$minutes:$seconds'
-        : '$minutes:$seconds';
+    return duration.inHours > 0 ? '$hours:$minutes:$seconds' : '$minutes:$seconds';
   }
 
   Widget _buildProgressBar(BuildContext context) {
@@ -207,12 +202,10 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
             );
           },
         ),
-
         IconButton(
           icon: Opacity(
             opacity: _prevAudio != null ? 1 : 0.4,
-            child: Icon(PhosphorIcons.skip_back_fill,
-                size: 30, color: Theme.of(context).primaryColor),
+            child: Icon(PhosphorIcons.skip_back_fill, size: 30, color: Theme.of(context).primaryColor),
           ),
           onPressed: () => _navigateToAudio(_prevAudio),
         ),
@@ -220,8 +213,7 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
           icon: Container(
             height: 70,
             width: 70,
-            decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor, shape: BoxShape.circle),
+            decoration: BoxDecoration(color: Theme.of(context).primaryColor, shape: BoxShape.circle),
             child: Icon(
               _isPlaying ? Icons.pause : Icons.play_arrow,
               color: AppColors.white,
@@ -240,8 +232,7 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
         IconButton(
           icon: Opacity(
             opacity: _nextAudio != null ? 1 : 0.4,
-            child: Icon(PhosphorIcons.skip_forward_fill,
-                size: 30, color: Theme.of(context).primaryColor),
+            child: Icon(PhosphorIcons.skip_forward_fill, size: 30, color: Theme.of(context).primaryColor),
           ),
           onPressed: () => _navigateToAudio(_nextAudio),
         ),
@@ -265,41 +256,40 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.audio.title)),
-      body: _loading
-          ? const AudioPlayerShimmer()
-          : Center(
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 32.0),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0),
-                      ),
-                    ),
-                    child: Center(
-                      child: Image.asset(AppImages.appLogo, scale: 2.5),
-                    ),
-                  ),
-                  12.kH,
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(40.0),
-                      child: Column(
+      body: Center(
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(20.0),
+                  bottomRight: Radius.circular(20.0),
+                ),
+              ),
+              child: Center(
+                child: Image.asset(AppImages.appLogo, scale: 2.5),
+              ),
+            ),
+            12.kH,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(40.0),
+                child: _loading
+                    ? const AudioPlayerShimmer()
+                    : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            widget.audio.title,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w800,
-                              color: Get.isDarkMode
-                                  ? Theme.of(context).iconTheme.color
-                                  : Theme.of(context).primaryColor,
+                          Expanded(
+                            child: Text(
+                              widget.audio.title,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.w800,
+                                color: Get.isDarkMode ? Theme.of(context).iconTheme.color : Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
                           32.kH,
@@ -307,11 +297,11 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
                           _buildPlayControls(context),
                         ],
                       ),
-                    ),
-                  ),
-                ],
               ),
             ),
+          ],
+        ),
+      ),
       bottomNavigationBar: !_loading && !alreadyDownloaded
           ? Padding(
               padding: const EdgeInsets.all(8.0),
@@ -334,10 +324,7 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
                           ? null
                           : Icon(
                               PhosphorIcons.download,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium
-                                  ?.color,
+                              color: Theme.of(context).textTheme.headlineMedium?.color,
                             ),
                     ),
                     Obx(() => audioController.downloadingAudioLoading.isTrue
@@ -349,9 +336,7 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
                                 onTap: () => audioController.cancelDownload(),
                                 child: Container(
                                   padding: const EdgeInsets.all(5),
-                                  decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppColors.white),
+                                  decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.white),
                                   child: const Icon(
                                     PhosphorIcons.x,
                                     size: 15,

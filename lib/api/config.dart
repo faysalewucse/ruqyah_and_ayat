@@ -26,7 +26,7 @@ class Api {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           options.headers['Authorization'] = StorageController().getAuthToken();
-          print("${options.method} : ${options.uri}");
+          debugPrint("${options.method} : ${options.uri}");
           return handler.next(options);
         },
         onResponse: (response, handler) {

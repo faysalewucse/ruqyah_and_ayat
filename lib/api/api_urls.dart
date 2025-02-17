@@ -2,7 +2,7 @@ class ApiUrls {
   static const String apiVersion = "v1";
 
   // Base URLs
-  // static const String rootApiUrl = "http://192.168.0.105:5000/api/$apiVersion";
+  // static const String rootApiUrl = "http://192.168.0.100:5000/api/$apiVersion";
   static const String rootApiUrl = "https://rukyah-server.vercel.app/api/$apiVersion";
   static const String websiteUrl = "https://sunnahcurebd.com";
   static const String audioBaseUrl = "$websiteUrl/ruqyah-app-audios/Audios";

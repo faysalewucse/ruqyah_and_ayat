@@ -25,7 +25,7 @@ class AudioTitle extends StatelessWidget {
             borderRadius: BorderRadius.circular(14.0),
             color: Get.isDarkMode
                 ? Theme.of(context).scaffoldBackgroundColor
-                : Theme.of(context).primaryColor.withOpacity(0.06),
+                : Theme.of(context).primaryColor.withOpacity( 0.06),
           ),
           child: Center(
             child: Text(

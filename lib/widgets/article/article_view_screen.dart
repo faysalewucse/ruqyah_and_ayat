@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:intl/intl.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
-import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 
 class ArticleViewScreen extends StatefulWidget {
   final Article article;
@@ -50,7 +48,7 @@ class _ArticleViewScreenState extends State<ArticleViewScreen> {
               child: RawScrollbar(
                 controller: _scrollController,
                 interactive: true,
-                thumbColor: Theme.of(context).primaryColor.withOpacity(0.5),
+                thumbColor: Theme.of(context).primaryColor.withOpacity( 0.5),
                 thickness: 10,
                 radius: const Radius.circular(5),
                 thumbVisibility: true,

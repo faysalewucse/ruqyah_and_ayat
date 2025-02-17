@@ -13,17 +13,6 @@ class AudioPlayerShimmer extends StatelessWidget {
       highlightColor: Colors.grey.shade100,
       child: Column(
         children: [
-          Container(
-            height: deviceHeight * 0.4,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(20.0),
-                bottomRight: Radius.circular(20.0),
-              ),
-            ),
-          ),
-          32.kH,
           Expanded(
               child: Center(
             child: Column(
