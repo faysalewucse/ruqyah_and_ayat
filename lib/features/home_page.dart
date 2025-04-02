@@ -3,28 +3,21 @@ import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:rukiyah_and_ayat/api/api_urls.dart';
 import 'package:rukiyah_and_ayat/controllers/data_controller/data_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
-
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/Config.dart';
 import 'package:rukiyah_and_ayat/models/Screen.dart';
-import 'package:rukiyah_and_ayat/features/ayat/ayat_categories.dart';
-import 'package:rukiyah_and_ayat/features/under_development.dart';
 import 'package:rukiyah_and_ayat/router/routes.dart';
 import 'package:rukiyah_and_ayat/services/version_service.dart';
 import 'package:rukiyah_and_ayat/utils/common_functions.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
-import 'package:rukiyah_and_ayat/widgets/animated_progress_loader.dart';
 import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/screen_card.dart';
 import 'package:rukiyah_and_ayat/widgets/dialogs/confirmation_dialog.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/constants/app_colors.dart';
 
@@ -42,46 +35,14 @@ class _HomePageState extends State<HomePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<Screen> screens = [
-    Screen(
-      'আয়াত',
-      FlutterIslamicIcons.quran,
-      categorySection,
-    ),
-    Screen(
-      'রুকইয়াহ',
-      PhosphorIcons.first_aid_kit_thin,
-      ruqyah,
-    ),
-    Screen(
-      'হিজামা',
-      PhosphorIcons.first_aid_thin,
-      hijama,
-    ),
-    Screen(
-      'হেফাজতের আমল',
-      PhosphorIcons.shield_thin,
-      securityDua,
-    ),
-    Screen(
-      'মাসনুন দুআ',
-      FlutterIslamicIcons.tasbihHand,
-      masnunDuaCategories,
-    ),
-    Screen(
-      'অডিও',
-      PhosphorIcons.music_notes_thin,
-      audioCategories,
-    ),
-    Screen(
-      'মাসায়েল',
-      PhosphorIcons.question_thin,
-      masayel,
-    ),
-    Screen(
-      'বিবিধ',
-      PhosphorIcons.bookmarks_thin,
-      bibidh,
-    ),
+    Screen('আয়াত', FlutterIslamicIcons.quran, categorySection),
+    Screen('রুকইয়াহ', PhosphorIcons.first_aid_kit_thin, ruqyah),
+    Screen('হিজামা', PhosphorIcons.first_aid_thin, hijama),
+    Screen('হেফাজতের আমল', PhosphorIcons.shield_thin, securityDua),
+    Screen('অডিও', PhosphorIcons.music_notes_thin, audioCategories),
+    Screen('মাসায়েল', PhosphorIcons.question_thin, masayel),
+    Screen('মাসনুন দুআ', FlutterIslamicIcons.tasbihHand, masnunDuaCategories),
+    Screen('বিবিধ', PhosphorIcons.bookmarks_thin, bibidh),
   ];
 
   @override
@@ -104,28 +65,17 @@ class _HomePageState extends State<HomePage> {
       key: _scaffoldKey,
       appBar: AppBar(
         titleSpacing: 0,
-        title: const Text(
-          appName,
-        ),
+        title: const Text(appName),
         actions: [
           IconButton(
             onPressed: () {
               _keeperController.switchTheme();
               Get.changeThemeMode(_keeperController.currentTheme.value);
             },
-            icon: Obx(
-              () => Icon(
-                _keeperController.currentTheme.value == ThemeMode.dark
-                    ? PhosphorIcons.sun
-                    : PhosphorIcons.moon,
-              ),
-            ),
-          )
+            icon: Obx(() => Icon(_keeperController.currentTheme.value == ThemeMode.dark ? PhosphorIcons.sun : PhosphorIcons.moon)),
+          ),
         ],
-        leading: IconButton(
-          icon: const Icon(PhosphorIcons.list),
-          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-        ),
+        leading: IconButton(icon: const Icon(PhosphorIcons.list), onPressed: () => _scaffoldKey.currentState?.openDrawer()),
       ),
       drawer: Drawer(
         child: Column(
@@ -134,9 +84,7 @@ class _HomePageState extends State<HomePage> {
               width: deviceWidth,
               height: 200.0,
               child: DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                ),
+                decoration: BoxDecoration(color: Theme.of(context).primaryColor),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -149,10 +97,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     8.kH,
-                    Text(
-                      appName,
-                      style: Theme.of(context).appBarTheme.titleTextStyle,
-                    ),
+                    Text(appName, style: Theme.of(context).appBarTheme.titleTextStyle),
                   ],
                 ),
               ),
@@ -164,14 +109,8 @@ class _HomePageState extends State<HomePage> {
                   ...screens.map(
                     (Screen screen) => ListTile(
                       dense: true,
-                      leading: Icon(
-                        screen.iconData,
-                        color: Theme.of(context).textTheme.titleLarge?.color,
-                      ),
-                      title: Text(
-                        screen.name,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
+                      leading: Icon(screen.iconData, color: Theme.of(context).textTheme.titleLarge?.color),
+                      title: Text(screen.name, style: Theme.of(context).textTheme.bodyLarge),
                       onTap: () {
                         Get.back();
                         Get.toNamed(screen.route);
@@ -181,42 +120,24 @@ class _HomePageState extends State<HomePage> {
                   const Divider(),
                   ListTile(
                     dense: true,
-                    leading: Icon(
-                      PhosphorIcons.warning_circle_thin,
-                      color: Theme.of(context).textTheme.titleLarge?.color,
-                    ),
-                    title: Text(
-                      'সমস্যা জানান',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
+                    leading: Icon(PhosphorIcons.warning_circle_thin, color: Theme.of(context).textTheme.titleLarge?.color),
+                    title: Text('সমস্যা জানান', style: Theme.of(context).textTheme.bodyLarge),
                     onTap: () {
                       launchInBrowser(ApiUrls.reportProblemGoogleForm);
                     },
                   ),
                   ListTile(
                     dense: true,
-                    leading: Icon(
-                      PhosphorIcons.share_network_thin,
-                      color: Theme.of(context).textTheme.titleLarge?.color,
-                    ),
-                    title: Text(
-                      'শেয়ার করুন',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
+                    leading: Icon(PhosphorIcons.share_network_thin, color: Theme.of(context).textTheme.titleLarge?.color),
+                    title: Text('শেয়ার করুন', style: Theme.of(context).textTheme.bodyLarge),
                     onTap: () {
                       _onShare(context);
                     },
                   ),
                   ListTile(
                     dense: true,
-                    leading: Icon(
-                      PhosphorIcons.google_play_logo_thin,
-                      color: Theme.of(context).textTheme.titleLarge?.color,
-                    ),
-                    title: Text(
-                      'আরো অ্যাপ দেখুন',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
+                    leading: Icon(PhosphorIcons.google_play_logo_thin, color: Theme.of(context).textTheme.titleLarge?.color),
+                    title: Text('আরো অ্যাপ দেখুন', style: Theme.of(context).textTheme.bodyLarge),
                     onTap: () {
                       launchInBrowser(ApiUrls.yaqeenTechSolutionsPlayStoreUrl);
                     },
@@ -229,16 +150,8 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Column(
                 children: [
-                  Text(
-                    "Powered by",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    "YAQEEN TECH SOLUTIONS",
-                    style: Theme.of(context).textTheme.headlineSmall,
-                    textAlign: TextAlign.center,
-                  ),
+                  Text("Powered by", style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center),
+                  Text("YAQEEN TECH SOLUTIONS", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
                 ],
               ),
             ),
@@ -254,11 +167,8 @@ class _HomePageState extends State<HomePage> {
             Stack(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 24.0, horizontal: 16.0),
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: rounded20),
+                  padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+                  decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: rounded20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -272,20 +182,16 @@ class _HomePageState extends State<HomePage> {
                       const Text(
                         "وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ",
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: "NooreHuda",
-                            color: AppColors.white,
-                            fontSize: 26,
-                            letterSpacing: 0),
+                        style: TextStyle(fontFamily: "NooreHuda", color: AppColors.white, fontSize: 26, letterSpacing: 0),
                       ),
                       verticalGap12,
                       Text(
-                          "আর আমি নাযিল করেছি এমন কুরআন, যা মুমিনের জন্য আরোগ্য ও রহমতস্বরূপ",
-                          textAlign: TextAlign.center,
-                          style: white16W600),
+                        "আর আমি নাযিল করেছি এমন কুরআন, যা মুমিনের জন্য আরোগ্য ও রহমতস্বরূপ",
+                        textAlign: TextAlign.center,
+                        style: white16W600,
+                      ),
                       verticalGap12,
-                      Text("“সূরাঃ আল-ইসরা (১৭ঃ৮২)”",
-                          textAlign: TextAlign.center, style: white14W500),
+                      Text("“সূরাঃ আল-ইসরা (১৭ঃ৮২)”", textAlign: TextAlign.center, style: white14W500),
                     ],
                   ),
                 ),
@@ -294,16 +200,10 @@ class _HomePageState extends State<HomePage> {
             16.kH,
             Expanded(
               child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 16, mainAxisSpacing: 16),
                 itemCount: screens.length,
                 itemBuilder: (context, index) {
-                  return ScreenCard(
-                    screen: screens[index],
-                  );
+                  return ScreenCard(screen: screens[index]);
                 },
               ),
             ),
@@ -323,104 +223,97 @@ class _HomePageState extends State<HomePage> {
   _onShare(BuildContext context) async {
     final box = context.findRenderObject() as RenderBox?;
 
-    await Share.share(
-      ApiUrls.playStoreAppLink,
-      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-    );
+    await Share.share(ApiUrls.playStoreAppLink, sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
   }
 
   void checkAppVersion() async {
-    // try {
-    final response = await VersionService.getAppConfig();
+    try {
+      final response = await VersionService.getAppConfig();
 
-    List<dynamic> jsonResponse = response.data["configs"] as List<dynamic>;
+      List<dynamic> jsonResponse = response.data["configs"] as List<dynamic>;
 
-    Config latestConfig = Config.fromJson(jsonResponse.first);
+      Config latestConfig = Config.fromJson(jsonResponse.first);
 
-    final box = GetStorage();
+      debugPrint("latest config: ${latestConfig.toJson()}");
+      final box = GetStorage();
 
-    // previous data versions variables
-    String dataVersion = box.read("dataVersion") ?? latestConfig.dataVersion;
-    String ayatDataVersion =
-        box.read("ayatDataVersion") ?? latestConfig.ayatDataVersion;
-    String categoryDataVersion =
-        box.read("categoryDataVersion") ?? latestConfig.categoryDataVersion;
-    String ruqyahDataVersion =
-        box.read("ruqyahDataVersion") ?? latestConfig.ruqyahDataVersion;
-    String hijamaDataVersion =
-        box.read("hijamaDataVersion") ?? latestConfig.hijamaDataVersion;
-    String nirapottarDataVersion =
-        box.read("nirapottarDataVersion") ?? latestConfig.nirapottarDataVersion;
-    String masnunDuaDataVersion =
-        box.read("masnunDuaDataVersion") ?? latestConfig.masnunDuaDataVersion;
-    String masnunDuaCategoryDataVersion =
-        box.read("masnunDuaCategoryDataVersion") ??
-            latestConfig.masnunDuaCategoryDataVersion;
-    String audioDataVersion =
-        box.read("audioDataVersion") ?? latestConfig.audioDataVersion;
-    String masayelDataVersion =
-        box.read("masayelDataVersion") ?? latestConfig.masayelDataVersion;
-    String bibidhDataVersion =
-        box.read("bibidhDataVersion") ?? latestConfig.bibidhDataVersion;
+      // previous data versions variables
+      String dataVersion = box.read("dataVersion") ?? latestConfig.dataVersion;
+      String ayatDataVersion = box.read("ayatDataVersion") ?? latestConfig.ayatDataVersion;
+      String categoryDataVersion = box.read("categoryDataVersion") ?? latestConfig.categoryDataVersion;
+      String ruqyahDataVersion = box.read("ruqyahDataVersion") ?? latestConfig.ruqyahDataVersion;
+      String hijamaDataVersion = box.read("hijamaDataVersion") ?? latestConfig.hijamaDataVersion;
+      String nirapottarDataVersion = box.read("nirapottarDataVersion") ?? latestConfig.nirapottarDataVersion;
+      String masnunDuaDataVersion = box.read("masnunDuaDataVersion") ?? latestConfig.masnunDuaDataVersion;
+      String masnunDuaCategoryDataVersion = box.read("masnunDuaCategoryDataVersion") ?? latestConfig.masnunDuaCategoryDataVersion;
+      String audioDataVersion = box.read("audioDataVersion") ?? latestConfig.audioDataVersion;
+      String masayelDataVersion = box.read("masayelDataVersion") ?? latestConfig.masayelDataVersion;
+      String masayelCategoriesDataVersion = box.read("masayelCategoriesDataVersion") ?? latestConfig.masayelCategoriesDataVersion;
+      String bibidhDataVersion = box.read("bibidhDataVersion") ?? latestConfig.bibidhDataVersion;
 
-    if (packageInfo.version != latestConfig.appVersion) {
-      showAppUpdateDialog();
-    } else {
-      // Check and update each data version
-      if (latestConfig.dataVersion != dataVersion) {
-        await dataController.updateData();
+      if (packageInfo.version != latestConfig.appVersion) {
+        showAppUpdateDialog();
       } else {
-        List<String> updates = [];
-        if (latestConfig.ayatDataVersion != ayatDataVersion) {
-          updates.add("verses");
-        }
-        if (latestConfig.categoryDataVersion != categoryDataVersion) {
-          updates.add("categories");
-        }
-        if (latestConfig.ruqyahDataVersion != ruqyahDataVersion) {
-          updates.add("articles");
-        }
-        if (latestConfig.hijamaDataVersion != hijamaDataVersion) {
-          updates.add("hijamas");
-        }
-        if (latestConfig.nirapottarDataVersion != nirapottarDataVersion) {
-          updates.add("nirapottarDuas");
-        }
-        if (latestConfig.masnunDuaDataVersion != masnunDuaDataVersion) {
-          updates.add("masnunDuas");
-        }
-        if (latestConfig.masnunDuaCategoryDataVersion !=
-            masnunDuaCategoryDataVersion) {
-          updates.add("masnunDuaCategories");
-        }
-        if (latestConfig.audioDataVersion != audioDataVersion) {
-          updates.add("audios");
-        }
-        // if (latestConfig.masayelDataVersion != masayelDataVersion) {
-        //    updates.add("masayel");
-        // }
-        // if (latestConfig.bibidhDataVersion != bibidhDataVersion) {
-        //    updates.add("bibidh");
-        // }
-        if(updates.isNotEmpty){
-          await dataController.updateSomeData(updates);
-        }
-      }
+        // Check and update each data version
+        if (latestConfig.dataVersion != dataVersion) {
+          await dataController.updateData();
+        } else {
+          List<String> updates = [];
+          if (latestConfig.ayatDataVersion != ayatDataVersion) {
+            updates.add("verses");
+          }
+          if (latestConfig.categoryDataVersion != categoryDataVersion) {
+            updates.add("categories");
+          }
+          if (latestConfig.ruqyahDataVersion != ruqyahDataVersion) {
+            updates.add("articles");
+          }
+          if (latestConfig.hijamaDataVersion != hijamaDataVersion) {
+            updates.add("hijamas");
+          }
+          if (latestConfig.nirapottarDataVersion != nirapottarDataVersion) {
+            updates.add("nirapottarDuas");
+          }
+          if (latestConfig.masnunDuaDataVersion != masnunDuaDataVersion) {
+            updates.add("masnunDuas");
+          }
+          if (latestConfig.masnunDuaCategoryDataVersion != masnunDuaCategoryDataVersion) {
+            updates.add("masnunDuaCategories");
+          }
+          if (latestConfig.audioDataVersion != audioDataVersion) {
+            updates.add("audios");
+          }
+          if (latestConfig.masayelDataVersion != masayelDataVersion) {
+             updates.add("masayel");
+          }
+          if (latestConfig.masayelCategoriesDataVersion != masayelCategoriesDataVersion) {
+            updates.add("masayelCategories");
+          }
+          // if (latestConfig.bibidhDataVersion != bibidhDataVersion) {
+          //    updates.add("bibidh");
+          // }
+          if (updates.isNotEmpty) {
+            debugPrint("Updates list => $updates");
 
-      box.write("dataVersion", latestConfig.dataVersion);
-      box.write("ayatDataVersion", latestConfig.ayatDataVersion);
-      box.write("categoryDataVersion", latestConfig.categoryDataVersion);
-      box.write("ruqyahDataVersion", latestConfig.ruqyahDataVersion);
-      box.write("hijamaDataVersion", latestConfig.hijamaDataVersion);
-      box.write("nirapottarDataVersion", latestConfig.nirapottarDataVersion);
-      box.write("masnunDuaDataVersion", latestConfig.masnunDuaDataVersion);
-      box.write("masnunDuaCategoryDataVersion",
-          latestConfig.masnunDuaCategoryDataVersion);
-      box.write("audioDataVersion", latestConfig.audioDataVersion);
+            await dataController.updateSomeData(updates);
+          }
+        }
+
+        box.write("dataVersion", latestConfig.dataVersion);
+        box.write("ayatDataVersion", latestConfig.ayatDataVersion);
+        box.write("categoryDataVersion", latestConfig.categoryDataVersion);
+        box.write("ruqyahDataVersion", latestConfig.ruqyahDataVersion);
+        box.write("hijamaDataVersion", latestConfig.hijamaDataVersion);
+        box.write("nirapottarDataVersion", latestConfig.nirapottarDataVersion);
+        box.write("masnunDuaDataVersion", latestConfig.masnunDuaDataVersion);
+        box.write("masnunDuaCategoryDataVersion", latestConfig.masnunDuaCategoryDataVersion);
+        box.write("masayelDataVersion", latestConfig.masayelDataVersion);
+        box.write("masayelCategoriesDataVersion", latestConfig.masayelCategoriesDataVersion);
+        box.write("audioDataVersion", latestConfig.audioDataVersion);
+      }
+    } catch (error) {
+      debugPrint("Error checking app version or data: $error");
     }
-    // } catch (error) {
-    //   print("Error checking app version or data: $error");
-    // }
   }
 
   void showAppUpdateDialog() {
@@ -429,8 +322,7 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext context) {
         return ConfirmationDialog(
           title: "অ্যাপ আপডেট",
-          confirmationMessage:
-              'নতুন সব বৈশিষ্ট্য এবং উন্নত পারফরম্যান্স পেতে এখনই আপনার অ্যাপটি আপডেট করুন।',
+          confirmationMessage: 'নতুন সব বৈশিষ্ট্য এবং উন্নত পারফরম্যান্স পেতে এখনই আপনার অ্যাপটি আপডেট করুন।',
           cancelText: 'বাতিল',
           okText: "আপডেট করুন",
           onOkPressed: () {

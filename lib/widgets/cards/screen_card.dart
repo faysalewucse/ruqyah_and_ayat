@@ -26,7 +26,7 @@ class ScreenCard extends StatelessWidget {
               width: 65,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50.0),
-                color: Get.isDarkMode ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).primaryColor.withOpacity( 0.06),
+                color: Get.isDarkMode ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).primaryColor.withValues(alpha: 0.06),
               ),
               child: Icon(
                 screen.iconData,

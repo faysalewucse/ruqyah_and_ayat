@@ -14,4 +14,5 @@ const String securityDua = "/security-dua";
 const String masnunDuas = "/masnun-duas";
 const String masnunDuaCategories = "/masnun-dua-categories";
 const String masayel = "/masayel";
+const String masayelsByCategory = "/masayels-by-category";
 const String bibidh = "/bibidh";

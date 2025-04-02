@@ -53,11 +53,20 @@ void main() async {
   masnunDuaCategoriesBox = await Hive.openBox<Category>('masnunDuaCategories');
   nirapottarDuaBox = await Hive.openBox<Article>('nirapottarDuas');
   audioBox = await Hive.openBox<AudioCategory>('audios');
+  masayelCategoriesBox = await Hive.openBox<Category>('masayelCategories');
+  masayelBox = await Hive.openBox<MasnunDua>('masayel');
 
+  // Initialize the NetworkController first and wait for it
+  final networkController = Get.put(NetworkController());
+  await networkController.initializeNetwork();
+
+  // Then initialize other controllers
   Get.put(StorageController());
-  Get.put(NetworkController());
   Get.put(KeeperController());
   Get.put(DataController());
+
+  // Remove splash screen after all initialization is complete
+  FlutterNativeSplash.remove();
 
   runApp(const MyApp());
 }

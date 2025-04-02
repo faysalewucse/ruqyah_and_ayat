@@ -22,6 +22,7 @@ BorderRadius rounded2 = BorderRadius.circular(2);
 BorderRadius rounded4 = BorderRadius.circular(4);
 BorderRadius rounded6 = BorderRadius.circular(6);
 BorderRadius rounded8 = BorderRadius.circular(8);
+BorderRadius rounded15 = BorderRadius.circular(15.0);
 BorderRadius rounded20 = BorderRadius.circular(20);
 BorderRadius roundedFull = BorderRadius.circular(50);
 

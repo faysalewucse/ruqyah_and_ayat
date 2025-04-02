@@ -48,7 +48,7 @@ class _ArticleViewScreenState extends State<ArticleViewScreen> {
               child: RawScrollbar(
                 controller: _scrollController,
                 interactive: true,
-                thumbColor: Theme.of(context).primaryColor.withOpacity( 0.5),
+                thumbColor: Theme.of(context).primaryColor.withValues(alpha: 0.5),
                 thickness: 10,
                 radius: const Radius.circular(5),
                 thumbVisibility: true,

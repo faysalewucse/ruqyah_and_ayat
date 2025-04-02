@@ -39,7 +39,7 @@ class Audio extends HiveObject {
       audioUrl: json['audioUrl'],
       audioUrlServer: json['audioUrlServer'] ?? "",
       description: json['description'],
-      index: json['index'] ?? 0, // Default index to 0 if not provided
+      index: json['index'] ?? 0,
     );
   }
 

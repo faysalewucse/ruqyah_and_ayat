@@ -8,7 +8,7 @@
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:label="Ruqyah &amp; Ayat"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

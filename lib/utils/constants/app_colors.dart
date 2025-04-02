@@ -15,7 +15,7 @@ class AppColors {
   static const Color scaffoldBackgroundColor = Color(0xffe5e5f2);
   static const Color darkScaffoldBackgroundColor = Color(0xff1e1e1e);
   static const Color bgGray1 = Color(0xffF1F1F1);
-  static Color borderColor1 = const Color(0xff000000).withOpacity( 0.1);
+  static Color borderColor1 = const Color(0xff000000).withValues(alpha: 0.1);
   static const Color newErrorColor = Color(0xffD9333F);
   static const Color starColor = Color(0xffF08200);
   static const Color purpleColor = Color(0xff9B81E5);

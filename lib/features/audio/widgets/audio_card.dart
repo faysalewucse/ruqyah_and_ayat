@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
 import 'package:rukiyah_and_ayat/features/audio/controllers/audio_controller.dart';
@@ -21,7 +22,7 @@ class AudioCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Theme.of(context).cardColor,
-      borderRadius: rounded20, // Ensure rounded corners for the Material
+      borderRadius: rounded15, // Ensure rounded corners for the Material
       child: InkWell(
         borderRadius: rounded20,
         onTap: () async{

@@ -64,7 +64,7 @@ class _MasnunDuasByCategoryState extends State<MasnunDuasByCategory> {
         ],
       ),
       body: Container(
-        color: Theme.of(context).primaryColor.withOpacity( 0.04),
+        color: Theme.of(context).primaryColor.withValues(alpha: 0.04),
         padding: const EdgeInsets.all(16.0),
         child: masnunDuaController.masnunDuas.isEmpty
             ? const NoData(

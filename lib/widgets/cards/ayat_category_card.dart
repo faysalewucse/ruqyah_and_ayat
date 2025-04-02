@@ -11,26 +11,30 @@ import 'package:rukiyah_and_ayat/widgets/leading_index.dart';
 class AyatCategoryCard extends StatelessWidget {
   final Category category;
   final bool forMasnunDua;
+  final bool forMasayel;
 
-  const AyatCategoryCard({super.key, required this.category, this.forMasnunDua = false});
+  const AyatCategoryCard({super.key, required this.category, this.forMasnunDua = false, this.forMasayel = false});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if(!forMasnunDua){
-          Get.toNamed(ayatList, arguments: category);
-        }
-        else{
+        if (forMasnunDua) {
           Get.toNamed(masnunDuas, arguments: category);
+        }
+        if (forMasayel) {
+          Get.toNamed(masayelsByCategory, arguments: category);
+        } else {
+          Get.toNamed(ayatList, arguments: category);
         }
       },
       child: Container(
         padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            // border: Border(left: BorderSide(color: Theme.of(context).primaryColor.withOpacity( alpha:0.5), width: 6)),
-            borderRadius: rounded20),
+          color: Theme.of(context).cardColor,
+          // border: Border(left: BorderSide(color: Theme.of(context).primaryColor.withValues(alpha: alpha:0.5), width: 6)),
+          borderRadius: rounded20,
+        ),
         child: Row(
           children: [
             Expanded(
@@ -46,7 +50,7 @@ class AyatCategoryCard extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(PhosphorIcons.caret_right)
+            const Icon(PhosphorIcons.caret_right),
           ],
         ),
       ),

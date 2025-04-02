@@ -43,6 +43,9 @@ class Config extends HiveObject {
   @HiveField(12)
   final String bibidhDataVersion;
 
+  @HiveField(13)
+  final String masayelCategoriesDataVersion;
+
   Config({
     required this.appVersion,
     required this.releaseNotes,
@@ -57,6 +60,7 @@ class Config extends HiveObject {
     required this.audioDataVersion,
     required this.masayelDataVersion,
     required this.bibidhDataVersion,
+    required this.masayelCategoriesDataVersion,
   });
 
   // Convert to JSON
@@ -74,6 +78,7 @@ class Config extends HiveObject {
       'masnunDuaCategoryDataVersion': masnunDuaCategoryDataVersion, // JSON mapping
       'audioDataVersion': audioDataVersion,
       'masayelDataVersion': masayelDataVersion,
+      'masayelCategoriesDataVersion': masayelCategoriesDataVersion,
       'bibidhDataVersion': bibidhDataVersion,
     };
   }
@@ -90,9 +95,10 @@ class Config extends HiveObject {
       hijamaDataVersion: json['hijamaDataVersion'] as String,
       nirapottarDataVersion: json['nirapottarDataVersion'] as String,
       masnunDuaDataVersion: json['masnunDuaDataVersion'] as String,
-      masnunDuaCategoryDataVersion: json['masnunDuaCategoryDataVersion'] as String, // Updated factory
+      masnunDuaCategoryDataVersion: json['masnunDuaCategoryDataVersion'] as String,
       audioDataVersion: json['audioDataVersion'] as String,
       masayelDataVersion: json['masayelDataVersion'] as String,
+      masayelCategoriesDataVersion: json['masayelCategoriesDataVersion'] as String,
       bibidhDataVersion: json['bibidhDataVersion'] as String,
     );
   }

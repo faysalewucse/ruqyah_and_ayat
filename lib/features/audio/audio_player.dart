@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:rukiyah_and_ayat/db/db_helper.dart';
 import 'package:rukiyah_and_ayat/features/audio/controllers/audio_controller.dart';
 import 'package:rukiyah_and_ayat/features/audio/helper/audio_helper.dart';
@@ -28,7 +26,7 @@ class RuqyahPlayer extends StatefulWidget {
 class _RuqyahPlayerState extends State<RuqyahPlayer> {
   final audioController = Get.find<AudioController>();
   late final AudioPlayer _audioPlayer = AudioPlayer();
-  bool _isPlaying = false;
+  bool _isPlaying = true;
   bool _isLooping = false;
   bool _loading = false;
   bool alreadyDownloaded = false;
@@ -45,6 +43,13 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
   void initState() {
     super.initState();
     _initializeAudioAndPlay();
+    _audioPlayer.playingStream.listen((isPlaying) {
+      if (mounted) {
+        setState(() {
+          _isPlaying = isPlaying;
+        });
+      }
+    });
   }
 
   @override
@@ -136,14 +141,6 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
     _audioPlayer.play();
   }
 
-  String convertToDirectUrl(String shareableUrl) {
-    final regex = RegExp(r'file/d/([^/]+)/');
-    final match = regex.firstMatch(shareableUrl);
-    if (match == null) throw Exception('Invalid Google Drive URL');
-    final fileId = match.group(1);
-    return 'https://drive.google.com/uc?id=$fileId&export=download';
-  }
-
   String _formatDuration(Duration duration) {
     final hours = duration.inHours.toString().padLeft(2, '0');
     final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
@@ -226,7 +223,6 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
             } else {
               await _audioPlayer.play();
             }
-            setState(() => _isPlaying = !_isPlaying);
           },
         ),
         IconButton(
@@ -315,7 +311,7 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
                       onTap: () async {
                         if (audioController.downloadingAudioLoading.isFalse) {
                           await audioController.downloadAudio(
-                            convertToDirectUrl(widget.audio.audioUrl),
+                            widget.audio.audioUrlServer ?? "",
                             widget.audio.title,
                           );
                         }

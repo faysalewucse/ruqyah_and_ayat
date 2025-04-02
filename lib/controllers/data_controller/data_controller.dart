@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
+import 'package:rukiyah_and_ayat/features/masnun-dua/masnun_dua_categories.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/helper/dialog_helper.dart';
 import 'package:rukiyah_and_ayat/helper/hive_boxes.dart';
@@ -12,6 +13,7 @@ import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
 import 'package:rukiyah_and_ayat/models/audio/audio_category.dart';
 import 'package:rukiyah_and_ayat/models/masnun-dua/masnun_dua.dart';
+import 'package:rukiyah_and_ayat/router/routes.dart';
 import 'package:rukiyah_and_ayat/services/articles_service.dart';
 import 'package:rukiyah_and_ayat/services/audio_service.dart';
 import 'package:rukiyah_and_ayat/services/category_service.dart';
@@ -29,7 +31,7 @@ class DataController extends GetxController {
   final downloadingMessage =
       "অ্যাপের ডেটা ডাউনলোড করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...".obs;
 
-  final totalSteps = 8.obs;
+  final totalSteps = 10.obs;
   var currentStep = 0.obs;
 
   // Declare the response variables to store fetched data
@@ -41,6 +43,8 @@ class DataController extends GetxController {
   List<Category> responseMasnunDuaCategories = [];
   List<Article> responseNirapottarDuas = [];
   List<AudioCategory> responseAudios = [];
+  List<MasnunDua> responseMasayels = [];
+  List<Category> responseMasayelCategories = [];
 
   Future<void> initDataController() async {
     await _initHive();
@@ -93,17 +97,18 @@ class DataController extends GetxController {
           case "audios":
             await updateAudios();
             break;
-          // Uncomment if you want to handle masayel and bibidh in the future
-          // case "masayel":
-          //   print("Updating masayel...");
-          //   await updateMasayel();
-          //   break;
+          case "masayel":
+            await updateMasayel();
+            break;
+          case "masayelCategories":
+            await updateMasayelCategories();
+            break;
           // case "bibidh":
           //   print("Updating bibidh...");
           //   await updateBibidh();
           //   break;
           default:
-            print("Unknown update: $update");
+            debugPrint("Unknown update: $update");
         }
 
         _updateProgress();
@@ -111,14 +116,14 @@ class DataController extends GetxController {
     } catch (e) {
       showErrorToast(
           message: 'অ্যাপের ডেটা ডাউনলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন');
-      print(e);
+      debugPrint("Error on updates => $e");
     } finally {
       if (Get.isDialogOpen ?? false) Get.back();
     }
   }
 
   Future<void> _clearBoxes() async {
-    debugPrint("_clearBoxes");
+    debugPrint("Clearing hive boxes data");
 
     await categoryBox.clear();
     await versesBox.clear();
@@ -127,6 +132,8 @@ class DataController extends GetxController {
     await nirapottarDuaBox.clear();
     await masnunDuaBox.clear();
     await masnunDuaCategoriesBox.clear();
+    await masayelBox.clear();
+    await masayelCategoriesBox.clear();
     await audioBox.clear();
   }
 
@@ -152,6 +159,10 @@ class DataController extends GetxController {
         await _updateProgress();
         await _fetchMasnunDuaCategories();
         await _updateProgress();
+        await _fetchMasayelCategories();
+        await _updateProgress();
+        await _fetchMasayels();
+        await _updateProgress();
         await _fetchNirapottarDuas();
         await _updateProgress();
         await _fetchAudios();
@@ -164,7 +175,7 @@ class DataController extends GetxController {
     } catch (e) {
       showErrorToast(
           message: 'অ্যাপের ডেটা ডাউনলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন');
-      print(e);
+      debugPrint("Data download error => $e");
     } finally {
       if (Get.isDialogOpen ?? false) Get.back();
     }
@@ -178,6 +189,8 @@ class DataController extends GetxController {
         nirapottarDuaBox.values.isNotEmpty &&
         masnunDuaBox.values.isNotEmpty &&
         masnunDuaCategoriesBox.values.isNotEmpty &&
+        masayelBox.values.isNotEmpty &&
+        masayelCategoriesBox.values.isNotEmpty &&
         audioBox.values.isNotEmpty;
   }
 
@@ -272,6 +285,24 @@ class DataController extends GetxController {
     );
   }
 
+  Future<void> _fetchMasayels() async {
+    final masayelResponse = await MasnunDuaService.getMasayels();
+    debugPrint("Masayels quantity: ${masayelResponse.data["masayels"].length}");
+
+    responseMasayels = List<MasnunDua>.from(
+      masayelResponse.data["masayels"].map((e) => MasnunDua.fromJson(e)),
+    );
+  }
+
+  Future<void> _fetchMasayelCategories() async {
+    final masayelCategoriesResponse =
+    await MasnunDuaService.getMasayelCategories();
+    responseMasayelCategories = List<Category>.from(
+      masayelCategoriesResponse.data["categories"]
+          .map((e) => Category.fromJson(e)),
+    );
+  }
+
   Future<void> _saveDataToHive() async {
     await _saveCategoriesToHive();
     await _saveVersesToHive();
@@ -279,6 +310,8 @@ class DataController extends GetxController {
     await _saveHijamasToHive();
     await _saveMasnunDuasToHive();
     await _saveMasnunDuaCategoriesToHive();
+    await _saveMasayelsToHive();
+    await _saveMasayelCategoriesToHive();
     await _saveNirapottarDuasToHive();
     await _saveAudiosToHive();
   }
@@ -287,7 +320,7 @@ class DataController extends GetxController {
   // Updates only categories data
   Future<void> updateCategories() async {
     downloadingMessage("ক্যাটাগরির কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("categories");
+    debugPrint("Updating categories");
     await _clearCategoriesBox();
     await _fetchCategories();
     await _saveCategoriesToHive();
@@ -298,7 +331,7 @@ class DataController extends GetxController {
   // Updates only verses data
   Future<void> updateVerses() async {
     downloadingMessage("আয়াতের কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("verses");
+    debugPrint("Updating verses");
     await _clearVersesBox();
     await _fetchVerses();
     await _saveVersesToHive();
@@ -307,7 +340,7 @@ class DataController extends GetxController {
 // Updates only articles data
   Future<void> updateArticles() async {
     downloadingMessage("আর্টিকেলগুলোর কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("articles");
+    debugPrint("Updating articles");
     await _clearArticlesBox();
     await _fetchArticles();
     await _saveArticlesToHive();
@@ -316,7 +349,7 @@ class DataController extends GetxController {
 // Updates only hijamas data
   Future<void> updateHijamas() async {
     downloadingMessage("হিজামার কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("hijamas");
+    debugPrint("Updating hijamas");
     await _clearHijamasBox();
     await _fetchHijamas();
     await _saveHijamasToHive();
@@ -325,7 +358,7 @@ class DataController extends GetxController {
 // Updates only masnun duas data
   Future<void> updateMasnunDuas() async {
     downloadingMessage("মাসনুন দুয়ার কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("masnunDuas");
+    debugPrint("Updating masnun duas data");
     await _clearMasnunDuasBox();
     await _fetchMasnunDuas();
     await _saveMasnunDuasToHive();
@@ -334,7 +367,7 @@ class DataController extends GetxController {
 // Updates only masnun dua categories data
   Future<void> updateMasnunDuaCategories() async {
     downloadingMessage("মাসনুন দুয়া ক্যাটাগরির কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("masnunDuaCategories");
+    debugPrint("Updating masnunDuaCategories");
     await _clearMasnunDuaCategoriesBox();
     await _fetchMasnunDuaCategories();
     await _saveMasnunDuaCategoriesToHive();
@@ -343,7 +376,7 @@ class DataController extends GetxController {
 // Updates only nirapottar duas data
   Future<void> updateNirapottarDuas() async {
     downloadingMessage("নিরাপত্তার দুয়ার কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("nirapottarDuas");
+    debugPrint("Updating nirapottar duas data");
     await _clearNirapottarDuasBox();
     await _fetchNirapottarDuas();
     await _saveNirapottarDuasToHive();
@@ -352,9 +385,24 @@ class DataController extends GetxController {
 // Updates only audios data
   Future<void> updateAudios() async {
     downloadingMessage("অডিওগুলোর কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    debugPrint("Updating audios data");
     await _clearAudiosBox();
     await _fetchAudios();
     await _saveAudiosToHive();
+  }
+
+  Future<void> updateMasayel() async {
+    downloadingMessage("মাসায়েল এর কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    await _clearMasayelBox();
+    await _fetchMasayels();
+    await _saveMasayelsToHive();
+  }
+
+  Future<void> updateMasayelCategories() async {
+    downloadingMessage("মাসায়েল এর কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    await _clearMasayelCategoriesBox();
+    await _fetchMasayelCategories();
+    await _saveMasayelCategoriesToHive();
   }
 
 
@@ -370,6 +418,11 @@ class DataController extends GetxController {
   Future<void> _clearMasnunDuasBox() async => await masnunDuaBox.clear();
 
   Future<void> _clearMasnunDuaCategoriesBox() async =>
+      await masnunDuaCategoriesBox.clear();
+
+  Future<void> _clearMasayelBox() async => await masayelBox.clear();
+
+  Future<void> _clearMasayelCategoriesBox() async =>
       await masnunDuaCategoriesBox.clear();
 
   Future<void> _clearNirapottarDuasBox() async =>
@@ -401,4 +454,10 @@ class DataController extends GetxController {
 
   Future<void> _saveAudiosToHive() async =>
       await audioBox.addAll(responseAudios);
+
+  Future<void> _saveMasayelsToHive() async =>
+      await masayelBox.addAll(responseMasayels);
+
+  Future<void> _saveMasayelCategoriesToHive() async =>
+      await masayelCategoriesBox.addAll(responseMasayelCategories);
 }
