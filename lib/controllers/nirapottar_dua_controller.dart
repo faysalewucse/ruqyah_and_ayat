@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/helper/hive_boxes.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
@@ -18,7 +19,7 @@ class NirapottarDuaController extends GetxController {
       nirapottarDuas(savedNirapottarDuas);
     } else {
       // Optionally handle the case where there is no cached data
-      print("No articles found in local storage.");
+      debugPrint("No articles found in local storage.");
     }
   }
 
@@ -28,7 +29,7 @@ class NirapottarDuaController extends GetxController {
       nirapottarDuas(filteredNirapottarDuas);
     } else {
       // Optionally handle the case where no matching data is available
-      print("No articles found for the specified index.");
+      debugPrint("No articles found for the specified index.");
     }
   }
 }

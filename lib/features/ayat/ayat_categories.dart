@@ -42,7 +42,7 @@ class _AyatCategoriesState extends State<AyatCategories> {
                     height: MediaQuery.of(context).size.height,
                     padding: const EdgeInsets.all(16.0),
                     child: ListView.separated(
-                      itemBuilder: (_, index) => AyatCategoryCard(
+                      itemBuilder: (_, index) => CategoryCard(
                         category: categoryController.categories[index],
                       ),
                       separatorBuilder: (_, i) => const SizedBox(

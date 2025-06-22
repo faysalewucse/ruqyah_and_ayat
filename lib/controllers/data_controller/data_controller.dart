@@ -104,7 +104,7 @@ class DataController extends GetxController {
             await updateMasayelCategories();
             break;
           // case "bibidh":
-          //   print("Updating bibidh...");
+          //   debugPrint("Updating bibidh...");
           //   await updateBibidh();
           //   break;
           default:

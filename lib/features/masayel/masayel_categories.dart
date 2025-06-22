@@ -39,7 +39,7 @@ class _MasayelCategoriesState extends State<MasayelCategories> {
                   height: MediaQuery.of(context).size.height,
                   padding: const EdgeInsets.all(16.0),
                   child: ListView.separated(
-                    itemBuilder: (_, index) => AyatCategoryCard(category: masayelController.masayelCategories[index], forMasayel: true),
+                    itemBuilder: (_, index) => CategoryCard(category: masayelController.masayelCategories[index], forMasayel: true),
                     separatorBuilder: (_, i) => const SizedBox(height: 12),
                     itemCount: masayelController.masayelCategories.length,
                   ),

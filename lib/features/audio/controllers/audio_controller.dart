@@ -39,7 +39,7 @@ class AudioController extends GetxController {
         allAudios.addAll(audioCategory.children);
       }
     } else {
-      print("কোনো অডিও খুজে পাওয়া যায় নি");
+      debugPrint("কোনো অডিও খুজে পাওয়া যায় নি");
     }
   }
 
@@ -50,7 +50,7 @@ class AudioController extends GetxController {
     if (filteredAudios.isNotEmpty) {
       audioCategories(filteredAudios);
     } else {
-      print("কোনো অডিও খুজে পাওয়া যায় নি");
+      debugPrint("কোনো অডিও খুজে পাওয়া যায় নি");
     }
   }
 
@@ -87,7 +87,7 @@ class AudioController extends GetxController {
       // Show success message after download completes.
       showSuccessToast(message: "ডাউনলোড সফল হয়েছে।");
     } catch (e) {
-      print('Error downloading file: $e');
+      debugPrint('Error downloading file: $e');
       throw Exception('Failed to download file');
     } finally {
       downloadingAudioLoading(false);

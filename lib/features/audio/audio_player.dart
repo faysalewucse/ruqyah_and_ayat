@@ -282,7 +282,7 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
                               widget.audio.title,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 20,
                                 fontWeight: FontWeight.w800,
                                 color: Get.isDarkMode ? Theme.of(context).iconTheme.color : Theme.of(context).primaryColor,
                               ),

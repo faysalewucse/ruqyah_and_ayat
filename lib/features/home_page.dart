@@ -254,8 +254,11 @@ class _HomePageState extends State<HomePage> {
       if (packageInfo.version != latestConfig.appVersion) {
         showAppUpdateDialog();
       } else {
+        debugPrint("Previous : Latest, Data version: $dataVersion : ${latestConfig.dataVersion}");
+
         // Check and update each data version
         if (latestConfig.dataVersion != dataVersion) {
+          debugPrint("Update data version");
           await dataController.updateData();
         } else {
           List<String> updates = [];
@@ -298,19 +301,20 @@ class _HomePageState extends State<HomePage> {
             await dataController.updateSomeData(updates);
           }
         }
-
-        box.write("dataVersion", latestConfig.dataVersion);
-        box.write("ayatDataVersion", latestConfig.ayatDataVersion);
-        box.write("categoryDataVersion", latestConfig.categoryDataVersion);
-        box.write("ruqyahDataVersion", latestConfig.ruqyahDataVersion);
-        box.write("hijamaDataVersion", latestConfig.hijamaDataVersion);
-        box.write("nirapottarDataVersion", latestConfig.nirapottarDataVersion);
-        box.write("masnunDuaDataVersion", latestConfig.masnunDuaDataVersion);
-        box.write("masnunDuaCategoryDataVersion", latestConfig.masnunDuaCategoryDataVersion);
-        box.write("masayelDataVersion", latestConfig.masayelDataVersion);
-        box.write("masayelCategoriesDataVersion", latestConfig.masayelCategoriesDataVersion);
-        box.write("audioDataVersion", latestConfig.audioDataVersion);
       }
+
+      box.write("dataVersion", latestConfig.dataVersion);
+      box.write("ayatDataVersion", latestConfig.ayatDataVersion);
+      box.write("categoryDataVersion", latestConfig.categoryDataVersion);
+      box.write("ruqyahDataVersion", latestConfig.ruqyahDataVersion);
+      box.write("hijamaDataVersion", latestConfig.hijamaDataVersion);
+      box.write("nirapottarDataVersion", latestConfig.nirapottarDataVersion);
+      box.write("masnunDuaDataVersion", latestConfig.masnunDuaDataVersion);
+      box.write("masnunDuaCategoryDataVersion", latestConfig.masnunDuaCategoryDataVersion);
+      box.write("masayelDataVersion", latestConfig.masayelDataVersion);
+      box.write("masayelCategoriesDataVersion", latestConfig.masayelCategoriesDataVersion);
+      box.write("audioDataVersion", latestConfig.audioDataVersion);
+
     } catch (error) {
       debugPrint("Error checking app version or data: $error");
     }

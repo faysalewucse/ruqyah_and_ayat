@@ -66,18 +66,17 @@ final List<GetPage<dynamic>> routePages = [
       ),
       GetPage(name: hijama, page: () => const HijamaArticleTitles()),
       GetPage(name: securityDua, page: () => const NirapottarDuaTitles()),
-      // GetPage(
-      //   name: masnunDuas,
-      //   page: () {
-      //     Category category = Get.arguments as Category;
-      //     return MasnunDuasByCategory(category: category);
-      //   },
-      // ),
-      // GetPage(
-      //   name: masnunDuaCategories,
-      //   page: () =>  const MasnunDuaCategories(),
-      // ),
-      GetPage(name: masnunDuaCategories, page: () => const UnderDevelopment(title: "মাসনুন দুআ")),
+      GetPage(
+        name: masnunDuas,
+        page: () {
+          Category category = Get.arguments as Category;
+          return MasnunDuasByCategory(category: category);
+        },
+      ),
+      GetPage(
+        name: masnunDuaCategories,
+        page: () =>  const MasnunDuaCategories(),
+      ),
       GetPage(name: masayel, page: () => const MasayelCategories()),
       GetPage(
         name: masayelsByCategory,

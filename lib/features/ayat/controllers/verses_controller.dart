@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/helper/hive_boxes.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
@@ -17,7 +18,7 @@ class VersesController extends GetxController {
       verses(savedVerses);
     } else {
       // Optionally handle the case where there is no cached data
-      print("কোনো ক্যাটাগরী খুজে পাওয়া যায়নি");
+      debugPrint("কোনো ক্যাটাগরী খুজে পাওয়া যায়নি");
     }
   }
 
@@ -28,7 +29,7 @@ class VersesController extends GetxController {
       return verses;
     } else {
       // Optionally handle the case where no matching data is available
-      print("কোনো ক্যাটাগরী খুজে পাওয়া যায়নি");
+      debugPrint("কোনো ক্যাটাগরী খুজে পাওয়া যায়নি");
       return [];
     }
   }

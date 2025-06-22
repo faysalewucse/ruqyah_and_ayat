@@ -29,7 +29,9 @@ class _MasnunDuasByCategoryState extends State<MasnunDuasByCategory> {
   final masnunDuaController = Get.find<MasnunDuaController>();
 
   void _initCall() async {
-    await masnunDuaController.loadNirapottarDuaByCategory(
+    debugPrint("Category: ${widget.category.toJson()}");
+
+    await masnunDuaController.loadMasnunDuaByCategory(
         categoryId: widget.category.id);
   }
 

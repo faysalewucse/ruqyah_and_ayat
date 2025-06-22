@@ -8,12 +8,12 @@ import 'package:rukiyah_and_ayat/router/routes.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 import 'package:rukiyah_and_ayat/widgets/leading_index.dart';
 
-class AyatCategoryCard extends StatelessWidget {
+class CategoryCard extends StatelessWidget {
   final Category category;
   final bool forMasnunDua;
   final bool forMasayel;
 
-  const AyatCategoryCard({super.key, required this.category, this.forMasnunDua = false, this.forMasayel = false});
+  const CategoryCard({super.key, required this.category, this.forMasnunDua = false, this.forMasayel = false});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class AyatCategoryCard extends StatelessWidget {
         if (forMasnunDua) {
           Get.toNamed(masnunDuas, arguments: category);
         }
-        if (forMasayel) {
+        else if (forMasayel) {
           Get.toNamed(masayelsByCategory, arguments: category);
         } else {
           Get.toNamed(ayatList, arguments: category);
