@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/features/masayel/masayel_categories.dart';
 import 'package:rukiyah_and_ayat/features/masayel/masayels_by_category.dart';
+import 'package:rukiyah_and_ayat/features/masnun-dua/category_duas.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/models/audio/audio.dart';
+import 'package:rukiyah_and_ayat/models/masnun-dua/masnun_dua.dart';
 import 'package:rukiyah_and_ayat/widgets/article/article_view_screen.dart';
 import 'package:rukiyah_and_ayat/features/audio/audio_player.dart';
 import 'package:rukiyah_and_ayat/features/audio/audio_categories.dart';
@@ -69,8 +71,15 @@ final List<GetPage<dynamic>> routePages = [
       GetPage(
         name: masnunDuas,
         page: () {
+          final arguments = Get.arguments as Map<String, dynamic>;
+          return MasnunDuasByCategory(masnunDuas: arguments["masnunDuas"] ?? [], title: arguments["title"] ?? "মাসনুন দুআ");
+        },
+      ),
+      GetPage(
+        name: categoryDuas,
+        page: () {
           Category category = Get.arguments as Category;
-          return MasnunDuasByCategory(category: category);
+          return CategoryDuas(category: category);
         },
       ),
       GetPage(

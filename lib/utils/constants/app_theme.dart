@@ -7,7 +7,7 @@ class AppTheme {
   static final lightTheme = ThemeData(
     scaffoldBackgroundColor: AppColors.white,
     canvasColor: AppColors.scaffoldBackgroundColor,
-    fontFamily: GoogleFonts.hindSiliguri().fontFamily,
+    fontFamily: GoogleFonts.notoSerifBengali().fontFamily,
     primaryColor: AppColors.primaryColor,
     cardColor: AppColors.white,
     indicatorColor: AppColors.primaryColorLight,
@@ -15,7 +15,7 @@ class AppTheme {
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.primaryColor,
       titleSpacing: 0,
-      titleTextStyle: GoogleFonts.hindSiliguri(
+      titleTextStyle: GoogleFonts.notoSerifBengali(
           fontWeight: FontWeight.w700, fontSize: 20, color: AppColors.white),
       iconTheme: const IconThemeData(
         color: AppColors.white, //change your color here
@@ -44,7 +44,7 @@ class AppTheme {
   static final darkTheme = ThemeData(
     scaffoldBackgroundColor: AppColors.darkScaffoldBackgroundColor,
     canvasColor: AppColors.darkScaffoldBackgroundColor,
-    fontFamily: GoogleFonts.hindSiliguri().fontFamily,
+    fontFamily: GoogleFonts.notoSerifBengali().fontFamily,
     primaryColor: AppColors.black,
     cardColor: AppColors.black,
     indicatorColor: AppColors.black,
@@ -52,7 +52,7 @@ class AppTheme {
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.black,
       titleSpacing: 0,
-      titleTextStyle: GoogleFonts.hindSiliguri(
+      titleTextStyle: GoogleFonts.notoSerifBengali(
           fontWeight: FontWeight.w700, fontSize: 20, color: AppColors.white),
       iconTheme: const IconThemeData(
         color: AppColors.white, //change your color here

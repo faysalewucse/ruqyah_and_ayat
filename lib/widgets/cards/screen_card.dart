@@ -41,7 +41,8 @@ class ScreenCard extends StatelessWidget {
                 screen.name,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
                     color: Theme.of(context).textTheme.headlineSmall?.color),
               ),
             ),

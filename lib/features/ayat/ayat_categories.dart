@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/category_controller.dart';
-import 'package:rukiyah_and_ayat/widgets/cards/ayat_category_card.dart';
+import 'package:rukiyah_and_ayat/widgets/cards/category_card.dart';
 import 'package:rukiyah_and_ayat/widgets/no_data.dart';
 
 class AyatCategories extends StatefulWidget {

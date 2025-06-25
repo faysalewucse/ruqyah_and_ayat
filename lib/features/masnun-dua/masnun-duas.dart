@@ -7,6 +7,7 @@ import 'package:rukiyah_and_ayat/features/ayat/controllers/verses_controller.dar
 
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
+import 'package:rukiyah_and_ayat/models/masnun-dua/masnun_dua.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/ayat_card.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/masnun_dua_card.dart';
 import 'package:rukiyah_and_ayat/widgets/settings/settings.dart';
@@ -15,37 +16,21 @@ import 'package:side_sheet/side_sheet.dart';
 
 import '../../utils/constants/app_colors.dart';
 
-class MasnunDuasByCategory extends StatefulWidget {
-  final Category category;
+class MasnunDuasByCategory extends StatelessWidget {
+  final String title;
+  final List<MasnunDua> masnunDuas;
 
-  const MasnunDuasByCategory({super.key, required this.category});
-
-  @override
-  State<MasnunDuasByCategory> createState() => _MasnunDuasByCategoryState();
-}
-
-class _MasnunDuasByCategoryState extends State<MasnunDuasByCategory> {
-  final keeperController = Get.find<KeeperController>();
-  final masnunDuaController = Get.find<MasnunDuaController>();
-
-  void _initCall() async {
-    debugPrint("Category: ${widget.category.toJson()}");
-
-    await masnunDuaController.loadMasnunDuaByCategory(
-        categoryId: widget.category.id);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initCall(); // Fetch verses data
-  }
+  const MasnunDuasByCategory({
+    super.key,
+    required this.masnunDuas,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.category.label),
+        title: Text(title),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
@@ -62,27 +47,27 @@ class _MasnunDuasByCategoryState extends State<MasnunDuasByCategory> {
                 color: AppColors.white,
               ),
             ),
-          )
+          ),
         ],
       ),
       body: Container(
         color: Theme.of(context).primaryColor.withValues(alpha: 0.04),
         padding: const EdgeInsets.all(16.0),
-        child: masnunDuaController.masnunDuas.isEmpty
-            ? const NoData(
-                text: "কোনো দুআ খুজে পাওয়া যায়নি",
-              )
-            : ListView.separated(
-                itemCount: masnunDuaController.masnunDuas.length,
-                separatorBuilder: (_, i) => const SizedBox(
-                  height: 12,
-                ),
-                itemBuilder: (context, index) => Obx(
-                  () => MasnunDuaCard(
-                    masnunDua: masnunDuaController.masnunDuas[index],
+        child: Obx(
+          () =>
+              masnunDuas.isEmpty
+                  ? const NoData(text: "কোনো দুআ খুজে পাওয়া যায়নি")
+                  : PageView.builder(
+                    itemCount: masnunDuas.length,
+                    controller:
+                        PageController(), // You can customize this if needed
+                    itemBuilder: (context, index) {
+                      return Obx(
+                        () => MasnunDuaCard(masnunDua: masnunDuas[index]),
+                      );
+                    },
                   ),
-                ),
-              ),
+        ),
       ),
     );
   }

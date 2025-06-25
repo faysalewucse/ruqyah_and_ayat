@@ -15,49 +15,44 @@ class MasnunDuaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        border: Border.all(color: AppColors.borderColor1),
-        borderRadius: rounded20,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            width: deviceWidth,
-            decoration: BoxDecoration(
-              color: Get.isDarkMode ? Theme.of(context).iconTheme.color : Theme.of(context).primaryColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12.0),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          width: deviceWidth,
+          decoration: BoxDecoration(
+            color: Get.isDarkMode ? Theme.of(context).iconTheme.color : Theme.of(context).primaryColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Text(
+            masnunDua.title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).primaryColor,
             ),
-            child: Text(
-              masnunDua.title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize,
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).primaryColor,
+          ),
+        ),
+        12.kH,
+        Expanded(
+          child: SingleChildScrollView(
+            child: SelectionArea(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: HtmlWidget(
+                  masnunDua.content,
+                  textStyle: htmlTextStyle,
+                  customStylesBuilder: (element) {
+                    return {'text-align': 'justify'};
+                  },
+                ),
               ),
             ),
           ),
-          12.kH,
-          SelectionArea(
-            child: HtmlWidget(
-              masnunDua.content,
-              textStyle: GoogleFonts.hindSiliguri(
-                fontSize: Theme.of(context).textTheme.headlineMedium?.fontSize,
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).textTheme.headlineLarge?.color,
-              ),
-              customStylesBuilder: (element) {
-                return {'text-align': 'justify'};
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

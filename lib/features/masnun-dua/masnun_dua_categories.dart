@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/category_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/masnun_dua_controller.dart';
-import 'package:rukiyah_and_ayat/widgets/cards/ayat_category_card.dart';
+import 'package:rukiyah_and_ayat/widgets/cards/category_card.dart';
 import 'package:rukiyah_and_ayat/widgets/no_data.dart';
 
 class MasnunDuaCategories extends StatefulWidget {
@@ -29,7 +29,7 @@ class _MasnunDuaCategoriesState extends State<MasnunDuaCategories> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("ক্যাটাগরী সমুহ")),
+      appBar: AppBar(title: const Text("মাসনুন দুআ")),
       body: Obx(
         () => masnunDuaController.masnunDuaCategories.isEmpty
             ? const NoData(text: "কোনো ক্যাটাগরী খুজে পাওয়া যায়নি")
