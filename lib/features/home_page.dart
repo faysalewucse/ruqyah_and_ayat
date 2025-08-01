@@ -29,27 +29,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _keeperController = Get.find<KeeperController>();
-  final networkController = Get.find<NetworkController>();
-  final dataController = Get.find<DataController>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  // Controllers
+  late final KeeperController _keeperController;
+  late final NetworkController _networkController;
+  late final DataController _dataController;
 
-  List<Screen> screens = [
-    Screen('আয়াত', FlutterIslamicIcons.quran, categorySection),
-    Screen('রুকইয়াহ', PhosphorIcons.first_aid_kit_thin, ruqyah),
-    Screen('হিজামা', PhosphorIcons.first_aid_thin, hijama),
-    Screen('হেফাজতের আমল', PhosphorIcons.shield_thin, securityDua),
-    Screen('অডিও', PhosphorIcons.music_notes_thin, audioCategories),
-    Screen('মাসায়েল', PhosphorIcons.question_thin, masayel),
-    Screen('মাসনুন দুআ', FlutterIslamicIcons.tasbihHand, masnunDuaCategories),
-    Screen('বিবিধ', PhosphorIcons.bookmarks_thin, bibidh),
-  ];
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    if (networkController.hasConnection.isTrue) {
-      checkAppVersion();
+    _initializeControllers();
+    _checkAppVersionIfConnected();
+  }
+
+  void _initializeControllers() {
+    _keeperController = Get.find<KeeperController>();
+    _networkController = Get.find<NetworkController>();
+    _dataController = Get.find<DataController>();
+  }
+
+  void _checkAppVersionIfConnected() {
+    if (_networkController.hasConnection.isTrue) {
+      _checkAppVersion();
     }
   }
 
@@ -63,278 +65,330 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        titleSpacing: 0,
-        title: const Text(appName),
-        actions: [
-          IconButton(
-            onPressed: () {
-              _keeperController.switchTheme();
-              Get.changeThemeMode(_keeperController.currentTheme.value);
-            },
-            icon: Obx(() => Icon(_keeperController.currentTheme.value == ThemeMode.dark ? PhosphorIcons.sun : PhosphorIcons.moon)),
-          ),
+      appBar: _buildAppBar(),
+      drawer: _buildDrawer(context),
+      body: _buildBody(context),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      titleSpacing: 0,
+      title: const Text(appName),
+      actions: [_buildThemeToggleButton()],
+      leading: _buildDrawerButton(),
+    );
+  }
+
+  Widget _buildThemeToggleButton() {
+    return IconButton(
+      onPressed: _toggleTheme,
+      icon: Obx(
+        () => Icon(_keeperController.currentTheme.value == ThemeMode.dark ? PhosphorIcons.sun : PhosphorIcons.moon),
+      ),
+    );
+  }
+
+  Widget _buildDrawerButton() {
+    return IconButton(icon: const Icon(PhosphorIcons.list), onPressed: () => _scaffoldKey.currentState?.openDrawer());
+  }
+
+  void _toggleTheme() {
+    _keeperController.switchTheme();
+    Get.changeThemeMode(_keeperController.currentTheme.value);
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: [
+          _buildDrawerHeader(context),
+          _buildDrawerMenuItems(context),
+          const Divider(),
+          _buildDrawerFooter(context),
         ],
-        leading: IconButton(icon: const Icon(PhosphorIcons.list), onPressed: () => _scaffoldKey.currentState?.openDrawer()),
       ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            SizedBox(
-              width: deviceWidth,
-              height: 200.0,
-              child: DrawerHeader(
-                decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Obx(
-                      () => Image.asset(
-                        _keeperController.currentTheme.value == ThemeMode.dark
-                            ? "assets/icons/app_icon_dark.png"
-                            : "assets/icons/app_icon.png",
-                        width: deviceHeight * 0.08,
-                      ),
-                    ),
-                    8.kH,
-                    Text(appName, style: Theme.of(context).appBarTheme.titleTextStyle),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: <Widget>[
-                  ...screens.map(
-                    (Screen screen) => ListTile(
-                      dense: true,
-                      leading: Icon(screen.iconData, color: Theme.of(context).textTheme.titleLarge?.color),
-                      title: Text(screen.name, style: Theme.of(context).textTheme.bodyLarge),
-                      onTap: () {
-                        Get.back();
-                        Get.toNamed(screen.route);
-                      },
-                    ),
-                  ),
-                  const Divider(),
-                  ListTile(
-                    dense: true,
-                    leading: Icon(PhosphorIcons.warning_circle_thin, color: Theme.of(context).textTheme.titleLarge?.color),
-                    title: Text('সমস্যা জানান', style: Theme.of(context).textTheme.bodyLarge),
-                    onTap: () {
-                      launchInBrowser(ApiUrls.reportProblemGoogleForm);
-                    },
-                  ),
-                  ListTile(
-                    dense: true,
-                    leading: Icon(PhosphorIcons.share_network_thin, color: Theme.of(context).textTheme.titleLarge?.color),
-                    title: Text('শেয়ার করুন', style: Theme.of(context).textTheme.bodyLarge),
-                    onTap: () {
-                      _onShare(context);
-                    },
-                  ),
-                  ListTile(
-                    dense: true,
-                    leading: Icon(PhosphorIcons.google_play_logo_thin, color: Theme.of(context).textTheme.titleLarge?.color),
-                    title: Text('আরো অ্যাপ দেখুন', style: Theme.of(context).textTheme.bodyLarge),
-                    onTap: () {
-                      launchInBrowser(ApiUrls.yaqeenTechSolutionsPlayStoreUrl);
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const Divider(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Column(
-                children: [
-                  Text("Powered by", style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center),
-                  Text("YAQEEN TECH SOLUTIONS", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: Container(
-        color: Theme.of(context).canvasColor,
-        padding: const EdgeInsets.all(16.0),
+    );
+  }
+
+  Widget _buildDrawerHeader(BuildContext context) {
+    return SizedBox(
+      width: deviceWidth,
+      height: 200.0,
+      child: DrawerHeader(
+        decoration: BoxDecoration(color: Theme.of(context).primaryColor),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-                  decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: rounded20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // const Icon(
-                      //   FlutterIslamicIcons.quran2,
-                      //   color: AppColors.white,
-                      //   size: 50,
-                      // ),
-                      // 24.kH,
-                      const Text(
-                        "وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontFamily: "NooreHuda", color: AppColors.white, fontSize: 26, letterSpacing: 0),
-                      ),
-                      verticalGap12,
-                      Text(
-                        "আর আমি নাযিল করেছি এমন কুরআন, যা মুমিনের জন্য আরোগ্য ও রহমতস্বরূপ",
-                        textAlign: TextAlign.center,
-                        style: white16W600,
-                      ),
-                      verticalGap12,
-                      Text("“সূরাঃ আল-ইসরা (১৭ঃ৮২)”", textAlign: TextAlign.center, style: white14W500),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            16.kH,
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 16, mainAxisSpacing: 16),
-                itemCount: screens.length,
-                itemBuilder: (context, index) {
-                  return ScreenCard(screen: screens[index]);
-                },
-              ),
-            ),
-            verticalGap12,
-            PrimaryButton(
-              label: "ওয়েবসাইট ভিজিট করুন",
-              onTap: () {
-                launchInBrowser(ApiUrls.websiteUrl);
-              },
-            ),
-          ],
+          children: [_buildAppIcon(), 8.kH, Text(appName, style: Theme.of(context).appBarTheme.titleTextStyle)],
         ),
       ),
     );
   }
 
-  _onShare(BuildContext context) async {
-    final box = context.findRenderObject() as RenderBox?;
-
-    await Share.share(ApiUrls.playStoreAppLink, sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+  Widget _buildAppIcon() {
+    return Obx(
+      () => Image.asset(
+        _keeperController.currentTheme.value == ThemeMode.dark
+            ? "assets/icons/app_icon_dark.png"
+            : "assets/icons/app_icon.png",
+        width: deviceHeight * 0.08,
+      ),
+    );
   }
 
-  void checkAppVersion() async {
+  Widget _buildDrawerMenuItems(BuildContext context) {
+    return Expanded(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [..._getScreenMenuItems(context), const Divider(), ..._getActionMenuItems(context)],
+      ),
+    );
+  }
+
+  List<Widget> _getScreenMenuItems(BuildContext context) {
+    return _getScreens()
+        .map(
+          (screen) => _buildDrawerMenuItem(
+            context: context,
+            icon: screen.iconData,
+            title: screen.name,
+            onTap: () => _navigateToScreen(screen.route),
+          ),
+        )
+        .toList();
+  }
+
+  List<Widget> _getActionMenuItems(BuildContext context) {
+    return [
+      _buildDrawerMenuItem(
+        context: context,
+        icon: PhosphorIcons.warning_circle_thin,
+        title: 'সমস্যা জানান',
+        onTap: () => launchInBrowser(ApiUrls.reportProblemGoogleForm),
+      ),
+      _buildDrawerMenuItem(
+        context: context,
+        icon: PhosphorIcons.share_network_thin,
+        title: 'শেয়ার করুন',
+        onTap: () => _shareApp(context),
+      ),
+      _buildDrawerMenuItem(
+        context: context,
+        icon: PhosphorIcons.google_play_logo_thin,
+        title: 'আরো অ্যাপ দেখুন',
+        onTap: () => launchInBrowser(ApiUrls.yaqeenTechSolutionsPlayStoreUrl),
+      ),
+    ];
+  }
+
+  Widget _buildDrawerMenuItem({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      dense: true,
+      leading: Icon(icon, color: Theme.of(context).textTheme.titleLarge?.color),
+      title: Text(title, style: Theme.of(context).textTheme.bodyLarge),
+      onTap: onTap,
+    );
+  }
+
+  void _navigateToScreen(String route) {
+    Get.back();
+    Get.toNamed(route);
+  }
+
+  Widget _buildDrawerFooter(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        children: [
+          Text("Powered by", style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center),
+          Text("YAQEEN TECH SOLUTIONS", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return Container(
+      color: Theme.of(context).canvasColor,
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [_buildHeaderQuote(context), 16.kH, _buildScreenGrid(), verticalGap12, _buildWebsiteButton()],
+      ),
+    );
+  }
+
+  Widget _buildHeaderQuote(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: rounded20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            "وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontFamily: "NooreHuda", color: AppColors.white, fontSize: 26, letterSpacing: 0),
+          ),
+          verticalGap12,
+          Text(
+            "আর আমি নাযিল করেছি এমন কুরআন, যা মুমিনের জন্য আরোগ্য ও রহমতস্বরূপ",
+            textAlign: TextAlign.center,
+            style: white16W600,
+          ),
+          verticalGap12,
+          Text("সূরাঃ আল-ইসরা (১৭ঃ৮২)", textAlign: TextAlign.center, style: white14W500),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildScreenGrid() {
+    return Expanded(
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+        ),
+        itemCount: _getScreens().length,
+        itemBuilder: (context, index) => ScreenCard(screen: _getScreens()[index]),
+      ),
+    );
+  }
+
+  Widget _buildWebsiteButton() {
+    return PrimaryButton(label: "ওয়েবসাইট ভিজিট করুন", onTap: () => launchInBrowser(ApiUrls.websiteUrl));
+  }
+
+  List<Screen> _getScreens() {
+    return [
+      Screen('আয়াত', FlutterIslamicIcons.quran, categorySection),
+      Screen('রুকইয়াহ', PhosphorIcons.first_aid_kit_thin, ruqyah),
+      Screen('হিজামা', PhosphorIcons.first_aid_thin, hijama),
+      Screen('হেফাজতের আমল', PhosphorIcons.shield_thin, securityDua),
+      Screen('অডিও', PhosphorIcons.music_notes_thin, audioCategories),
+      Screen('মাসায়েল', PhosphorIcons.question_thin, masayel),
+      Screen('মাসনুন দুআ', FlutterIslamicIcons.tasbihHand, masnunDuaCategories),
+      Screen('বিবিধ', PhosphorIcons.bookmarks_thin, bibidh),
+    ];
+  }
+
+  Future<void> _shareApp(BuildContext context) async {
+    final box = context.findRenderObject() as RenderBox?;
+    if (box != null) {
+      await Share.share(ApiUrls.playStoreAppLink, sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+    }
+  }
+
+  Future<void> _checkAppVersion() async {
     try {
       final response = await VersionService.getAppConfig();
+      final configs = response.data["configs"] as List<dynamic>;
+      final latestConfig = Config.fromJson(configs.first);
 
-      List<dynamic> jsonResponse = response.data["configs"] as List<dynamic>;
-
-      Config latestConfig = Config.fromJson(jsonResponse.first);
-
-      debugPrint("latest config: ${latestConfig.toJson()}");
-      final box = GetStorage();
-
-      // previous data versions variables
-      String dataVersion = box.read("dataVersion") ?? latestConfig.dataVersion;
-      String ayatDataVersion = box.read("ayatDataVersion") ?? latestConfig.ayatDataVersion;
-      String categoryDataVersion = box.read("categoryDataVersion") ?? latestConfig.categoryDataVersion;
-      String ruqyahDataVersion = box.read("ruqyahDataVersion") ?? latestConfig.ruqyahDataVersion;
-      String hijamaDataVersion = box.read("hijamaDataVersion") ?? latestConfig.hijamaDataVersion;
-      String nirapottarDataVersion = box.read("nirapottarDataVersion") ?? latestConfig.nirapottarDataVersion;
-      String masnunDuaDataVersion = box.read("masnunDuaDataVersion") ?? latestConfig.masnunDuaDataVersion;
-      String masnunDuaCategoryDataVersion = box.read("masnunDuaCategoryDataVersion") ?? latestConfig.masnunDuaCategoryDataVersion;
-      String audioDataVersion = box.read("audioDataVersion") ?? latestConfig.audioDataVersion;
-      String masayelDataVersion = box.read("masayelDataVersion") ?? latestConfig.masayelDataVersion;
-      String masayelCategoriesDataVersion = box.read("masayelCategoriesDataVersion") ?? latestConfig.masayelCategoriesDataVersion;
-      String bibidhDataVersion = box.read("bibidhDataVersion") ?? latestConfig.bibidhDataVersion;
+      debugPrint("Latest config: ${latestConfig.toJson()}");
 
       if (packageInfo.version != latestConfig.appVersion) {
-        showAppUpdateDialog();
+        _showAppUpdateDialog();
       } else {
-        debugPrint("Previous : Latest, Data version: $dataVersion : ${latestConfig.dataVersion}");
-
-        // Check and update each data version
-        if (latestConfig.dataVersion != dataVersion) {
-          debugPrint("Update data version");
-          await dataController.updateData();
-        } else {
-          List<String> updates = [];
-          if (latestConfig.ayatDataVersion != ayatDataVersion) {
-            updates.add("verses");
-          }
-          if (latestConfig.categoryDataVersion != categoryDataVersion) {
-            updates.add("categories");
-          }
-          if (latestConfig.ruqyahDataVersion != ruqyahDataVersion) {
-            updates.add("articles");
-          }
-          if (latestConfig.hijamaDataVersion != hijamaDataVersion) {
-            updates.add("hijamas");
-          }
-          if (latestConfig.nirapottarDataVersion != nirapottarDataVersion) {
-            updates.add("nirapottarDuas");
-          }
-          if (latestConfig.masnunDuaDataVersion != masnunDuaDataVersion) {
-            updates.add("masnunDuas");
-          }
-          if (latestConfig.masnunDuaCategoryDataVersion != masnunDuaCategoryDataVersion) {
-            updates.add("masnunDuaCategories");
-          }
-          if (latestConfig.audioDataVersion != audioDataVersion) {
-            updates.add("audios");
-          }
-          if (latestConfig.masayelDataVersion != masayelDataVersion) {
-             updates.add("masayel");
-          }
-          if (latestConfig.masayelCategoriesDataVersion != masayelCategoriesDataVersion) {
-            updates.add("masayelCategories");
-          }
-          // if (latestConfig.bibidhDataVersion != bibidhDataVersion) {
-          //    updates.add("bibidh");
-          // }
-          if (updates.isNotEmpty) {
-            debugPrint("Updates list => $updates");
-
-            await dataController.updateSomeData(updates);
-          }
-        }
+        await _handleDataVersionUpdates(latestConfig);
       }
 
-      box.write("dataVersion", latestConfig.dataVersion);
-      box.write("ayatDataVersion", latestConfig.ayatDataVersion);
-      box.write("categoryDataVersion", latestConfig.categoryDataVersion);
-      box.write("ruqyahDataVersion", latestConfig.ruqyahDataVersion);
-      box.write("hijamaDataVersion", latestConfig.hijamaDataVersion);
-      box.write("nirapottarDataVersion", latestConfig.nirapottarDataVersion);
-      box.write("masnunDuaDataVersion", latestConfig.masnunDuaDataVersion);
-      box.write("masnunDuaCategoryDataVersion", latestConfig.masnunDuaCategoryDataVersion);
-      box.write("masayelDataVersion", latestConfig.masayelDataVersion);
-      box.write("masayelCategoriesDataVersion", latestConfig.masayelCategoriesDataVersion);
-      box.write("audioDataVersion", latestConfig.audioDataVersion);
-
+      _saveLatestVersionData(latestConfig);
     } catch (error) {
       debugPrint("Error checking app version or data: $error");
     }
   }
 
-  void showAppUpdateDialog() {
+  Future<void> _handleDataVersionUpdates(Config latestConfig) async {
+    final box = GetStorage();
+    final currentDataVersion = box.read("dataVersion") ?? latestConfig.dataVersion;
+
+    debugPrint("Previous : Latest, Data version: $currentDataVersion : ${latestConfig.dataVersion}");
+
+    if (latestConfig.dataVersion != currentDataVersion) {
+      debugPrint("Update data version");
+      await _dataController.updateData();
+    } else {
+      final updates = _getRequiredUpdates(latestConfig, box);
+      if (updates.isNotEmpty) {
+        debugPrint("Updates list => $updates");
+        await _dataController.updateSomeData(updates);
+      }
+    }
+  }
+
+  List<String> _getRequiredUpdates(Config latestConfig, GetStorage box) {
+    final updates = <String>[];
+
+    final versionChecks = {
+      'ayatDataVersion': ('verses', latestConfig.ayatDataVersion),
+      'categoryDataVersion': ('categories', latestConfig.categoryDataVersion),
+      'ruqyahDataVersion': ('articles', latestConfig.ruqyahDataVersion),
+      'hijamaDataVersion': ('hijamas', latestConfig.hijamaDataVersion),
+      'nirapottarDataVersion': ('nirapottarDuas', latestConfig.nirapottarDataVersion),
+      'masnunDuaDataVersion': ('masnunDuas', latestConfig.masnunDuaDataVersion),
+      'masnunDuaCategoryDataVersion': ('masnunDuaCategories', latestConfig.masnunDuaCategoryDataVersion),
+      'audioDataVersion': ('audios', latestConfig.audioDataVersion),
+      'masayelDataVersion': ('masayel', latestConfig.masayelDataVersion),
+      'masayelCategoriesDataVersion': ('masayelCategories', latestConfig.masayelCategoriesDataVersion),
+    };
+
+    for (final entry in versionChecks.entries) {
+      final storageKey = entry.key;
+      final updateKey = entry.value.$1;
+      final latestVersion = entry.value.$2;
+      final currentVersion = box.read(storageKey) ?? latestVersion;
+
+      if (latestVersion != currentVersion) {
+        updates.add(updateKey);
+      }
+    }
+
+    return updates;
+  }
+
+  void _saveLatestVersionData(Config latestConfig) {
+    final box = GetStorage();
+    final versionKeys = {
+      "dataVersion": latestConfig.dataVersion,
+      "ayatDataVersion": latestConfig.ayatDataVersion,
+      "categoryDataVersion": latestConfig.categoryDataVersion,
+      "ruqyahDataVersion": latestConfig.ruqyahDataVersion,
+      "hijamaDataVersion": latestConfig.hijamaDataVersion,
+      "nirapottarDataVersion": latestConfig.nirapottarDataVersion,
+      "masnunDuaDataVersion": latestConfig.masnunDuaDataVersion,
+      "masnunDuaCategoryDataVersion": latestConfig.masnunDuaCategoryDataVersion,
+      "masayelDataVersion": latestConfig.masayelDataVersion,
+      "masayelCategoriesDataVersion": latestConfig.masayelCategoriesDataVersion,
+      "audioDataVersion": latestConfig.audioDataVersion,
+    };
+
+    for (final entry in versionKeys.entries) {
+      box.write(entry.key, entry.value);
+    }
+  }
+
+  void _showAppUpdateDialog() {
     showDialog<void>(
       context: Get.context!,
-      builder: (BuildContext context) {
-        return ConfirmationDialog(
-          title: "অ্যাপ আপডেট",
-          confirmationMessage: 'নতুন সব বৈশিষ্ট্য এবং উন্নত পারফরম্যান্স পেতে এখনই আপনার অ্যাপটি আপডেট করুন।',
-          cancelText: 'বাতিল',
-          okText: "আপডেট করুন",
-          onOkPressed: () {
-            Get.back();
-            launchInBrowser(ApiUrls.playStoreAppLink);
-          },
-        );
-      },
+      builder:
+          (context) => ConfirmationDialog(
+            title: "অ্যাপ আপডেট",
+            confirmationMessage: 'নতুন সব বৈশিষ্ট্য এবং উন্নত পারফরম্যান্স পেতে এখনই আপনার অ্যাপটি আপডেট করুন।',
+            cancelText: 'বাতিল',
+            okText: "আপডেট করুন",
+            onOkPressed: () {
+              Get.back();
+              launchInBrowser(ApiUrls.playStoreAppLink);
+            },
+          ),
     );
   }
 }
