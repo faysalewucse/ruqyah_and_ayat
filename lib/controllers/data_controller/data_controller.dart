@@ -5,8 +5,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/storage_controller.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
-import 'package:rukiyah_and_ayat/helper/dialog_helper.dart';
 import 'package:rukiyah_and_ayat/helper/hive_boxes.dart';
+import 'package:rukiyah_and_ayat/helper/toast.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
 import 'package:rukiyah_and_ayat/models/Config.dart';
@@ -16,7 +16,6 @@ import 'package:rukiyah_and_ayat/models/masnun-dua/masnun_dua.dart';
 import 'package:rukiyah_and_ayat/services/articles_service.dart';
 import 'package:rukiyah_and_ayat/services/audio_service.dart';
 import 'package:rukiyah_and_ayat/services/category_service.dart';
-import 'package:rukiyah_and_ayat/helper/toast.dart';
 import 'package:rukiyah_and_ayat/services/hijama_service.dart';
 import 'package:rukiyah_and_ayat/services/masnun_dua_service.dart';
 import 'package:rukiyah_and_ayat/services/nirapottar_dua_service.dart';
@@ -25,6 +24,7 @@ import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 import 'package:rukiyah_and_ayat/widgets/custom_loader.dart';
 
 class DataController extends GetxController {
+  final currentAppVersion = ''.obs;
   final networkController = Get.find<NetworkController>();
   final downloadingMessage = "অ্যাপের ডেটা ডাউনলোড করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...".obs;
 

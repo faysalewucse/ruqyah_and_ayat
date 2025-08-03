@@ -115,14 +115,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildDrawerHeader(BuildContext context) {
+    TextStyle style = TextStyle(fontFamily: GoogleFonts.lexend().fontFamily, fontSize: 10, color: AppColors.white);
+
     return SizedBox(
       width: deviceWidth,
-      height: 200.0,
+      height: 220.0,
       child: DrawerHeader(
         decoration: BoxDecoration(color: Theme.of(context).primaryColor),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [_buildAppIcon(), 8.kH, Text(appName, style: Theme.of(context).appBarTheme.titleTextStyle)],
+          children: [
+            _buildAppIcon(),
+            8.kH,
+            Text(appName, style: Theme.of(context).appBarTheme.titleTextStyle),
+            Obx(
+              () =>
+                  _dataController.currentAppVersion.value.isEmpty
+                      ? Text("loading...", style: style)
+                      : Text("v${_dataController.currentAppVersion.value}", style: style),
+            ),
+          ],
         ),
       ),
     );
@@ -193,7 +205,10 @@ class _HomePageState extends State<HomePage> {
     return ListTile(
       dense: true,
       leading: Icon(icon, color: Theme.of(context).textTheme.titleLarge?.color),
-      title: Text(title, style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).textTheme.titleLarge?.color)),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).textTheme.titleLarge?.color),
+      ),
       onTap: onTap,
     );
   }
@@ -208,8 +223,21 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         children: [
-          Text("Powered by", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontFamily: GoogleFonts.lexend().fontFamily, fontSize: 10), textAlign: TextAlign.center),
-          Text("devsKafela", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: GoogleFonts.lexend().fontFamily, fontWeight: FontWeight.w600), textAlign: TextAlign.center),
+          Text(
+            "Powered by",
+            style: Theme.of(
+              context,
+            ).textTheme.labelSmall?.copyWith(fontFamily: GoogleFonts.lexend().fontFamily, fontSize: 10),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            "devsKafela",
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontFamily: GoogleFonts.lexend().fontFamily,
+              fontWeight: FontWeight.w600,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -296,6 +324,7 @@ class _HomePageState extends State<HomePage> {
       final latestConfig = Config.fromJson(configs.first);
 
       debugPrint("Latest config: ${latestConfig.toJson()}");
+      _dataController.currentAppVersion.value = packageInfo.version;
 
       if (packageInfo.version != latestConfig.appVersion) {
         _showAppUpdateDialog();
