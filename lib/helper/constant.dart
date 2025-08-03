@@ -248,13 +248,15 @@ BoxDecoration rounded20PrimaryLight = BoxDecoration(
 );
 
 TextStyle htmlTextStyle = GoogleFonts.notoSerifBengali(
-  fontSize: 20,
+  fontSize: 19,
   fontWeight: FontWeight.w500,
   color: AppColors.neutralN700,
 );
 
+Map<String, String> articleStyle = {'text-align': 'justify', 'line-height': '1.3'};
+
 TextStyle htmlTextStyleDark = GoogleFonts.notoSerifBengali(
-  fontSize: n70016W500.fontSize,
+  fontSize: 19,
   fontWeight: FontWeight.w500,
   color: Colors.white,
 );

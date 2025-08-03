@@ -25,18 +25,6 @@ class _ArticleViewScreenState extends State<ArticleViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // // Check if the publishedDate is valid and parse it
-    // DateTime publishDate;
-    // try {
-    //   publishDate = DateTime.parse(article.createdAt.toString()).toLocal();
-    // } catch (e) {
-    //   publishDate =
-    //       DateTime.now(); // Fallback to the current date if parsing fails
-    // }
-    //
-    // // Format the publish date
-    // final formattedDate = DateFormat('dd MMMM, yyyy').format(publishDate);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.article.title),
@@ -64,7 +52,7 @@ class _ArticleViewScreenState extends State<ArticleViewScreen> {
                         widget.article.content,
                         textStyle: Get.isDarkMode ? htmlTextStyleDark : htmlTextStyle,
                         customStylesBuilder: (element) {
-                          return {'text-align': 'justify'};
+                          return articleStyle;
                         },
                       ),
                     ),

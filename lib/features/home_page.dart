@@ -326,10 +326,10 @@ class _HomePageState extends State<HomePage> {
       debugPrint("Latest config: ${latestConfig.toJson()}");
       _dataController.currentAppVersion.value = packageInfo.version;
 
-      debugPrint("Package version: ${packageInfo.version}");
+      debugPrint("Package version: ${packageInfo.buildNumber}");
       debugPrint("Latest app version: ${latestConfig.appVersion}");
 
-      if (packageInfo.version != latestConfig.appVersion) {
+      if (packageInfo.buildNumber != latestConfig.appVersion) {
         _showAppUpdateDialog();
       } else {
         await _dataController.checkAndUpdateData(latestConfig);

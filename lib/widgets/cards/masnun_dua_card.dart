@@ -43,7 +43,7 @@ class MasnunDuaCard extends StatelessWidget {
                 masnunDua.content,
                 textStyle: Get.isDarkMode ? htmlTextStyleDark : htmlTextStyle,
                 customStylesBuilder: (element) {
-                  return {'text-align': 'justify'};
+                  return articleStyle;
                 },
               ),
             ),
