@@ -43,32 +43,34 @@ class _RuqyahTitlesState extends State<RuqyahTitles> {
       appBar: AppBar(
         title: const Text("রুকইয়াহ"),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-            child: CustomSearchField(searchController: searchController, filterMethod: _filterArticles, hintText: "আর্টিক্যাল",),
-          ),
-          Expanded(
-            child: Obx(
-                  () => filteredArticles.isEmpty
-                  ? const NoData(
-                text: "কোনো আর্টিক্যাল খুজে পাওয়া যায়নি",
-              )
-                  : ListView.separated(
-                padding: const EdgeInsets.all(16.0),
-                itemBuilder: (_, index) => ArticleTitleCard(
-                  article: filteredArticles[index],
-                  index: index,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+              child: CustomSearchField(searchController: searchController, filterMethod: _filterArticles, hintText: "আর্টিক্যাল",),
+            ),
+            Expanded(
+              child: Obx(
+                    () => filteredArticles.isEmpty
+                    ? const NoData(
+                  text: "কোনো আর্টিক্যাল খুজে পাওয়া যায়নি",
+                )
+                    : ListView.separated(
+                  padding: const EdgeInsets.all(16.0),
+                  itemBuilder: (_, index) => ArticleTitleCard(
+                    article: filteredArticles[index],
+                    index: index,
+                  ),
+                  separatorBuilder: (_, i) => const SizedBox(
+                    height: 12,
+                  ),
+                  itemCount: filteredArticles.length,
                 ),
-                separatorBuilder: (_, i) => const SizedBox(
-                  height: 12,
-                ),
-                itemCount: filteredArticles.length,
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

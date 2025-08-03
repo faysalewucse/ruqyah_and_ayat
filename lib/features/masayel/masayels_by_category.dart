@@ -57,25 +57,27 @@ class _MasayelsByCategoryState extends State<MasayelsByCategory> {
           ),
         ],
       ),
-      body: Container(
-        color: Theme.of(context).canvasColor,
-        padding: const EdgeInsets.all(16.0),
-        child:
-            masayelController.masayels.isEmpty
-                ? const NoData(text: "কোনো মাসআলার ক্যাটাগরী খুজে পাওয়া যায়নি")
-                : ListView.separated(
-                  itemCount: masayelController.masayels.length,
-                  separatorBuilder: (_, i) => const SizedBox(height: 12),
-                  itemBuilder:
-                      (context, index) => Obx(
-                        () => MasayelCard(
-                          masayels: masayelController.masayels,
-                          title: masayelController.masayels[index].title,
-                          index: index,
-                          categoryTitle: widget.category.label,
+      body: SafeArea(
+        child: Container(
+          color: Theme.of(context).canvasColor,
+          padding: const EdgeInsets.all(16.0),
+          child:
+              masayelController.masayels.isEmpty
+                  ? const NoData(text: "কোনো মাসআলার ক্যাটাগরী খুজে পাওয়া যায়নি")
+                  : ListView.separated(
+                    itemCount: masayelController.masayels.length,
+                    separatorBuilder: (_, i) => const SizedBox(height: 12),
+                    itemBuilder:
+                        (context, index) => Obx(
+                          () => MasayelCard(
+                            masayels: masayelController.masayels,
+                            title: masayelController.masayels[index].title,
+                            index: index,
+                            categoryTitle: widget.category.label,
+                          ),
                         ),
-                      ),
-                ),
+                  ),
+        ),
       ),
     );
   }

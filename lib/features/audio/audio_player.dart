@@ -252,50 +252,52 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.audio.title)),
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(20.0),
-                  bottomRight: Radius.circular(20.0),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(20.0),
+                    bottomRight: Radius.circular(20.0),
+                  ),
+                ),
+                child: Center(
+                  child: Image.asset(AppImages.appLogo, scale: 2.5),
                 ),
               ),
-              child: Center(
-                child: Image.asset(AppImages.appLogo, scale: 2.5),
-              ),
-            ),
-            12.kH,
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(40.0),
-                child: _loading
-                    ? const AudioPlayerShimmer()
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              widget.audio.title,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w800,
-                                color: Get.isDarkMode ? Theme.of(context).iconTheme.color : Theme.of(context).primaryColor,
+              12.kH,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(40.0),
+                  child: _loading
+                      ? const AudioPlayerShimmer()
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.audio.title,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  color: Get.isDarkMode ? Theme.of(context).iconTheme.color : Theme.of(context).primaryColor,
+                                ),
                               ),
                             ),
-                          ),
-                          32.kH,
-                          _buildProgressBar(context),
-                          _buildPlayControls(context),
-                        ],
-                      ),
+                            32.kH,
+                            _buildProgressBar(context),
+                            _buildPlayControls(context),
+                          ],
+                        ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: !_loading && !alreadyDownloaded

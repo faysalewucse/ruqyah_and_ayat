@@ -32,24 +32,26 @@ class _AudioCategoriesState extends State<AudioCategories> {
       appBar: AppBar(
         title: const Text("অডিও সমুহ"),
       ),
-      body: Obx(
-            () => audioController.audioCategories.isEmpty
-            ? const NoData(
-          text: "কোনো অডিও খুজে পাওয়া যায়নি",
-        )
-            : Container(
-          color: Theme.of(context).canvasColor,
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.all(16.0),
-          child: ListView.separated(
-            itemBuilder: (_, index) => AudioCategoryCard(
-              audioCategory: audioController.audioCategories[index],
-              index: index,
+      body: SafeArea(
+        child: Obx(
+              () => audioController.audioCategories.isEmpty
+              ? const NoData(
+            text: "কোনো অডিও খুজে পাওয়া যায়নি",
+          )
+              : Container(
+            color: Theme.of(context).canvasColor,
+            height: MediaQuery.of(context).size.height,
+            padding: const EdgeInsets.all(16.0),
+            child: ListView.separated(
+              itemBuilder: (_, index) => AudioCategoryCard(
+                audioCategory: audioController.audioCategories[index],
+                index: index,
+              ),
+              separatorBuilder: (_, i) => const SizedBox(
+                height: 12,
+              ),
+              itemCount: audioController.audioCategories.length,
             ),
-            separatorBuilder: (_, i) => const SizedBox(
-              height: 12,
-            ),
-            itemCount: audioController.audioCategories.length,
           ),
         ),
       ),

@@ -44,22 +44,24 @@ class MasnunDuasByCategory extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        padding: const EdgeInsets.all(16.0),
-        child: Obx(
-          () =>
-              masnunDuas.isEmpty
-                  ? const NoData(text: "কোনো দুআ খুজে পাওয়া যায়নি")
-                  : PageView.builder(
-                    itemCount: masnunDuas.length,
-                    controller: PageController(
-                      initialPage: index
+      body: SafeArea(
+        child: Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          padding: const EdgeInsets.all(16.0),
+          child: Obx(
+            () =>
+                masnunDuas.isEmpty
+                    ? const NoData(text: "কোনো দুআ খুজে পাওয়া যায়নি")
+                    : PageView.builder(
+                      itemCount: masnunDuas.length,
+                      controller: PageController(
+                        initialPage: index
+                      ),
+                      itemBuilder: (context, index) {
+                        return Obx(() => MasnunDuaCard(masnunDua: masnunDuas[index]));
+                      },
                     ),
-                    itemBuilder: (context, index) {
-                      return Obx(() => MasnunDuaCard(masnunDua: masnunDuas[index]));
-                    },
-                  ),
+          ),
         ),
       ),
     );

@@ -64,26 +64,28 @@ class _AyatListByCategoryState extends State<AyatListByCategory> {
           )
         ],
       ),
-      body: Container(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        padding: const EdgeInsets.all(16.0),
-        child: verses.isEmpty
-            ? const NoData(
-                text: "কোনো আয়াত খুজে পাওয়া যায়নি",
-              )
-            : ListView.separated(
-                itemCount: verses.length,
-                separatorBuilder: (_, i) => const SizedBox(
-                  height: 40,
-                  child: Divider(),
-                ),
-                itemBuilder: (context, index) => Obx(
-                  ()=> AyatCard(
-                    verse: verses[index],
-                    selectedFont: keeperController.arabicFontFamily.value,
+      body: SafeArea(
+        child: Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          padding: const EdgeInsets.all(16.0),
+          child: verses.isEmpty
+              ? const NoData(
+                  text: "কোনো আয়াত খুজে পাওয়া যায়নি",
+                )
+              : ListView.separated(
+                  itemCount: verses.length,
+                  separatorBuilder: (_, i) => const SizedBox(
+                    height: 40,
+                    child: Divider(),
+                  ),
+                  itemBuilder: (context, index) => Obx(
+                    ()=> AyatCard(
+                      verse: verses[index],
+                      selectedFont: keeperController.arabicFontFamily.value,
+                    ),
                   ),
                 ),
-              ),
+        ),
       ),
     );
   }

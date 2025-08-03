@@ -41,54 +41,56 @@ class _ArticleViewScreenState extends State<ArticleViewScreen> {
       appBar: AppBar(
         title: Text(widget.article.title),
       ),
-      body: Container(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        // padding: const EdgeInsets.all(10.0), // Add padding here
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: RawScrollbar(
-                controller: _scrollController,
-                interactive: true,
-                thumbColor: Theme.of(context).primaryColor.withValues(alpha: 0.5),
-                thickness: 10,
-                radius: const Radius.circular(5),
-                thumbVisibility: true,
-                child: SingleChildScrollView(
+      body: SafeArea(
+        child: Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          // padding: const EdgeInsets.all(10.0), // Add padding here
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: RawScrollbar(
                   controller: _scrollController,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: HtmlWidget(
-                      widget.article.content,
-                      textStyle: Get.isDarkMode ? htmlTextStyleDark : htmlTextStyle,
-                      customStylesBuilder: (element) {
-                        return {'text-align': 'justify'};
-                      },
+                  interactive: true,
+                  thumbColor: Theme.of(context).primaryColor.withValues(alpha: 0.5),
+                  thickness: 10,
+                  radius: const Radius.circular(5),
+                  thumbVisibility: true,
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: HtmlWidget(
+                        widget.article.content,
+                        textStyle: Get.isDarkMode ? htmlTextStyleDark : htmlTextStyle,
+                        customStylesBuilder: (element) {
+                          return {'text-align': 'justify'};
+                        },
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            // Padding(
-            //   padding: const EdgeInsets.all(10.0),
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       12.kH,
-            //       Text(
-            //         article.author,
-            //         style: Theme.of(context).textTheme.titleSmall,
-            //       ),
-            //       4.kH,
-            //       Text(
-            //         formattedDate,
-            //         style: Theme.of(context).textTheme.titleSmall,
-            //       ),
-            //     ],
-            //   ),
-            // )
-          ],
+              // Padding(
+              //   padding: const EdgeInsets.all(10.0),
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       12.kH,
+              //       Text(
+              //         article.author,
+              //         style: Theme.of(context).textTheme.titleSmall,
+              //       ),
+              //       4.kH,
+              //       Text(
+              //         formattedDate,
+              //         style: Theme.of(context).textTheme.titleSmall,
+              //       ),
+              //     ],
+              //   ),
+              // )
+            ],
+          ),
         ),
       ),
     );

@@ -43,9 +43,6 @@ class DataController extends GetxController {
 
   Future<void> initDataController() async {
     await _initHive();
-    debugPrint('⬇️ calling fetchAndSaveData()');
-    await fetchAndSaveData();
-    // await updateData();
   }
 
   Future<void> _initHive() async {

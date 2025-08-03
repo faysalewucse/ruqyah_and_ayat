@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
       key: _scaffoldKey,
       appBar: _buildAppBar(),
       drawer: _buildDrawer(context),
-      body: _buildBody(context),
+      body: SafeArea(child: _buildBody(context)),
     );
   }
 
@@ -325,6 +325,9 @@ class _HomePageState extends State<HomePage> {
 
       debugPrint("Latest config: ${latestConfig.toJson()}");
       _dataController.currentAppVersion.value = packageInfo.version;
+
+      debugPrint("Package version: ${packageInfo.version}");
+      debugPrint("Latest app version: ${latestConfig.appVersion}");
 
       if (packageInfo.version != latestConfig.appVersion) {
         _showAppUpdateDialog();

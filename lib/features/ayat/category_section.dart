@@ -23,80 +23,82 @@ class CategorySection extends StatelessWidget {
       appBar: AppBar(
         title: const Text("আয়াত"),
       ),
-      body: Container(
-        color: Theme.of(context).canvasColor,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: rounded20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "فَلَمَّا أَلْقَوْا قَالَ مُوسَىٰ مَا جِئْتُم بِهِ السِّحْرُ ۖ إِنَّ اللَّهَ سَيُبْطِلُهُ ۖ إِنَّ اللَّهَ لَا يُصْلِحُ عَمَلَ الْمُفْسِدِينَ",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: "NooreHuda",
-                        color: AppColors.white,
-                        fontSize: 24,
-                        letterSpacing: 0,),
-                  ),
-                  verticalGap12,
-                  Text(
-                      "অতঃপর তারা (ফেরাউনের হায়ার করা জাদুকররা ) যখন (লাঠি ও রশি) নিক্ষেপ করল তখন মূসা বলল, ‘তোমরা যা এনেছো তা জাদু, নিশ্চয়ই আল্লাহ্ একে অসার করে দিবেন। আল্লাহ্ অবশ্যই অশান্তি সৃষ্টিকারীদের কর্ম সার্থক করেন না।’",
+      body: SafeArea(
+        child: Container(
+          color: Theme.of(context).canvasColor,
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: rounded20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "فَلَمَّا أَلْقَوْا قَالَ مُوسَىٰ مَا جِئْتُم بِهِ السِّحْرُ ۖ إِنَّ اللَّهَ سَيُبْطِلُهُ ۖ إِنَّ اللَّهَ لَا يُصْلِحُ عَمَلَ الْمُفْسِدِينَ",
                       textAlign: TextAlign.center,
-                      style: white16W600),
-                  verticalGap12,
-                  Text("“সূরাঃ ইউনুস (১০ঃ৮১)”",
-                      textAlign: TextAlign.center, style: white14W500),
-                ],
-              ),
-            ),
-            16.kH,
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // 2 columns
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
+                      style: TextStyle(
+                          fontFamily: "NooreHuda",
+                          color: AppColors.white,
+                          fontSize: 24,
+                          letterSpacing: 0,),
+                    ),
+                    verticalGap12,
+                    Text(
+                        "অতঃপর তারা (ফেরাউনের হায়ার করা জাদুকররা ) যখন (লাঠি ও রশি) নিক্ষেপ করল তখন মূসা বলল, ‘তোমরা যা এনেছো তা জাদু, নিশ্চয়ই আল্লাহ্ একে অসার করে দিবেন। আল্লাহ্ অবশ্যই অশান্তি সৃষ্টিকারীদের কর্ম সার্থক করেন না।’",
+                        textAlign: TextAlign.center,
+                        style: white16W600),
+                    verticalGap12,
+                    Text("“সূরাঃ ইউনুস (১০ঃ৮১)”",
+                        textAlign: TextAlign.center, style: white14W500),
+                  ],
                 ),
-                itemCount: parts.length,
-                itemBuilder: (context, index) {
-                  return MaterialButton(
-                    onPressed: () {
-                      Get.toNamed(categories, arguments: index + 1);
-                    },
-                    color: Theme.of(context).cardColor,
-                    elevation: 1.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(20), // Rounded corners
-                    ),
-                    padding: const EdgeInsets.all(16.0),
-                    // Padding inside the button
-                    child: Center(
-                      child: Text(
-                        parts[index],
-                        style: Theme.of(context).textTheme.headlineLarge,
-                      ),
-                    ),
-                  );
-                },
               ),
-            ),
-            PrimaryButton(
-                label: "ওয়েবসাইট ভিজিট করুন",
-                onTap: () {
-                  launchInBrowser(ApiUrls.websiteUrl);
-                }),
-          ],
+              16.kH,
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // 2 columns
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
+                  itemCount: parts.length,
+                  itemBuilder: (context, index) {
+                    return MaterialButton(
+                      onPressed: () {
+                        Get.toNamed(categories, arguments: index + 1);
+                      },
+                      color: Theme.of(context).cardColor,
+                      elevation: 1.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(20), // Rounded corners
+                      ),
+                      padding: const EdgeInsets.all(16.0),
+                      // Padding inside the button
+                      child: Center(
+                        child: Text(
+                          parts[index],
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              PrimaryButton(
+                  label: "ওয়েবসাইট ভিজিট করুন",
+                  onTap: () {
+                    launchInBrowser(ApiUrls.websiteUrl);
+                  }),
+            ],
+          ),
         ),
       ),
     );

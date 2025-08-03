@@ -30,22 +30,24 @@ class _MasnunDuaCategoriesState extends State<MasnunDuaCategories> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("মাসনুন দুআ")),
-      body: Obx(
-        () => masnunDuaController.masnunDuaCategories.isEmpty
-            ? const NoData(text: "কোনো ক্যাটাগরী খুজে পাওয়া যায়নি")
-            : Container(
-                color: Theme.of(context).canvasColor,
-                height: MediaQuery.of(context).size.height,
-                padding: const EdgeInsets.all(16.0),
-                child: ListView.separated(
-                  separatorBuilder: (_, i) => const SizedBox(height: 12),
-                  itemCount: masnunDuaController.masnunDuaCategories.length,
-                  itemBuilder: (_, index) => CategoryCard(
-                    category: masnunDuaController.masnunDuaCategories[index],
-                    forMasnunDua: true,
+      body: SafeArea(
+        child: Obx(
+          () => masnunDuaController.masnunDuaCategories.isEmpty
+              ? const NoData(text: "কোনো ক্যাটাগরী খুজে পাওয়া যায়নি")
+              : Container(
+                  color: Theme.of(context).canvasColor,
+                  height: MediaQuery.of(context).size.height,
+                  padding: const EdgeInsets.all(16.0),
+                  child: ListView.separated(
+                    separatorBuilder: (_, i) => const SizedBox(height: 12),
+                    itemCount: masnunDuaController.masnunDuaCategories.length,
+                    itemBuilder: (_, index) => CategoryCard(
+                      category: masnunDuaController.masnunDuaCategories[index],
+                      forMasnunDua: true,
+                    ),
                   ),
                 ),
-              ),
+        ),
       ),
     );
   }

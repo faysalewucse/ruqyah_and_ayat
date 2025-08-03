@@ -248,7 +248,7 @@ BoxDecoration rounded20PrimaryLight = BoxDecoration(
 );
 
 TextStyle htmlTextStyle = GoogleFonts.notoSerifBengali(
-  fontSize: n70016W500.fontSize,
+  fontSize: 20,
   fontWeight: FontWeight.w500,
   color: AppColors.neutralN700,
 );
