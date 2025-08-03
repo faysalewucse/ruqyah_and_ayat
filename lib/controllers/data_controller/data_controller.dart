@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
-import 'package:rukiyah_and_ayat/features/masnun-dua/masnun_dua_categories.dart';
+import 'package:rukiyah_and_ayat/controllers/storage_controller.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/helper/dialog_helper.dart';
 import 'package:rukiyah_and_ayat/helper/hive_boxes.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
 import 'package:rukiyah_and_ayat/models/Category.dart';
+import 'package:rukiyah_and_ayat/models/Config.dart';
 import 'package:rukiyah_and_ayat/models/Verse.dart';
 import 'package:rukiyah_and_ayat/models/audio/audio_category.dart';
 import 'package:rukiyah_and_ayat/models/masnun-dua/masnun_dua.dart';
-import 'package:rukiyah_and_ayat/router/routes.dart';
 import 'package:rukiyah_and_ayat/services/articles_service.dart';
 import 'package:rukiyah_and_ayat/services/audio_service.dart';
 import 'package:rukiyah_and_ayat/services/category_service.dart';
@@ -23,69 +22,27 @@ import 'package:rukiyah_and_ayat/services/masnun_dua_service.dart';
 import 'package:rukiyah_and_ayat/services/nirapottar_dua_service.dart';
 import 'package:rukiyah_and_ayat/services/verses_service.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
-import 'package:rukiyah_and_ayat/widgets/animated_progress_loader.dart';
-
-enum DataType {
-  categories,
-  verses,
-  articles,
-  hijamas,
-  masnunDuas,
-  masnunDuaCategories,
-  nirapottarDuas,
-  audios,
-  masayel,
-  masayelCategories,
-}
-
-class DataProgress {
-  final String title;
-  final String message;
-  final double progress;
-  final DataType? currentDataType;
-
-  DataProgress({
-    required this.title,
-    required this.message,
-    required this.progress,
-    this.currentDataType,
-  });
-}
+import 'package:rukiyah_and_ayat/widgets/custom_loader.dart';
 
 class DataController extends GetxController {
   final networkController = Get.find<NetworkController>();
+  final downloadingMessage = "অ্যাপের ডেটা ডাউনলোড করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...".obs;
 
-  // Progress tracking
-  final Rx<DataProgress> dataProgress = DataProgress(
-    title: 'প্রস্তুত হচ্ছে',
-    message: 'অনুগ্রহ করে অপেক্ষা করুন...',
-    progress: 0.0,
-  ).obs;
-
-  final RxBool isLoading = false.obs;
-  final RxBool isUpdating = false.obs;
-  final RxBool isSelectiveUpdate = false.obs;
-
-  // Data storage
-  final Map<DataType, dynamic> _responseData = {};
-
-  // Data type configurations
-  static const Map<DataType, String> _dataTypeMessages = {
-    DataType.categories: 'ক্যাটাগরি ডাউনলোড হচ্ছে...',
-    DataType.verses: 'আয়াত ডাউনলোড হচ্ছে...',
-    DataType.articles: 'আর্টিকেল ডাউনলোড হচ্ছে...',
-    DataType.hijamas: 'হিজামা ডাউনলোড হচ্ছে...',
-    DataType.masnunDuas: 'মাসনুন দুয়া ডাউনলোড হচ্ছে...',
-    DataType.masnunDuaCategories: 'মাসনুন দুয়া ক্যাটাগরি ডাউনলোড হচ্ছে...',
-    DataType.nirapottarDuas: 'নিরাপত্তার দুয়া ডাউনলোড হচ্ছে...',
-    DataType.audios: 'অডিও ডাউনলোড হচ্ছে...',
-    DataType.masayel: 'মাসায়েল ডাউনলোড হচ্ছে...',
-    DataType.masayelCategories: 'মাসায়েল ক্যাটাগরি ডাউনলোড হচ্ছে...',
-  };
+  // Declare the response variables to store fetched data
+  List<Category> responseCategories = [];
+  List<Verse> responseVerses = [];
+  List<Article> responseArticles = [];
+  List<Article> responseHijamas = [];
+  List<MasnunDua> responseMasnunDuas = [];
+  List<Category> responseMasnunDuaCategories = [];
+  List<Article> responseNirapottarDuas = [];
+  List<AudioCategory> responseAudios = [];
 
   Future<void> initDataController() async {
     await _initHive();
+    debugPrint('⬇️ calling fetchAndSaveData()');
     await fetchAndSaveData();
+    // await updateData();
   }
 
   Future<void> _initHive() async {
@@ -94,169 +51,54 @@ class DataController extends GetxController {
   }
 
   Future<void> updateData() async {
-    debugPrint("Updating all data");
-    await _clearAllBoxes();
+    debugPrint('updateData called');
+    await _clearBoxes();
     await fetchAndSaveData();
   }
 
-  Future<void> updateSomeData(List<String> updates) async {
-    if (updates.isEmpty) return;
-
-    try {
-      isUpdating(true);
-      isSelectiveUpdate(true); // Flag to prevent fetchAndSaveData from running
-
-      _updateProgress(
-        title: 'আপডেট হচ্ছে',
-        message: 'আপডেট শুরু হচ্ছে...',
-        progress: 0.0,
-      );
-
-      _showLoadingDialog();
-
-      final List<DataType> dataTypesToUpdate = _parseUpdateTypes(updates);
-      debugPrint("Updating specific data types: $dataTypesToUpdate");
-
-      for (int i = 0; i < dataTypesToUpdate.length; i++) {
-        final dataType = dataTypesToUpdate[i];
-        final progress = (i / dataTypesToUpdate.length);
-
-        _updateProgress(
-          title: 'আপডেট হচ্ছে',
-          message: _dataTypeMessages[dataType] ?? 'ডাউনলোড হচ্ছে...',
-          progress: progress,
-          currentDataType: dataType,
-        );
-
-        await _updateSingleDataType(dataType);
-        debugPrint("Successfully updated: $dataType");
-      }
-
-      _updateProgress(
-        title: 'সম্পন্ন',
-        message: 'আপডেট সফল হয়েছে',
-        progress: 1.0,
-      );
-
-      showSuccessToast(message: 'ডেটা সফলভাবে আপডেট হয়েছে');
-
-    } catch (e) {
-      showErrorToast(message: 'আপডেট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন');
-      debugPrint("Error on updates => $e");
-    } finally {
-      isUpdating(false);
-      isSelectiveUpdate(false); // Reset flag
-      if (Get.isDialogOpen ?? false) Get.back();
-    }
-  }
-
-  List<DataType> _parseUpdateTypes(List<String> updates) {
-    return updates.map((update) {
-      switch (update) {
-        case "verses": return DataType.verses;
-        case "categories": return DataType.categories;
-        case "articles": return DataType.articles;
-        case "hijamas": return DataType.hijamas;
-        case "nirapottarDuas": return DataType.nirapottarDuas;
-        case "masnunDuas": return DataType.masnunDuas;
-        case "masnunDuaCategories": return DataType.masnunDuaCategories;
-        case "audios": return DataType.audios;
-        case "masayel": return DataType.masayel;
-        case "masayelCategories": return DataType.masayelCategories;
-        default:
-          debugPrint("Unknown update type: $update");
-          return null;
-      }
-    }).where((element) => element != null).cast<DataType>().toList();
-  }
-
-  Future<void> _updateSingleDataType(DataType dataType) async {
-    try {
-      debugPrint("Clearing box for: $dataType");
-      await _clearSingleBox(dataType);
-
-      debugPrint("Fetching data for: $dataType");
-      await _fetchSingleDataType(dataType);
-
-      debugPrint("Saving data for: $dataType");
-      await _saveSingleDataType(dataType);
-
-      debugPrint("Successfully completed update for: $dataType");
-    } catch (e) {
-      debugPrint("Error updating $dataType: $e");
-      rethrow;
-    }
+  Future<void> _clearBoxes() async {
+    debugPrint('Clearing all Hive boxes...');
+    await categoryBox.clear();
+    await versesBox.clear();
+    await ruqyahsBox.clear();
+    await hijamasBox.clear();
+    await nirapottarDuaBox.clear();
+    await masnunDuaBox.clear();
+    await masnunDuaCategoriesBox.clear();
+    await audioBox.clear();
   }
 
   Future<void> fetchAndSaveData() async {
-    // Don't run if selective update is in progress
-    if (isSelectiveUpdate.value) {
-      debugPrint("Selective update in progress - skipping fetchAndSaveData");
-      return;
-    }
-
-    if (!_isDataStoredLocally() && !networkController.hasConnection.value) {
-      return DialogHelper.showNoInternetDialog();
-    }
-
-    if (_isDataStoredLocally()) {
-      debugPrint("Data already exists locally - skipping initial download");
+    debugPrint('fetchAndSaveData called');
+    if (networkController.hasConnection.isFalse) {
       return;
     }
 
     try {
-      isLoading(true);
-      debugPrint("Starting initial data download - clearing all boxes");
-      _showLoadingDialog();
-      await _clearAllBoxes();
+      if (!_isDataStoredLocally()) {
+        _showLoadingDialog();
 
-      final dataTypes = DataType.values;
+        await _fetchCategories();
+        await _fetchVerses();
+        await _fetchArticles();
+        await _fetchHijamas();
+        await _fetchMasnunDuas();
+        await _fetchMasnunDuaCategories();
+        await _fetchNirapottarDuas();
+        await _fetchAudios();
 
-      for (int i = 0; i < dataTypes.length; i++) {
-        final dataType = dataTypes[i];
-        final progress = (i / dataTypes.length);
-
-        _updateProgress(
-          title: 'ডেটা প্রস্তুত হচ্ছে',
-          message: _dataTypeMessages[dataType] ?? 'ডাউনলোড হচ্ছে...',
-          progress: progress,
-          currentDataType: dataType,
-        );
-
-        await _fetchSingleDataType(dataType);
+        _saveDataToHive();
+        showSuccessToast(message: 'অ্যাপের ডেটা সফলভাবে ডাউনলোড হয়েছে। আলহামদুলিল্লাহ');
       }
-
-      _updateProgress(
-        title: 'সংরক্ষণ হচ্ছে',
-        message: 'ডেটা সংরক্ষণ করা হচ্ছে...',
-        progress: 0.9,
-      );
-
-      await _saveAllDataToHive();
-
-      _updateProgress(
-        title: 'সম্পন্ন',
-        message: 'সফলভাবে ডাউনলোড হয়েছে',
-        progress: 1.0,
-      );
-
-      showSuccessToast(message: 'অ্যাপের ডেটা সফলভাবে ডাউনলোড হয়েছে। আলহামদুলিল্লাহ');
-
     } catch (e) {
-      showErrorToast(message: 'অ্যাপের ডেটা ডাউনলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন');
-      debugPrint("Data download error => $e");
+      showErrorToast(message: 'অ্যাপের ডেটা ডাউনলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন');
+      print(e);
     } finally {
-      isLoading(false);
       if (Get.isDialogOpen ?? false) Get.back();
     }
   }
 
   bool _isDataStoredLocally() {
-    // During selective updates, don't check for data completeness
-    if (isSelectiveUpdate.value) {
-      return true;
-    }
-
     return categoryBox.values.isNotEmpty &&
         versesBox.values.isNotEmpty &&
         ruqyahsBox.values.isNotEmpty &&
@@ -264,298 +106,302 @@ class DataController extends GetxController {
         nirapottarDuaBox.values.isNotEmpty &&
         masnunDuaBox.values.isNotEmpty &&
         masnunDuaCategoriesBox.values.isNotEmpty &&
-        masayelBox.values.isNotEmpty &&
-        masayelCategoriesBox.values.isNotEmpty &&
         audioBox.values.isNotEmpty;
-  }
-
-  void _updateProgress({
-    required String title,
-    required String message,
-    required double progress,
-    DataType? currentDataType,
-  }) {
-    dataProgress.value = DataProgress(
-      title: title,
-      message: message,
-      progress: progress.clamp(0.0, 1.0),
-      currentDataType: currentDataType,
-    );
   }
 
   Future<void> _showLoadingDialog() async {
     Get.defaultDialog(
       radius: 20,
       contentPadding: const EdgeInsets.all(20.0),
-      title: '',
+      title: 'ডেটা প্রস্তুত হচ্ছে',
       titleStyle: primary20W500,
-      content: Obx(() => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            dataProgress.value.title,
-            style: primary20W500,
-            textAlign: TextAlign.center,
-          ),
-          20.kH,
-          AnimatedLiquidLinearProgressIndicator(
-            progress: dataProgress.value.progress,
-          ),
-          15.kH,
-          Text(
-            '${(dataProgress.value.progress * 100).toInt()}%',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
-            ),
-          ),
-          15.kH,
-          Text(
-            dataProgress.value.message,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 14),
-          ),
-        ],
-      )),
+      content: Column(
+        children: [const CustomLoader(), 20.kH, Obx(() => Text(downloadingMessage.value, textAlign: TextAlign.center))],
+      ),
       barrierDismissible: false,
     );
   }
 
-  // Unified fetch method
-  Future<void> _fetchSingleDataType(DataType dataType) async {
-    try {
-      switch (dataType) {
-        case DataType.categories:
-          await _fetchCategories();
-          break;
-        case DataType.verses:
-          await _fetchVerses();
-          break;
-        case DataType.articles:
-          await _fetchArticles();
-          break;
-        case DataType.hijamas:
-          await _fetchHijamas();
-          break;
-        case DataType.masnunDuas:
-          await _fetchMasnunDuas();
-          break;
-        case DataType.masnunDuaCategories:
-          await _fetchMasnunDuaCategories();
-          break;
-        case DataType.nirapottarDuas:
-          await _fetchNirapottarDuas();
-          break;
-        case DataType.audios:
-          await _fetchAudios();
-          break;
-        case DataType.masayel:
-          await _fetchMasayels();
-          break;
-        case DataType.masayelCategories:
-          await _fetchMasayelCategories();
-          break;
-      }
-    } catch (e) {
-      debugPrint("Error fetching $dataType: $e");
-      rethrow;
-    }
-  }
-
-  // Individual fetch methods
   Future<void> _fetchCategories() async {
-    final response = await CategoryService.getAllCategories();
-    _responseData[DataType.categories] = List<Category>.from(
-      response.data["categories"].map((e) => Category.fromJson(e)),
-    );
+    downloadingMessage("ক্যাটাগরি ডাউনলোড হচ্ছে...");
+    final categoriesResponse = await CategoryService.getAllCategories();
+    responseCategories = List<Category>.from(categoriesResponse.data["categories"].map((e) => Category.fromJson(e)));
   }
 
   Future<void> _fetchVerses() async {
-    final response = await VersesService.getVerses();
-    _responseData[DataType.verses] = List<Verse>.from(
-      response.data["verses"].map((e) => Verse.fromJson(e)),
-    );
+    downloadingMessage("আয়াতসমূহ ডাউনলোড হচ্ছে...");
+    final versesResponse = await VersesService.getVerses();
+    responseVerses = List<Verse>.from(versesResponse.data["verses"].map((e) => Verse.fromJson(e)));
   }
 
   Future<void> _fetchArticles() async {
-    final response = await ArticlesService.getArticles();
-    _responseData[DataType.articles] = List<Article>.from(
-      response.data["articles"].map((e) => Article.fromJson(e)),
-    );
+    downloadingMessage("আর্টিকেল ডাউনলোড হচ্ছে...");
+    final articlesResponse = await ArticlesService.getArticles();
+    responseArticles = List<Article>.from(articlesResponse.data["articles"].map((e) => Article.fromJson(e)));
   }
 
   Future<void> _fetchHijamas() async {
-    final response = await HijamaService.getHijamaArticles();
-    _responseData[DataType.hijamas] = List<Article>.from(
-      response.data["hijamas"].map((e) => Article.fromJson(e)),
-    );
+    downloadingMessage("হিজামা আর্টিকেল ডাউনলোড হচ্ছে...");
+    final hijamasResponse = await HijamaService.getHijamaArticles();
+    responseHijamas = List<Article>.from(hijamasResponse.data["hijamas"].map((e) => Article.fromJson(e)));
   }
 
   Future<void> _fetchMasnunDuas() async {
-    final response = await MasnunDuaService.getMasnunDuas();
-    _responseData[DataType.masnunDuas] = List<MasnunDua>.from(
-      response.data["masnunDuas"].map((e) => MasnunDua.fromJson(e)),
-    );
+    downloadingMessage("মাসনুন দু’আ ডাউনলোড হচ্ছে...");
+    final masnunDuasResponse = await MasnunDuaService.getMasnunDuas();
+    responseMasnunDuas = List<MasnunDua>.from(masnunDuasResponse.data["masnunDuas"].map((e) => MasnunDua.fromJson(e)));
   }
 
   Future<void> _fetchMasnunDuaCategories() async {
-    final response = await MasnunDuaService.getMasnunDuaCategories();
-    _responseData[DataType.masnunDuaCategories] = List<Category>.from(
-      response.data["categories"].map((e) => Category.fromJson(e)),
+    downloadingMessage("মাসনুন দু’আ ডাউনলোড হচ্ছে...");
+    final masnunDuaCategoriesResponse = await MasnunDuaService.getMasnunDuaCategories();
+    responseMasnunDuaCategories = List<Category>.from(
+      masnunDuaCategoriesResponse.data["categories"].map((e) => Category.fromJson(e)),
     );
   }
 
   Future<void> _fetchNirapottarDuas() async {
-    final response = await NirapottarDuaService.getNirapottarDuas();
-    _responseData[DataType.nirapottarDuas] = List<Article>.from(
-      response.data["nirapottarDuas"].map((e) => Article.fromJson(e)),
+    downloadingMessage("নিরাপত্তার দু’আ ডাউনলোড হচ্ছে...");
+    final nirapottarDuasResponse = await NirapottarDuaService.getNirapottarDuas();
+    responseNirapottarDuas = List<Article>.from(
+      nirapottarDuasResponse.data["nirapottarDuas"].map((e) => Article.fromJson(e)),
     );
   }
 
   Future<void> _fetchAudios() async {
-    final response = await AudioService.getAllAudios();
-    _responseData[DataType.audios] = List<AudioCategory>.from(
-      response.data["audios"].map((e) => AudioCategory.fromJson(e)),
-    );
+    downloadingMessage("অডিও ডাউনলোড হচ্ছে...");
+    final audiosResponse = await AudioService.getAllAudios();
+    responseAudios = List<AudioCategory>.from(audiosResponse.data["audios"].map((e) => AudioCategory.fromJson(e)));
   }
 
-  Future<void> _fetchMasayels() async {
-    final response = await MasnunDuaService.getMasayels();
-    debugPrint("Masayels quantity: ${response.data["masayels"].length}");
-    _responseData[DataType.masayel] = List<MasnunDua>.from(
-      response.data["masayels"].map((e) => MasnunDua.fromJson(e)),
-    );
+  Future<void> _saveDataToHive() async {
+    await _saveCategoriesToHive();
+    await _saveVersesToHive();
+    await _saveArticlesToHive();
+    await _saveHijamasToHive();
+    await _saveMasnunDuasToHive();
+    await _saveMasnunDuaCategoriesToHive();
+    await _saveNirapottarDuasToHive();
+    await _saveAudiosToHive();
   }
 
-  Future<void> _fetchMasayelCategories() async {
-    final response = await MasnunDuaService.getMasayelCategories();
-    _responseData[DataType.masayelCategories] = List<Category>.from(
-      response.data["categories"].map((e) => Category.fromJson(e)),
-    );
+  //================== Update Section ===================//
+  // Updates only categories data
+  Future<void> updateCategories() async {
+    downloadingMessage("ক্যাটাগরির কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    print("categories");
+    await _clearCategoriesBox();
+    await _fetchCategories();
+    await _saveCategoriesToHive();
   }
 
-  // Clear methods
-  Future<void> _clearAllBoxes() async {
-    debugPrint("Clearing all hive boxes data");
-    await Future.wait([
-      categoryBox.clear(),
-      versesBox.clear(),
-      ruqyahsBox.clear(),
-      hijamasBox.clear(),
-      nirapottarDuaBox.clear(),
-      masnunDuaBox.clear(),
-      masnunDuaCategoriesBox.clear(),
-      masayelBox.clear(),
-      masayelCategoriesBox.clear(),
-      audioBox.clear(),
-    ]);
+  // Updates only verses data
+  Future<void> updateVerses() async {
+    downloadingMessage("আয়াতের কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    await _clearVersesBox();
+    await _fetchVerses();
+    await _saveVersesToHive();
   }
 
-  Future<void> _clearSingleBox(DataType dataType) async {
-    switch (dataType) {
-      case DataType.categories:
-        await categoryBox.clear();
-        break;
-      case DataType.verses:
-        await versesBox.clear();
-        break;
-      case DataType.articles:
-        await ruqyahsBox.clear();
-        break;
-      case DataType.hijamas:
-        await hijamasBox.clear();
-        break;
-      case DataType.masnunDuas:
-        await masnunDuaBox.clear();
-        break;
-      case DataType.masnunDuaCategories:
-        await masnunDuaCategoriesBox.clear();
-        break;
-      case DataType.nirapottarDuas:
-        await nirapottarDuaBox.clear();
-        break;
-      case DataType.audios:
-        await audioBox.clear();
-        break;
-      case DataType.masayel:
-        await masayelBox.clear();
-        break;
-      case DataType.masayelCategories:
-        await masayelCategoriesBox.clear();
-        break;
+  // Updates only articles data
+  Future<void> updateArticles() async {
+    downloadingMessage("আর্টিকেলগুলোর কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    await _clearArticlesBox();
+    await _fetchArticles();
+    await _saveArticlesToHive();
+  }
+
+  // Updates only hijamas data
+  Future<void> updateHijamas() async {
+    downloadingMessage("হিজামার কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    await _clearHijamasBox();
+    await _fetchHijamas();
+    await _saveHijamasToHive();
+  }
+
+  // Updates only masnun duas data
+  Future<void> updateMasnunDuas() async {
+    downloadingMessage("মাসনুন দুয়ার কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    await _clearMasnunDuasBox();
+    await _fetchMasnunDuas();
+    await _saveMasnunDuasToHive();
+  }
+
+  // Updates only masnun dua categories data
+  Future<void> updateMasnunDuaCategories() async {
+    downloadingMessage("মাসনুন দুয়া ক্যাটাগরির কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    await _clearMasnunDuaCategoriesBox();
+    await _fetchMasnunDuaCategories();
+    await _saveMasnunDuaCategoriesToHive();
+  }
+
+  // Updates only nirapottar duas data
+  Future<void> updateNirapottarDuas() async {
+    downloadingMessage("নিরাপত্তার দুয়ার কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    await _clearNirapottarDuasBox();
+    await _fetchNirapottarDuas();
+    await _saveNirapottarDuasToHive();
+  }
+
+  // Updates only audios data
+  Future<void> updateAudios() async {
+    downloadingMessage("অডিওগুলোর কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    await _clearAudiosBox();
+    await _fetchAudios();
+    await _saveAudiosToHive();
+  }
+
+  // Clear individual boxes
+  Future<void> _clearCategoriesBox() async => await categoryBox.clear();
+
+  Future<void> _clearVersesBox() async => await versesBox.clear();
+
+  Future<void> _clearArticlesBox() async => await ruqyahsBox.clear();
+
+  Future<void> _clearHijamasBox() async => await hijamasBox.clear();
+
+  Future<void> _clearMasnunDuasBox() async => await masnunDuaBox.clear();
+
+  Future<void> _clearMasnunDuaCategoriesBox() async => await masnunDuaCategoriesBox.clear();
+
+  Future<void> _clearNirapottarDuasBox() async => await nirapottarDuaBox.clear();
+
+  Future<void> _clearAudiosBox() async => await audioBox.clear();
+
+  // Save individual data to Hive
+  Future<void> _saveCategoriesToHive() async {
+    debugPrint('Saving categories to Hive...');
+    await categoryBox.putAll({for (var category in responseCategories) category.id: category});
+  }
+
+  Future<void> _saveVersesToHive() async {
+    debugPrint('Saving verses to Hive...');
+    int i = 0;
+    await versesBox.putAll({for (var verse in responseVerses) i++: verse});
+  }
+
+  Future<void> _saveArticlesToHive() async {
+    debugPrint('Saving articles to Hive...');
+    await ruqyahsBox.putAll({for (var article in responseArticles) article.id: article});
+  }
+
+  Future<void> _saveHijamasToHive() async {
+    debugPrint('Saving hijamas to Hive...');
+    await hijamasBox.putAll({for (var hijama in responseHijamas) hijama.id: hijama});
+  }
+
+  Future<void> _saveMasnunDuasToHive() async {
+    debugPrint('Saving masnun duas to Hive...');
+    await masnunDuaBox.putAll({for (var dua in responseMasnunDuas) dua.id: dua});
+  }
+
+  Future<void> _saveMasnunDuaCategoriesToHive() async {
+    debugPrint('Saving masnun dua categories to Hive...');
+    await masnunDuaCategoriesBox.putAll({for (var category in responseMasnunDuaCategories) category.id: category});
+  }
+
+  Future<void> _saveNirapottarDuasToHive() async {
+    debugPrint('Saving nirapottar duas to Hive...');
+    await nirapottarDuaBox.putAll({for (var dua in responseNirapottarDuas) dua.id: dua});
+  }
+
+  Future<void> _saveAudiosToHive() async {
+    debugPrint('Saving audios to Hive...');
+    await audioBox.putAll({for (var audio in responseAudios) audio.id: audio});
+  }
+
+  // Version-based update logic
+  Future<void> checkAndUpdateData(Config config) async {
+    final storageController = Get.find<StorageController>();
+    debugPrint('Checking and updating data versions...');
+
+    final currentVersions = {
+      'dataVersion': config.dataVersion,
+      'ayatDataVersion': config.ayatDataVersion,
+      'categoryDataVersion': config.categoryDataVersion,
+      'ruqyahDataVersion': config.ruqyahDataVersion,
+      'hijamaDataVersion': config.hijamaDataVersion,
+      'nirapottarDataVersion': config.nirapottarDataVersion,
+      'masnunDuaDataVersion': config.masnunDuaDataVersion,
+      'masnunDuaCategoryDataVersion': config.masnunDuaCategoryDataVersion,
+      'audioDataVersion': config.audioDataVersion,
+      'masayelDataVersion': config.masayelDataVersion,
+      'bibidhDataVersion': config.bibidhDataVersion,
+      'masayelCategoriesDataVersion': config.masayelCategoriesDataVersion,
+    };
+
+    final previousVersions = storageController.getAllDataVersions(currentVersions.keys.toList());
+
+    debugPrint('Previous versions: $previousVersions');
+    debugPrint('Current API versions: $currentVersions');
+
+    void saveNewVersions() {
+      storageController.saveDataVersions(currentVersions);
+      debugPrint('Saving new versions: $currentVersions');
     }
-  }
 
-  // Save methods
-  Future<void> _saveAllDataToHive() async {
-    final futures = DataType.values.map((dataType) => _saveSingleDataType(dataType));
-    await Future.wait(futures);
-  }
-
-  Future<void> _saveSingleDataType(DataType dataType) async {
-    final data = _responseData[dataType];
-    if (data == null) return;
-
-    switch (dataType) {
-      case DataType.categories:
-        await categoryBox.addAll(data as List<Category>);
-        break;
-      case DataType.verses:
-        await versesBox.addAll(data as List<Verse>);
-        break;
-      case DataType.articles:
-        await ruqyahsBox.addAll(data as List<Article>);
-        break;
-      case DataType.hijamas:
-        await hijamasBox.addAll(data as List<Article>);
-        break;
-      case DataType.masnunDuas:
-        await masnunDuaBox.addAll(data as List<MasnunDua>);
-        break;
-      case DataType.masnunDuaCategories:
-        await masnunDuaCategoriesBox.addAll(data as List<Category>);
-        break;
-      case DataType.nirapottarDuas:
-        await nirapottarDuaBox.addAll(data as List<Article>);
-        break;
-      case DataType.audios:
-        await audioBox.addAll(data as List<AudioCategory>);
-        break;
-      case DataType.masayel:
-        await masayelBox.addAll(data as List<MasnunDua>);
-        break;
-      case DataType.masayelCategories:
-        await masayelCategoriesBox.addAll(data as List<Category>);
-        break;
+    // If dataVersion changed, update everything
+    if (currentVersions['dataVersion'] != previousVersions['dataVersion']) {
+      debugPrint('dataVersion changed. Updating all data...');
+      downloadingMessage('সব ডাটা আপডেট হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...');
+      await updateData();
+      saveNewVersions();
+      return;
     }
-  }
 
-  // Getter methods for accessing data
-  List<Category> get categories => _responseData[DataType.categories] ?? [];
-  List<Verse> get verses => _responseData[DataType.verses] ?? [];
-  List<Article> get articles => _responseData[DataType.articles] ?? [];
-  List<Article> get hijamas => _responseData[DataType.hijamas] ?? [];
-  List<MasnunDua> get masnunDuas => _responseData[DataType.masnunDuas] ?? [];
-  List<Category> get masnunDuaCategories => _responseData[DataType.masnunDuaCategories] ?? [];
-  List<Article> get nirapottarDuas => _responseData[DataType.nirapottarDuas] ?? [];
-  List<AudioCategory> get audios => _responseData[DataType.audios] ?? [];
-  List<MasnunDua> get masayels => _responseData[DataType.masayel] ?? [];
-  List<Category> get masayelCategories => _responseData[DataType.masayelCategories] ?? [];
+    // Define updates map
+    final updateMap = <String, Future<void> Function()>{
+      'ayatDataVersion': () async {
+        debugPrint('ayatDataVersion changed. Updating verses...');
+        await updateVerses();
+      },
+      'categoryDataVersion': () async {
+        debugPrint('categoryDataVersion changed. Updating categories...');
+        await updateCategories();
+      },
+      'ruqyahDataVersion': () async {
+        debugPrint('ruqyahDataVersion changed. Updating articles...');
+        await updateArticles();
+      },
+      'hijamaDataVersion': () async {
+        debugPrint('hijamaDataVersion changed. Updating hijamas...');
+        await updateHijamas();
+      },
+      'nirapottarDataVersion': () async {
+        debugPrint('nirapottarDataVersion changed. Updating nirapottar duas...');
+        await updateNirapottarDuas();
+      },
+      'masnunDuaDataVersion': () async {
+        debugPrint('masnunDuaDataVersion changed. Updating masnun duas...');
+        await updateMasnunDuas();
+      },
+      'masnunDuaCategoryDataVersion': () async {
+        debugPrint('masnunDuaCategoryDataVersion changed. Updating masnun dua categories...');
+        await updateMasnunDuaCategories();
+      },
+      'audioDataVersion': () async {
+        debugPrint('audioDataVersion changed. Updating audios...');
+        await updateAudios();
+      },
+      // Add more update actions as needed
+    };
 
-  // Debug method to check current data state
-  void logCurrentDataState() {
-    debugPrint("=== Current Data State ===");
-    debugPrint("Categories in Hive: ${categoryBox.values.length}");
-    debugPrint("Verses in Hive: ${versesBox.values.length}");
-    debugPrint("Articles in Hive: ${ruqyahsBox.values.length}");
-    debugPrint("Hijamas in Hive: ${hijamasBox.values.length}");
-    debugPrint("MasnunDuas in Hive: ${masnunDuaBox.values.length}");
-    debugPrint("MasnunDua Categories in Hive: ${masnunDuaCategoriesBox.values.length}");
-    debugPrint("Nirapottar Duas in Hive: ${nirapottarDuaBox.values.length}");
-    debugPrint("Audios in Hive: ${audioBox.values.length}");
-    debugPrint("Masayels in Hive: ${masayelBox.values.length}");
-    debugPrint("Masayel Categories in Hive: ${masayelCategoriesBox.values.length}");
-    debugPrint("========================");
+    // Filter only the updates that need to run
+    final updatesToRun =
+        updateMap.entries.where((entry) {
+          final key = entry.key;
+          return currentVersions[key] != previousVersions[key];
+        }).toList();
+
+    if (updatesToRun.isNotEmpty) {
+      _showLoadingDialog(); // Show only if there's something to update
+
+      for (final update in updatesToRun) {
+        await update.value();
+      }
+
+      saveNewVersions();
+      Get.back(); // Close loading dialog
+    }
   }
 }

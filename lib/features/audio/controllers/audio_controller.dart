@@ -44,9 +44,7 @@ class AudioController extends GetxController {
   }
 
   Future<void> loadArticlesById({required String id}) async {
-    final filteredAudios = audioBox.values
-        .where((AudioCategory article) => article.id == id)
-        .toList();
+    final filteredAudios = audioBox.values.where((AudioCategory article) => article.id == id).toList();
     if (filteredAudios.isNotEmpty) {
       audioCategories(filteredAudios);
     } else {
@@ -71,18 +69,22 @@ class AudioController extends GetxController {
       }
 
       // Track progress using Dio's onReceiveProgress.
-      await Api().dio.download(url, filePath,
-          onReceiveProgress: (receivedBytes, totalBytes) {
-        downloadingFileSize(totalBytes / (1024 * 1024));
-        if (totalBytes != -1) {
-          double progress = (receivedBytes / totalBytes) * 100;
-          downloadingProgress(progress);
-          if (progress == 100) {
-            downloadingProgress(0.0);
-            downloadingFileSize(0.0);
+      await Api().dio.download(
+        url,
+        filePath,
+        onReceiveProgress: (receivedBytes, totalBytes) {
+          downloadingFileSize(totalBytes / (1024 * 1024));
+          if (totalBytes != -1) {
+            double progress = (receivedBytes / totalBytes) * 100;
+            downloadingProgress(progress);
+            if (progress == 100) {
+              downloadingProgress(0.0);
+              downloadingFileSize(0.0);
+            }
           }
-        }
-      }, cancelToken: cancelToken);
+        },
+        cancelToken: cancelToken,
+      );
 
       // Show success message after download completes.
       showSuccessToast(message: "ডাউনলোড সফল হয়েছে।");
@@ -97,7 +99,6 @@ class AudioController extends GetxController {
   void cancelDownload() {
     if (!cancelToken.isCancelled) {
       cancelToken.cancel();
-      showSuccessToast(message: "ডাউনলোডটি বাদ দেয়া হয়েছে");
       downloadingProgress(0.0);
       downloadingFileSize(0.0);
     }

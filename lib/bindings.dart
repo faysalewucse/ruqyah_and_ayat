@@ -15,22 +15,14 @@ import 'package:rukiyah_and_ayat/features/ayat/controllers/verses_controller.dar
 class MyBindings implements Bindings {
   @override
   void dependencies() {
-
-    Get.putAsync<DataController>(() async {
-      final networkController = Get.find<NetworkController>();
-      await networkController.getConnectionType();
-      return DataController();
-    }).then((dataController) {
-      // Remaining controllers are initialized only after DataController is initialized
-      Get.put(KeeperController());
-      Get.put(CategoryController());
-      Get.put(VersesController());
-      Get.put(RuqyahController());
-      Get.put(HijamaController());
-      Get.put(MasnunDuaController());
-      Get.put(MasayelController());
-      Get.put(NirapottarDuaController());
-      Get.put(AudioController());
-    });
+    Get.put(KeeperController());
+    Get.put(CategoryController());
+    Get.put(VersesController());
+    Get.put(RuqyahController());
+    Get.put(HijamaController());
+    Get.put(MasnunDuaController());
+    Get.put(MasayelController());
+    Get.put(NirapottarDuaController());
+    Get.put(AudioController());
   }
 }

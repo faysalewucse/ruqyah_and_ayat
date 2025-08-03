@@ -48,4 +48,23 @@ class StorageController{
   bool hasOnBoardVisited(){
     return storage.read("visited") ?? false;
   }
+
+  // Version management
+  void saveDataVersions(Map<String, String> versions) {
+    versions.forEach((key, value) {
+      storage.write(key, value);
+    });
+  }
+
+  String? getDataVersion(String key) {
+    return storage.read(key);
+  }
+
+  Map<String, String> getAllDataVersions(List<String> keys) {
+    Map<String, String> result = {};
+    for (var key in keys) {
+      result[key] = storage.read(key) ?? '';
+    }
+    return result;
+  }
 }

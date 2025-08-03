@@ -3,6 +3,7 @@ import 'package:flutter_islamic_icons/flutter_islamic_icons.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rukiyah_and_ayat/api/api_urls.dart';
 import 'package:rukiyah_and_ayat/controllers/data_controller/data_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
@@ -49,7 +50,9 @@ class _HomePageState extends State<HomePage> {
     _dataController = Get.find<DataController>();
   }
 
-  void _checkAppVersionIfConnected() {
+  void _checkAppVersionIfConnected() async {
+    await _dataController.initDataController();
+
     if (_networkController.hasConnection.isTrue) {
       _checkAppVersion();
     }
@@ -190,7 +193,7 @@ class _HomePageState extends State<HomePage> {
     return ListTile(
       dense: true,
       leading: Icon(icon, color: Theme.of(context).textTheme.titleLarge?.color),
-      title: Text(title, style: Theme.of(context).textTheme.bodyLarge),
+      title: Text(title, style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).textTheme.titleLarge?.color)),
       onTap: onTap,
     );
   }
@@ -205,8 +208,8 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         children: [
-          Text("Powered by", style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center),
-          Text("YAQEEN TECH SOLUTIONS", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
+          Text("Powered by", style: Theme.of(context).textTheme.labelSmall?.copyWith(fontFamily: GoogleFonts.lexend().fontFamily, fontSize: 10), textAlign: TextAlign.center),
+          Text("devsKafela", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: GoogleFonts.lexend().fontFamily, fontWeight: FontWeight.w600), textAlign: TextAlign.center),
         ],
       ),
     );
@@ -297,81 +300,10 @@ class _HomePageState extends State<HomePage> {
       if (packageInfo.version != latestConfig.appVersion) {
         _showAppUpdateDialog();
       } else {
-        await _handleDataVersionUpdates(latestConfig);
+        await _dataController.checkAndUpdateData(latestConfig);
       }
-
-      _saveLatestVersionData(latestConfig);
     } catch (error) {
       debugPrint("Error checking app version or data: $error");
-    }
-  }
-
-  Future<void> _handleDataVersionUpdates(Config latestConfig) async {
-    final box = GetStorage();
-    final currentDataVersion = box.read("dataVersion") ?? latestConfig.dataVersion;
-
-    debugPrint("Previous : Latest, Data version: $currentDataVersion : ${latestConfig.dataVersion}");
-
-    if (latestConfig.dataVersion != currentDataVersion) {
-      debugPrint("Update data version");
-      await _dataController.updateData();
-    } else {
-      final updates = _getRequiredUpdates(latestConfig, box);
-      if (updates.isNotEmpty) {
-        debugPrint("Updates list => $updates");
-        await _dataController.updateSomeData(updates);
-      }
-    }
-  }
-
-  List<String> _getRequiredUpdates(Config latestConfig, GetStorage box) {
-    final updates = <String>[];
-
-    final versionChecks = {
-      'ayatDataVersion': ('verses', latestConfig.ayatDataVersion),
-      'categoryDataVersion': ('categories', latestConfig.categoryDataVersion),
-      'ruqyahDataVersion': ('articles', latestConfig.ruqyahDataVersion),
-      'hijamaDataVersion': ('hijamas', latestConfig.hijamaDataVersion),
-      'nirapottarDataVersion': ('nirapottarDuas', latestConfig.nirapottarDataVersion),
-      'masnunDuaDataVersion': ('masnunDuas', latestConfig.masnunDuaDataVersion),
-      'masnunDuaCategoryDataVersion': ('masnunDuaCategories', latestConfig.masnunDuaCategoryDataVersion),
-      'audioDataVersion': ('audios', latestConfig.audioDataVersion),
-      'masayelDataVersion': ('masayel', latestConfig.masayelDataVersion),
-      'masayelCategoriesDataVersion': ('masayelCategories', latestConfig.masayelCategoriesDataVersion),
-    };
-
-    for (final entry in versionChecks.entries) {
-      final storageKey = entry.key;
-      final updateKey = entry.value.$1;
-      final latestVersion = entry.value.$2;
-      final currentVersion = box.read(storageKey) ?? latestVersion;
-
-      if (latestVersion != currentVersion) {
-        updates.add(updateKey);
-      }
-    }
-
-    return updates;
-  }
-
-  void _saveLatestVersionData(Config latestConfig) {
-    final box = GetStorage();
-    final versionKeys = {
-      "dataVersion": latestConfig.dataVersion,
-      "ayatDataVersion": latestConfig.ayatDataVersion,
-      "categoryDataVersion": latestConfig.categoryDataVersion,
-      "ruqyahDataVersion": latestConfig.ruqyahDataVersion,
-      "hijamaDataVersion": latestConfig.hijamaDataVersion,
-      "nirapottarDataVersion": latestConfig.nirapottarDataVersion,
-      "masnunDuaDataVersion": latestConfig.masnunDuaDataVersion,
-      "masnunDuaCategoryDataVersion": latestConfig.masnunDuaCategoryDataVersion,
-      "masayelDataVersion": latestConfig.masayelDataVersion,
-      "masayelCategoriesDataVersion": latestConfig.masayelCategoriesDataVersion,
-      "audioDataVersion": latestConfig.audioDataVersion,
-    };
-
-    for (final entry in versionKeys.entries) {
-      box.write(entry.key, entry.value);
     }
   }
 
