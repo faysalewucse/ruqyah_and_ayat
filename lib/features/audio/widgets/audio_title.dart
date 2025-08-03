@@ -29,7 +29,7 @@ class AudioTitle extends StatelessWidget {
               child: Center(child: Text(BanglaConverter.engToBan("${index + 1}"))),
             ),
         8.kW,
-        Expanded(child: Text(title, style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 16))),
+        Expanded(child: Text(title, style: Theme.of(context).textTheme.titleSmall)),
       ],
     );
   }

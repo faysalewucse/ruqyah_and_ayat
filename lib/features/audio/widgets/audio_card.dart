@@ -24,7 +24,7 @@ class AudioCard extends StatelessWidget {
       color: Theme.of(context).cardColor,
       borderRadius: rounded15, // Ensure rounded corners for the Material
       child: InkWell(
-        borderRadius: rounded20,
+        borderRadius: rounded15,
         onTap: () async{
           final localPath = await audioController.getLocalFilePath(audio.title);
 

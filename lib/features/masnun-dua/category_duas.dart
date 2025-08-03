@@ -31,9 +31,7 @@ class _CategoryDuasState extends State<CategoryDuas> {
   final masnunDuaController = Get.find<MasnunDuaController>();
 
   void _initCall() async {
-    await masnunDuaController.loadMasnunDuaByCategory(
-      categoryId: widget.category.id,
-    );
+    await masnunDuaController.loadMasnunDuaByCategory(categoryId: widget.category.id);
   }
 
   @override
@@ -47,7 +45,7 @@ class _CategoryDuasState extends State<CategoryDuas> {
     return Scaffold(
       appBar: AppBar(title: Text(widget.category.label)),
       body: Container(
-        color: Theme.of(context).primaryColor.withValues(alpha: 0.04),
+        color: Theme.of(context).canvasColor,
         padding: const EdgeInsets.all(16.0),
         child: Obx(
           () =>
@@ -65,21 +63,20 @@ class _CategoryDuasState extends State<CategoryDuas> {
                             arguments: {
                               "masnunDuas": masnunDuaController.masnunDuas,
                               "title": widget.category.label,
+                              "index": index,
                             },
                           );
                         },
                         child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: rounded20White,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(
-                                child: Text(
-                                  masnunDua.title,
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                              ),
+                              Expanded(child: Text(masnunDua.title, style: Theme.of(context).textTheme.titleSmall)),
                               const Icon(PhosphorIcons.caret_right),
                             ],
                           ),

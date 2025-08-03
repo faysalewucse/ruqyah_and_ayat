@@ -237,6 +237,7 @@ BoxDecoration rounded20White = BoxDecoration(
   color: AppColors.white,
   borderRadius: rounded20,
 );
+
 BoxDecoration rounded6PrimaryLight = BoxDecoration(
   color: AppColors.primaryColorLight,
   borderRadius: rounded6,
@@ -250,4 +251,10 @@ TextStyle htmlTextStyle = GoogleFonts.notoSerifBengali(
   fontSize: n70016W500.fontSize,
   fontWeight: FontWeight.w500,
   color: AppColors.neutralN700,
+);
+
+TextStyle htmlTextStyleDark = GoogleFonts.notoSerifBengali(
+  fontSize: n70016W500.fontSize,
+  fontWeight: FontWeight.w500,
+  color: Colors.white,
 );

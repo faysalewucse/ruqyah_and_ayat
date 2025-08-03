@@ -15,7 +15,7 @@ import 'package:rukiyah_and_ayat/features/ayat/category_section.dart';
 import 'package:rukiyah_and_ayat/features/hijama/hijama_titles.dart';
 import 'package:rukiyah_and_ayat/features/home_page.dart';
 import 'package:rukiyah_and_ayat/features/initial_screen.dart';
-import 'package:rukiyah_and_ayat/features/masnun-dua/masnun-duas.dart';
+import 'package:rukiyah_and_ayat/features/masnun-dua/masnun-duas-pageview.dart';
 import 'package:rukiyah_and_ayat/features/masnun-dua/masnun_dua_categories.dart';
 import 'package:rukiyah_and_ayat/features/nirapottar-dua/nirapottar_dua_titles.dart';
 import 'package:rukiyah_and_ayat/features/ruqyah/ruqyah_titles.dart';
@@ -72,7 +72,11 @@ final List<GetPage<dynamic>> routePages = [
         name: masnunDuas,
         page: () {
           final arguments = Get.arguments as Map<String, dynamic>;
-          return MasnunDuasByCategory(masnunDuas: arguments["masnunDuas"] ?? [], title: arguments["title"] ?? "মাসনুন দুআ");
+          return MasnunDuasByCategory(
+            masnunDuas: arguments["masnunDuas"] ?? [],
+            title: arguments["title"] ?? "মাসনুন দুআ",
+            index: arguments["index"] ?? 0,
+          );
         },
       ),
       GetPage(
@@ -82,10 +86,7 @@ final List<GetPage<dynamic>> routePages = [
           return CategoryDuas(category: category);
         },
       ),
-      GetPage(
-        name: masnunDuaCategories,
-        page: () =>  const MasnunDuaCategories(),
-      ),
+      GetPage(name: masnunDuaCategories, page: () => const MasnunDuaCategories()),
       GetPage(name: masayel, page: () => const MasayelCategories()),
       GetPage(
         name: masayelsByCategory,

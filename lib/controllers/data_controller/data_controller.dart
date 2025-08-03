@@ -17,6 +17,7 @@ import 'package:rukiyah_and_ayat/services/articles_service.dart';
 import 'package:rukiyah_and_ayat/services/audio_service.dart';
 import 'package:rukiyah_and_ayat/services/category_service.dart';
 import 'package:rukiyah_and_ayat/services/hijama_service.dart';
+import 'package:rukiyah_and_ayat/services/masayel_service.dart';
 import 'package:rukiyah_and_ayat/services/masnun_dua_service.dart';
 import 'package:rukiyah_and_ayat/services/nirapottar_dua_service.dart';
 import 'package:rukiyah_and_ayat/services/verses_service.dart';
@@ -37,6 +38,8 @@ class DataController extends GetxController {
   List<Category> responseMasnunDuaCategories = [];
   List<Article> responseNirapottarDuas = [];
   List<AudioCategory> responseAudios = [];
+  List<MasnunDua> responseMasayels = [];
+  List<Category> responseMasayelCategories = [];
 
   Future<void> initDataController() async {
     await _initHive();
@@ -66,6 +69,8 @@ class DataController extends GetxController {
     await masnunDuaBox.clear();
     await masnunDuaCategoriesBox.clear();
     await audioBox.clear();
+    await masayelBox.clear();
+    await masayelCategoriesBox.clear();
   }
 
   Future<void> fetchAndSaveData() async {
@@ -86,6 +91,8 @@ class DataController extends GetxController {
         await _fetchMasnunDuaCategories();
         await _fetchNirapottarDuas();
         await _fetchAudios();
+        await _fetchMasayels();
+        await _fetchMasayelsCategories();
 
         _saveDataToHive();
         showSuccessToast(message: 'অ্যাপের ডেটা সফলভাবে ডাউনলোড হয়েছে। আলহামদুলিল্লাহ');
@@ -106,6 +113,8 @@ class DataController extends GetxController {
         nirapottarDuaBox.values.isNotEmpty &&
         masnunDuaBox.values.isNotEmpty &&
         masnunDuaCategoriesBox.values.isNotEmpty &&
+        masayelBox.values.isNotEmpty &&
+        masayelCategoriesBox.values.isNotEmpty &&
         audioBox.values.isNotEmpty;
   }
 
@@ -174,6 +183,20 @@ class DataController extends GetxController {
     responseAudios = List<AudioCategory>.from(audiosResponse.data["audios"].map((e) => AudioCategory.fromJson(e)));
   }
 
+  Future<void> _fetchMasayels() async {
+    downloadingMessage("মাসায়েল ডাউনলোড হচ্ছে...");
+    final masayelResponses = await MasayelService.getMasayels();
+    responseMasayels = List<MasnunDua>.from(masayelResponses.data["masayels"].map((e) => MasnunDua.fromJson(e)));
+  }
+
+  Future<void> _fetchMasayelsCategories() async {
+    downloadingMessage("মাসায়েল ডাউনলোড হচ্ছে...");
+    final masayelCategoriesResponse = await MasayelService.getMasayelCategories();
+    responseMasayelCategories = List<Category>.from(
+      masayelCategoriesResponse.data["categories"].map((e) => Category.fromJson(e)),
+    );
+  }
+
   Future<void> _saveDataToHive() async {
     await _saveCategoriesToHive();
     await _saveVersesToHive();
@@ -183,6 +206,8 @@ class DataController extends GetxController {
     await _saveMasnunDuaCategoriesToHive();
     await _saveNirapottarDuasToHive();
     await _saveAudiosToHive();
+    await _saveMasayelsToHive();
+    await _saveMasayelCategoriesToHive();
   }
 
   //================== Update Section ===================//
@@ -229,12 +254,27 @@ class DataController extends GetxController {
 
   // Updates only masnun dua categories data
   Future<void> updateMasnunDuaCategories() async {
-    downloadingMessage("মাসনুন দুয়া ক্যাটাগরির কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    downloadingMessage("মাসনুন দুআ এর কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
     await _clearMasnunDuaCategoriesBox();
     await _fetchMasnunDuaCategories();
     await _saveMasnunDuaCategoriesToHive();
   }
 
+  // Updates only masnun duas data
+  Future<void> updateMasayels() async {
+    downloadingMessage("মাসায়েল এর আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    await _cleanMasayelsBox();
+    await _fetchMasayels();
+    await _saveMasayelsToHive();
+  }
+
+  // Updates only masnun dua categories data
+  Future<void> updateMasayelCategories() async {
+    downloadingMessage("মাসায়েল এর কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
+    await _cleanMasayelCategoriesBox();
+    await _fetchMasayelsCategories();
+    await _saveMasayelCategoriesToHive();
+  }
   // Updates only nirapottar duas data
   Future<void> updateNirapottarDuas() async {
     downloadingMessage("নিরাপত্তার দুয়ার কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
@@ -253,19 +293,14 @@ class DataController extends GetxController {
 
   // Clear individual boxes
   Future<void> _clearCategoriesBox() async => await categoryBox.clear();
-
   Future<void> _clearVersesBox() async => await versesBox.clear();
-
   Future<void> _clearArticlesBox() async => await ruqyahsBox.clear();
-
   Future<void> _clearHijamasBox() async => await hijamasBox.clear();
-
   Future<void> _clearMasnunDuasBox() async => await masnunDuaBox.clear();
-
   Future<void> _clearMasnunDuaCategoriesBox() async => await masnunDuaCategoriesBox.clear();
-
+  Future<void> _cleanMasayelsBox() async => await masayelBox.clear();
+  Future<void> _cleanMasayelCategoriesBox() async => await masayelCategoriesBox.clear();
   Future<void> _clearNirapottarDuasBox() async => await nirapottarDuaBox.clear();
-
   Future<void> _clearAudiosBox() async => await audioBox.clear();
 
   // Save individual data to Hive
@@ -298,6 +333,16 @@ class DataController extends GetxController {
   Future<void> _saveMasnunDuaCategoriesToHive() async {
     debugPrint('Saving masnun dua categories to Hive...');
     await masnunDuaCategoriesBox.putAll({for (var category in responseMasnunDuaCategories) category.id: category});
+  }
+
+  Future<void> _saveMasayelsToHive() async {
+    debugPrint('Saving masayels to Hive...');
+    await masayelBox.putAll({for (var masayel in responseMasayels) masayel.id: masayel});
+  }
+
+  Future<void> _saveMasayelCategoriesToHive() async {
+    debugPrint('Saving masayel categories to Hive...');
+    await masayelCategoriesBox.putAll({for (var category in responseMasayelCategories) category.id: category});
   }
 
   Future<void> _saveNirapottarDuasToHive() async {
@@ -383,6 +428,14 @@ class DataController extends GetxController {
         debugPrint('audioDataVersion changed. Updating audios...');
         await updateAudios();
       },
+      'masayelDataVersion': () async {
+        debugPrint('masayelDataVersion changed. Updating masayels...');
+        await updateMasayels();
+      },
+      'masayelCategoriesDataVersion': () async {
+        debugPrint('masayelCategoriesDataVersion changed. Updating masayel categories...');
+        await updateMasayelCategories();
+      },
       // Add more update actions as needed
     };
 
@@ -401,7 +454,7 @@ class DataController extends GetxController {
       }
 
       saveNewVersions();
-      Get.back(); // Close loading dialog
+      if(Get.isDialogOpen ?? false) Get.back();
     }
   }
 }

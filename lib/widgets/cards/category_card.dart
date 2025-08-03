@@ -21,8 +21,7 @@ class CategoryCard extends StatelessWidget {
       onTap: () {
         if (forMasnunDua) {
           Get.toNamed(categoryDuas, arguments: category);
-        }
-        else if (forMasayel) {
+        } else if (forMasayel) {
           Get.toNamed(masayelsByCategory, arguments: category);
         } else {
           Get.toNamed(ayatList, arguments: category);
@@ -30,11 +29,7 @@ class CategoryCard extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          // border: Border(left: BorderSide(color: Theme.of(context).primaryColor.withValues(alpha: alpha:0.5), width: 6)),
-          borderRadius: rounded20,
-        ),
+        decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: rounded15),
         child: Row(
           children: [
             Expanded(

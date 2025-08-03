@@ -10,12 +10,4 @@ class MasnunDuaService{
   static Future<Response> getMasnunDuaCategories () async {
     return await Api().dio.get(ApiUrls.getAllMasnunDuaCategories);
   }
-
-  static Future<Response> getMasayels () async {
-    return await Api().dio.get(ApiUrls.getAllMasayels);
-  }
-
-  static Future<Response> getMasayelCategories () async {
-    return await Api().dio.get(ApiUrls.getAllMasayelCategories);
-  }
 }

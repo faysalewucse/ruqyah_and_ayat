@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
@@ -60,7 +61,7 @@ class _ArticleViewScreenState extends State<ArticleViewScreen> {
                     padding: const EdgeInsets.all(16.0),
                     child: HtmlWidget(
                       widget.article.content,
-                      textStyle: htmlTextStyle,
+                      textStyle: Get.isDarkMode ? htmlTextStyleDark : htmlTextStyle,
                       customStylesBuilder: (element) {
                         return {'text-align': 'justify'};
                       },

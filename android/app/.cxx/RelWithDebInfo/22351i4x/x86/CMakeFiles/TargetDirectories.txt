@@ -1,0 +1,2 @@
+F:/Projects/RuqyahAndAyat/ruqyah_and_ayat/android/app/.cxx/RelWithDebInfo/22351i4x/x86/CMakeFiles/edit_cache.dir
+F:/Projects/RuqyahAndAyat/ruqyah_and_ayat/android/app/.cxx/RelWithDebInfo/22351i4x/x86/CMakeFiles/rebuild_cache.dir

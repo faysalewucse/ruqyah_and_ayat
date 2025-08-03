@@ -16,6 +16,7 @@ class MasnunDuaCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      spacing: 12.0,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
@@ -35,24 +36,21 @@ class MasnunDuaCard extends StatelessWidget {
             ),
           ),
         ),
-        12.kH,
         Expanded(
           child: SingleChildScrollView(
             child: SelectionArea(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: HtmlWidget(
-                  masnunDua.content,
-                  textStyle: htmlTextStyle,
-                  customStylesBuilder: (element) {
-                    return {'text-align': 'justify'};
-                  },
-                ),
+              child: HtmlWidget(
+                masnunDua.content,
+                textStyle: Get.isDarkMode ? htmlTextStyleDark : htmlTextStyle,
+                customStylesBuilder: (element) {
+                  return {'text-align': 'justify'};
+                },
               ),
             ),
           ),
         ),
       ],
     );
+
   }
 }

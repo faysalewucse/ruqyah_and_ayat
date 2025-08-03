@@ -11,10 +11,10 @@ class LeadingIndex extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      width: 40,
+      height: 35,
+      width: 35,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14.0),
+        borderRadius: BorderRadius.circular(10.0),
         color: Get.isDarkMode
             ? Theme.of(context).scaffoldBackgroundColor
             : Theme.of(context).primaryColor.withValues(alpha: 0.06),
