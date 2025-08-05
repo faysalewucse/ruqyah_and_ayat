@@ -28,7 +28,7 @@ class MasayelCard extends StatelessWidget {
           color: Theme.of(context).cardColor,
           borderRadius: rounded15,
         ),
-        child: Text(title, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineLarge,),
+        child: Text(title, textAlign: TextAlign.center, style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 18),),
       ),
     );
   }

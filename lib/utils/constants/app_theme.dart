@@ -15,7 +15,7 @@ class AppTheme {
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.primaryColor,
       titleSpacing: 0,
-      titleTextStyle: GoogleFonts.notoSerifBengali(
+      titleTextStyle: GoogleFonts.hindSiliguri(
           fontWeight: FontWeight.w700, fontSize: 20, color: AppColors.white),
       iconTheme: const IconThemeData(
         color: AppColors.white, //change your color here

@@ -39,12 +39,15 @@ class MasnunDuaCard extends StatelessWidget {
         Expanded(
           child: SingleChildScrollView(
             child: SelectionArea(
-              child: HtmlWidget(
-                masnunDua.content,
-                textStyle: Get.isDarkMode ? htmlTextStyleDark : htmlTextStyle,
-                customStylesBuilder: (element) {
-                  return articleStyle;
-                },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: HtmlWidget(
+                  masnunDua.content,
+                  textStyle: Get.isDarkMode ? htmlTextStyleDark : htmlTextStyle,
+                  customStylesBuilder: (element) {
+                    return articleStyle;
+                  },
+                ),
               ),
             ),
           ),

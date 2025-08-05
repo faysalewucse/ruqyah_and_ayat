@@ -28,6 +28,22 @@ class DataController extends GetxController {
   final currentAppVersion = ''.obs;
   final networkController = Get.find<NetworkController>();
   final downloadingMessage = "অ্যাপের ডেটা ডাউনলোড করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...".obs;
+  final latestConfig = Config(
+    appVersion: "1",
+    releaseNotes: "1.0.0",
+    dataVersion: "1.0.0",
+    ayatDataVersion: "1.0.0",
+    categoryDataVersion: "1.0.0",
+    ruqyahDataVersion: "1.0.0",
+    hijamaDataVersion: "1.0.0",
+    nirapottarDataVersion: "1.0.0",
+    masnunDuaDataVersion: "1.0.0",
+    masnunDuaCategoryDataVersion: "1.0.0",
+    audioDataVersion: "1.0.0",
+    masayelDataVersion: "1.0.0",
+    bibidhDataVersion: "1.0.0",
+    masayelCategoriesDataVersion: "1.0.0",
+  ).obs;
 
   // Declare the response variables to store fetched data
   List<Category> responseCategories = [];
@@ -47,7 +63,7 @@ class DataController extends GetxController {
 
   Future<void> _initHive() async {
     final appDocDir = await getApplicationDocumentsDirectory();
-    Hive.init(appDocDir.path);
+    Hive.init('${appDocDir.path}/hive_v2');
   }
 
   Future<void> updateData() async {
@@ -272,6 +288,7 @@ class DataController extends GetxController {
     await _fetchMasayelsCategories();
     await _saveMasayelCategoriesToHive();
   }
+
   // Updates only nirapottar duas data
   Future<void> updateNirapottarDuas() async {
     downloadingMessage("নিরাপত্তার দুয়ার কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
@@ -290,14 +307,23 @@ class DataController extends GetxController {
 
   // Clear individual boxes
   Future<void> _clearCategoriesBox() async => await categoryBox.clear();
+
   Future<void> _clearVersesBox() async => await versesBox.clear();
+
   Future<void> _clearArticlesBox() async => await ruqyahsBox.clear();
+
   Future<void> _clearHijamasBox() async => await hijamasBox.clear();
+
   Future<void> _clearMasnunDuasBox() async => await masnunDuaBox.clear();
+
   Future<void> _clearMasnunDuaCategoriesBox() async => await masnunDuaCategoriesBox.clear();
+
   Future<void> _cleanMasayelsBox() async => await masayelBox.clear();
+
   Future<void> _cleanMasayelCategoriesBox() async => await masayelCategoriesBox.clear();
+
   Future<void> _clearNirapottarDuasBox() async => await nirapottarDuaBox.clear();
+
   Future<void> _clearAudiosBox() async => await audioBox.clear();
 
   // Save individual data to Hive
@@ -451,7 +477,7 @@ class DataController extends GetxController {
       }
 
       saveNewVersions();
-      if(Get.isDialogOpen ?? false) Get.back();
+      if (Get.isDialogOpen ?? false) Get.back();
     }
   }
 }

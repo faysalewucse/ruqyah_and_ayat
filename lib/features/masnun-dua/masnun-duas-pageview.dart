@@ -26,24 +26,7 @@ class MasnunDuasByCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: IconButton(
-              onPressed: () {
-                SideSheet.right(
-                  context: context,
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  body: const Settings(),
-                );
-              },
-              icon: const Icon(PhosphorIcons.sliders_horizontal, color: AppColors.white),
-            ),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text(title)),
       body: SafeArea(
         child: Container(
           color: Theme.of(context).scaffoldBackgroundColor,
@@ -54,9 +37,7 @@ class MasnunDuasByCategory extends StatelessWidget {
                     ? const NoData(text: "কোনো দুআ খুজে পাওয়া যায়নি")
                     : PageView.builder(
                       itemCount: masnunDuas.length,
-                      controller: PageController(
-                        initialPage: index
-                      ),
+                      controller: PageController(initialPage: index),
                       itemBuilder: (context, index) {
                         return Obx(() => MasnunDuaCard(masnunDua: masnunDuas[index]));
                       },

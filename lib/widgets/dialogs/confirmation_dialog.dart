@@ -8,8 +8,17 @@ class ConfirmationDialog extends StatelessWidget {
   final String cancelText;
   final String okText;
   final VoidCallback onOkPressed;
+  final VoidCallback? onCancelPressed;
 
-  ConfirmationDialog({super.key, required this.title, required this.confirmationMessage, required this.cancelText, required this.okText, required this.onOkPressed});
+  ConfirmationDialog({
+    super.key,
+    required this.title,
+    required this.confirmationMessage,
+    required this.cancelText,
+    required this.okText,
+    required this.onOkPressed,
+    this.onCancelPressed,
+  });
 
   final keeperController = Get.find<KeeperController>();
 
@@ -17,32 +26,24 @@ class ConfirmationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       actionsPadding: const EdgeInsets.all(20.0),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       title: Text(title),
-      content: Text(
-        confirmationMessage,
-      ),
+      content: Text(confirmationMessage),
       actions: <Widget>[
         GestureDetector(
-            onTap: () {
-              Get.back();
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                cancelText,
-                style: Theme.of(context).textTheme.displaySmall,
-              ),
-            )),
+          onTap: onCancelPressed ?? () {
+            Get.back();
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(cancelText, style: Theme.of(context).textTheme.displaySmall),
+          ),
+        ),
         GestureDetector(
           onTap: onOkPressed,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              okText,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
+            child: Text(okText, style: Theme.of(context).textTheme.headlineSmall),
           ),
         ),
       ],

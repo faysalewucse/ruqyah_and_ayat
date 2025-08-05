@@ -51,8 +51,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _checkAppVersionIfConnected() async {
-    await _dataController.initDataController();
-
     if (_networkController.hasConnection.isTrue) {
       _checkAppVersion();
     }
@@ -319,7 +317,9 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _checkAppVersion() async {
     try {
+      print("[Config Called Start]");
       final response = await VersionService.getAppConfig();
+      print("[Config Called End]");
       final configs = response.data["configs"] as List<dynamic>;
       final latestConfig = Config.fromJson(configs.first);
 
@@ -330,7 +330,12 @@ class _HomePageState extends State<HomePage> {
       debugPrint("Latest app version: ${latestConfig.appVersion}");
 
       if (packageInfo.buildNumber != latestConfig.appVersion) {
-        _showAppUpdateDialog();
+        _showAppUpdateDialog(
+          onCancel: () {
+            _dataController.checkAndUpdateData(latestConfig);
+            Get.back();
+          },
+        );
       } else {
         await _dataController.checkAndUpdateData(latestConfig);
       }
@@ -339,7 +344,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _showAppUpdateDialog() {
+  void _showAppUpdateDialog({VoidCallback? onCancel}) {
     showDialog<void>(
       context: Get.context!,
       builder:
@@ -352,6 +357,7 @@ class _HomePageState extends State<HomePage> {
               Get.back();
               launchInBrowser(ApiUrls.playStoreAppLink);
             },
+            onCancelPressed: onCancel,
           ),
     );
   }

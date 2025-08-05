@@ -41,21 +41,6 @@ class _MasayelsByCategoryState extends State<MasayelsByCategory> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.category.label),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: IconButton(
-              onPressed: () {
-                SideSheet.right(
-                  context: context,
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  body: const Settings(),
-                );
-              },
-              icon: const Icon(PhosphorIcons.sliders_horizontal, color: AppColors.white),
-            ),
-          ),
-        ],
       ),
       body: SafeArea(
         child: Container(

@@ -27,6 +27,9 @@ import 'package:toastification/toastification.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  FlutterNativeSplash.remove();
+
   packageInfo = await PackageInfo.fromPlatform();
 
   await Firebase.initializeApp(
@@ -34,7 +37,6 @@ void main() async {
   );
   await FirebaseApi().initNotification();
 
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await GetStorage.init();
   await Hive.initFlutter();
 
@@ -64,9 +66,6 @@ void main() async {
   Get.put(StorageController());
   Get.put(KeeperController());
   Get.put(DataController());
-
-  // Remove splash screen after all initialization is complete
-  FlutterNativeSplash.remove();
 
   runApp(const MyApp());
 }
