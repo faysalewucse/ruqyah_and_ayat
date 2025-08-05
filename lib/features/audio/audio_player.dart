@@ -301,52 +301,54 @@ class _RuqyahPlayerState extends State<RuqyahPlayer> {
         ),
       ),
       bottomNavigationBar: !_loading && !alreadyDownloaded
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Obx(
-                () => Stack(
-                  children: [
-                    PrimaryButton(
-                      label: audioController.downloadingAudioLoading.isTrue
-                          ? "ডাউনলোড হচ্ছে... (${audioController.downloadingFileSize.toStringAsFixed(2)} MB - ${audioController.downloadingProgress.value.toInt()}%)"
-                          : "ডাউনলোড",
-                      onTap: () async {
-                        if (audioController.downloadingAudioLoading.isFalse) {
-                          await audioController.downloadAudio(
-                            widget.audio.audioUrlServer ?? "",
-                            widget.audio.title,
-                          );
-                        }
-                      },
-                      suffix: audioController.downloadingAudioLoading.isTrue
-                          ? null
-                          : Icon(
-                              PhosphorIcons.download,
-                              color: Theme.of(context).textTheme.headlineMedium?.color,
-                            ),
-                    ),
-                    Obx(() => audioController.downloadingAudioLoading.isTrue
-                        ? Positioned.fill(
-                            right: 10,
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: GestureDetector(
-                                onTap: () => audioController.cancelDownload(),
-                                child: Container(
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.white),
-                                  child: const Icon(
-                                    PhosphorIcons.x,
-                                    size: 15,
+          ? SafeArea(
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Obx(
+                  () => Stack(
+                    children: [
+                      PrimaryButton(
+                        label: audioController.downloadingAudioLoading.isTrue
+                            ? "ডাউনলোড হচ্ছে... (${audioController.downloadingFileSize.toStringAsFixed(2)} MB - ${audioController.downloadingProgress.value.toInt()}%)"
+                            : "ডাউনলোড",
+                        onTap: () async {
+                          if (audioController.downloadingAudioLoading.isFalse) {
+                            await audioController.downloadAudio(
+                              widget.audio.audioUrlServer ?? "",
+                              widget.audio.title,
+                            );
+                          }
+                        },
+                        suffix: audioController.downloadingAudioLoading.isTrue
+                            ? null
+                            : Icon(
+                                PhosphorIcons.download,
+                                color: Theme.of(context).textTheme.headlineMedium?.color,
+                              ),
+                      ),
+                      Obx(() => audioController.downloadingAudioLoading.isTrue
+                          ? Positioned.fill(
+                              right: 10,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: GestureDetector(
+                                  onTap: () => audioController.cancelDownload(),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(5),
+                                    decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.white),
+                                    child: const Icon(
+                                      PhosphorIcons.x,
+                                      size: 15,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ))
-                        : const SizedBox.shrink())
-                  ],
+                              ))
+                          : const SizedBox.shrink())
+                    ],
+                  ),
                 ),
               ),
-            )
+          )
           : null,
     );
   }
