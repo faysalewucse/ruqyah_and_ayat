@@ -8,7 +8,7 @@ part of 'Config.dart';
 
 class ConfigAdapter extends TypeAdapter<Config> {
   @override
-  final int typeId = 3;
+  final int typeId = 1;
 
   @override
   Config read(BinaryReader reader) {
@@ -30,7 +30,7 @@ class ConfigAdapter extends TypeAdapter<Config> {
       audioDataVersion: fields[10] as String,
       masayelDataVersion: fields[11] as String,
       bibidhDataVersion: fields[12] as String,
-      masayelCategoriesDataVersion: fields[13] as String,
+      masayelCategoriesDataVersion: fields[13] as String?,
     );
   }
 

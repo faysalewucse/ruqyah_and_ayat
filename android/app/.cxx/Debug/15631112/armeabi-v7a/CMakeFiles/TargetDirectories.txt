@@ -1,0 +1,2 @@
+/Users/nerddevs/Documents/Faysal/ruqyah_and_ayat/android/app/.cxx/Debug/15631112/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/nerddevs/Documents/Faysal/ruqyah_and_ayat/android/app/.cxx/Debug/15631112/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -50,7 +50,7 @@ class StorageController{
   }
 
   // Version management
-  void saveDataVersions(Map<String, String> versions) {
+  void saveDataVersions(Map<String, String?> versions) {
     versions.forEach((key, value) {
       storage.write(key, value);
     });

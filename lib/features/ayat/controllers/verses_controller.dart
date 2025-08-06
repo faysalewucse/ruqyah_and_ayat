@@ -23,7 +23,15 @@ class VersesController extends GetxController {
   }
 
   Future<List<Verse>> loadVersesByCategory({required String categoryId}) async {
-    final filteredVerses = versesBox.values.where((verse) => verse.category == categoryId).toList()..sort((a, b) => a.index.compareTo(b.index));
+    final filteredVerses =
+        versesBox.values.where((verse) => verse.category == categoryId).toList()
+          ..sort((a, b) {
+            if (a.index == null && b.index == null) return 0;
+            if (a.index == null) return 1; // a goes after b
+            if (b.index == null) return -1; // a goes before b
+            return a.index!.compareTo(b.index!);
+          });
+
     if (filteredVerses.isNotEmpty) {
       verses(filteredVerses);
       return verses;
