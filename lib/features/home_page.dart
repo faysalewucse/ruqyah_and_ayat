@@ -51,6 +51,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _checkAppVersionIfConnected() async {
+    await _dataController.initDataController();
+
     if (_networkController.hasConnection.isTrue) {
       _checkAppVersion();
     }
@@ -300,7 +302,7 @@ class _HomePageState extends State<HomePage> {
       Screen('আয়াত', FlutterIslamicIcons.quran, categorySection),
       Screen('রুকইয়াহ', PhosphorIcons.first_aid_kit_thin, ruqyah),
       Screen('হিজামা', PhosphorIcons.first_aid_thin, hijama),
-      Screen('হেফাজতের আমল', PhosphorIcons.shield_thin, securityDua),
+      Screen('হেফাজত', PhosphorIcons.shield_thin, securityDua),
       Screen('অডিও', PhosphorIcons.music_notes_thin, audioCategories),
       Screen('মাসায়েল', PhosphorIcons.question_thin, masayel),
       Screen('মাসনুন দুআ', FlutterIslamicIcons.tasbihHand, masnunDuaCategories),
@@ -317,9 +319,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _checkAppVersion() async {
     try {
-      print("[Config Called Start]");
       final response = await VersionService.getAppConfig();
-      print("[Config Called End]");
       final configs = response.data["configs"] as List<dynamic>;
       final latestConfig = Config.fromJson(configs.first);
 
@@ -330,12 +330,7 @@ class _HomePageState extends State<HomePage> {
       debugPrint("Latest app version: ${latestConfig.appVersion}");
 
       if (packageInfo.buildNumber != latestConfig.appVersion) {
-        _showAppUpdateDialog(
-          onCancel: () {
-            _dataController.checkAndUpdateData(latestConfig);
-            Get.back();
-          },
-        );
+        _showAppUpdateDialog();
       } else {
         await _dataController.checkAndUpdateData(latestConfig);
       }
@@ -344,7 +339,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _showAppUpdateDialog({VoidCallback? onCancel}) {
+  void _showAppUpdateDialog() {
     showDialog<void>(
       context: Get.context!,
       builder:
@@ -357,7 +352,6 @@ class _HomePageState extends State<HomePage> {
               Get.back();
               launchInBrowser(ApiUrls.playStoreAppLink);
             },
-            onCancelPressed: onCancel,
           ),
     );
   }

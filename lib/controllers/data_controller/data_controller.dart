@@ -28,22 +28,6 @@ class DataController extends GetxController {
   final currentAppVersion = ''.obs;
   final networkController = Get.find<NetworkController>();
   final downloadingMessage = "অ্যাপের ডেটা ডাউনলোড করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...".obs;
-  final latestConfig = Config(
-    appVersion: "1",
-    releaseNotes: "1.0.0",
-    dataVersion: "1.0.0",
-    ayatDataVersion: "1.0.0",
-    categoryDataVersion: "1.0.0",
-    ruqyahDataVersion: "1.0.0",
-    hijamaDataVersion: "1.0.0",
-    nirapottarDataVersion: "1.0.0",
-    masnunDuaDataVersion: "1.0.0",
-    masnunDuaCategoryDataVersion: "1.0.0",
-    audioDataVersion: "1.0.0",
-    masayelDataVersion: "1.0.0",
-    bibidhDataVersion: "1.0.0",
-    masayelCategoriesDataVersion: "1.0.0",
-  ).obs;
 
   // Declare the response variables to store fetched data
   List<Category> responseCategories = [];
@@ -63,7 +47,7 @@ class DataController extends GetxController {
 
   Future<void> _initHive() async {
     final appDocDir = await getApplicationDocumentsDirectory();
-    Hive.init('${appDocDir.path}/hive_v2');
+    Hive.init(appDocDir.path);
   }
 
   Future<void> updateData() async {
@@ -111,8 +95,8 @@ class DataController extends GetxController {
         showSuccessToast(message: 'অ্যাপের ডেটা সফলভাবে ডাউনলোড হয়েছে। আলহামদুলিল্লাহ');
       }
     } catch (e) {
+      debugPrint('Error fetching and saving data: $e');
       showErrorToast(message: 'অ্যাপের ডেটা ডাউনলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন');
-      print(e);
     } finally {
       if (Get.isDialogOpen ?? false) Get.back();
     }
@@ -227,7 +211,6 @@ class DataController extends GetxController {
   // Updates only categories data
   Future<void> updateCategories() async {
     downloadingMessage("ক্যাটাগরির কিছু আপডেট ডাটা ডাউনলোড হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন।");
-    print("categories");
     await _clearCategoriesBox();
     await _fetchCategories();
     await _saveCategoriesToHive();
