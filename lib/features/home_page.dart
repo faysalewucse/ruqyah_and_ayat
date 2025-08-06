@@ -302,7 +302,7 @@ class _HomePageState extends State<HomePage> {
       Screen('আয়াত', FlutterIslamicIcons.quran, categorySection),
       Screen('রুকইয়াহ', PhosphorIcons.first_aid_kit_thin, ruqyah),
       Screen('হিজামা', PhosphorIcons.first_aid_thin, hijama),
-      Screen('হেফাজত', PhosphorIcons.shield_thin, securityDua),
+      Screen('সুরক্ষার আমল', PhosphorIcons.shield_thin, securityDua),
       Screen('অডিও', PhosphorIcons.music_notes_thin, audioCategories),
       Screen('মাসায়েল', PhosphorIcons.question_thin, masayel),
       Screen('মাসনুন দুআ', FlutterIslamicIcons.tasbihHand, masnunDuaCategories),
@@ -319,15 +319,17 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _checkAppVersion() async {
     try {
+      print("[Config Called start]");
       final response = await VersionService.getAppConfig();
       final configs = response.data["configs"] as List<dynamic>;
       final latestConfig = Config.fromJson(configs.first);
+      print("[Config Called end]");
 
-      debugPrint("Latest config: ${latestConfig.toJson()}");
+      debugPrint("latest_config => [${latestConfig.toJson()}]");
       _dataController.currentAppVersion.value = packageInfo.version;
 
-      debugPrint("Package version: ${packageInfo.buildNumber}");
-      debugPrint("Latest app version: ${latestConfig.appVersion}");
+      print("current_app_version => [${packageInfo.buildNumber}]");
+      print("latest_app_version => [${latestConfig.appVersion}]");
 
       if (packageInfo.buildNumber != latestConfig.appVersion) {
         _showAppUpdateDialog();

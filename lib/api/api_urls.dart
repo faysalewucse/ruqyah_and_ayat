@@ -6,7 +6,7 @@ class ApiUrls {
   static const String rootApiUrl = "https://rukyah-server.vercel.app/api/$apiVersion";
   static const String websiteUrl = "https://sunnahcurebd.com";
   static const String audioBaseUrl = "$websiteUrl/ruqyah-app-audios/Audios";
-  static const String yaqeenTechSolutionsPlayStoreUrl = "https://play.google.com/store/apps/developer?id=Yaqeen+Tech+Solutions";
+  static const String yaqeenTechSolutionsPlayStoreUrl = "https://play.google.com/store/apps/developer?id=devsKafela&hl=en";
   static const String reportProblemGoogleForm = "https://forms.gle/zB2kCortFX6xEL1K9";
 
   // Play Store

@@ -121,7 +121,9 @@ class DataController extends GetxController {
       contentPadding: const EdgeInsets.all(20.0),
       title: 'ডেটা প্রস্তুত হচ্ছে',
       titleStyle: primary20W500,
+      titlePadding: const EdgeInsets.only(top: 28.0),
       content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [const CustomLoader(), 20.kH, Obx(() => Text(downloadingMessage.value, textAlign: TextAlign.center))],
       ),
       barrierDismissible: false,
