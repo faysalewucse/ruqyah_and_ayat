@@ -41,16 +41,6 @@ class CategorySection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "فَلَمَّا أَلْقَوْا قَالَ مُوسَىٰ مَا جِئْتُم بِهِ السِّحْرُ ۖ إِنَّ اللَّهَ سَيُبْطِلُهُ ۖ إِنَّ اللَّهَ لَا يُصْلِحُ عَمَلَ الْمُفْسِدِينَ",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: "NooreHuda",
-                          color: AppColors.white,
-                          fontSize: 24,
-                          letterSpacing: 0,),
-                    ),
-                    verticalGap12,
-                    Text(
                         "অতঃপর তারা (ফেরাউনের হায়ার করা জাদুকররা ) যখন (লাঠি ও রশি) নিক্ষেপ করল তখন মূসা বলল, ‘তোমরা যা এনেছো তা জাদু, নিশ্চয়ই আল্লাহ্ একে অসার করে দিবেন। আল্লাহ্ অবশ্যই অশান্তি সৃষ্টিকারীদের কর্ম সার্থক করেন না।’",
                         textAlign: TextAlign.center,
                         style: white16W600),

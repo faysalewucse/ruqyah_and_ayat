@@ -9,11 +9,12 @@ import 'package:rukiyah_and_ayat/controllers/data_controller/data_controller.dar
 import 'package:rukiyah_and_ayat/controllers/keeper_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/network_controller.dart';
 import 'package:rukiyah_and_ayat/helper/constant.dart';
-import 'package:rukiyah_and_ayat/models/Config.dart';
+import 'package:rukiyah_and_ayat/models/Config.dart' as conf;
 import 'package:rukiyah_and_ayat/models/Screen.dart';
 import 'package:rukiyah_and_ayat/router/routes.dart';
 import 'package:rukiyah_and_ayat/services/version_service.dart';
 import 'package:rukiyah_and_ayat/utils/common_functions.dart';
+import 'package:rukiyah_and_ayat/utils/constants/app_images.dart';
 import 'package:rukiyah_and_ayat/utils/sizedbox_extension.dart';
 import 'package:rukiyah_and_ayat/widgets/buttons/primary_button.dart';
 import 'package:rukiyah_and_ayat/widgets/cards/screen_card.dart';
@@ -165,7 +166,7 @@ class _HomePageState extends State<HomePage> {
         .map(
           (screen) => _buildDrawerMenuItem(
             context: context,
-            icon: screen.iconData,
+            icon: screen.iconString,
             title: screen.name,
             onTap: () => _navigateToScreen(screen.route),
           ),
@@ -175,19 +176,19 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _getActionMenuItems(BuildContext context) {
     return [
-      _buildDrawerMenuItem(
+      _buildDrawerMenuOthersItem(
         context: context,
         icon: PhosphorIcons.warning_circle_thin,
         title: 'সমস্যা জানান',
         onTap: () => launchInBrowser(ApiUrls.reportProblemGoogleForm),
       ),
-      _buildDrawerMenuItem(
+      _buildDrawerMenuOthersItem(
         context: context,
         icon: PhosphorIcons.share_network_thin,
         title: 'শেয়ার করুন',
         onTap: () => _shareApp(context),
       ),
-      _buildDrawerMenuItem(
+      _buildDrawerMenuOthersItem(
         context: context,
         icon: PhosphorIcons.google_play_logo_thin,
         title: 'আরো অ্যাপ দেখুন',
@@ -197,6 +198,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildDrawerMenuItem({
+    required BuildContext context,
+    required String icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      dense: true,
+      leading: Image.asset(icon),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).textTheme.titleLarge?.color),
+      ),
+      onTap: onTap,
+    );
+  }
+  
+  Widget _buildDrawerMenuOthersItem({
     required BuildContext context,
     required IconData icon,
     required String title,
@@ -257,23 +275,191 @@ class _HomePageState extends State<HomePage> {
   Widget _buildHeaderQuote(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-      decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: rounded20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: rounded20,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primaryColor.withValues(alpha: 0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          const Text(
-            "وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: "NooreHuda", color: AppColors.white, fontSize: 26, letterSpacing: 0),
+          // Vector UI Elements - Top Right Large Circle
+          Positioned(
+            top: -30,
+            right: -30,
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.white.withValues(alpha: 0.12),
+                border: Border.all(
+                  color: AppColors.white.withValues(alpha: 0.15),
+                  width: 2,
+                ),
+              ),
+            ),
           ),
-          verticalGap12,
-          Text(
-            "আর আমি নাযিল করেছি এমন কুরআন, যা মুমিনের জন্য আরোগ্য ও রহমতস্বরূপ",
-            textAlign: TextAlign.center,
-            style: white16W600,
+          // Vector UI Elements - Bottom Left Medium Circle
+          Positioned(
+            bottom: -40,
+            left: -40,
+            child: Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.white.withValues(alpha: 0.08),
+              ),
+            ),
           ),
-          verticalGap12,
-          Text("সূরাঃ আল-ইসরা (১৭ঃ৮২)", textAlign: TextAlign.center, style: white14W500),
+          // Vector UI Elements - Top Right Small Inner Circle
+          Positioned(
+            top: 15,
+            right: 15,
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppColors.white.withValues(alpha: 0.2),
+                  width: 1.5,
+                ),
+              ),
+            ),
+          ),
+          // Vector UI Elements - Bottom Right Corner Arc
+          Positioned(
+            bottom: -20,
+            right: 20,
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.white.withValues(alpha: 0.06),
+              ),
+            ),
+          ),
+          // Vector UI Elements - Top Left Dot Pattern
+          Positioned(
+            top: 20,
+            left: 20,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildDot(8),
+                6.kW,
+                _buildDot(8),
+                6.kW,
+                _buildDot(8),
+              ],
+            ),
+          ),
+          // Vector UI Elements - Bottom Left Small Dots
+          Positioned(
+            bottom: 25,
+            left: 25,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _buildDot(6, opacity: 0.4),
+                5.kW,
+                _buildDot(6, opacity: 0.3),
+                5.kW,
+                _buildDot(6, opacity: 0.2),
+              ],
+            ),
+          ),
+          // Vector UI Elements - Top Right Progress Lines
+          Positioned(
+            top: 25,
+            right: 20,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  width: 35,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: AppColors.white.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                6.kH,
+                Container(
+                  width: 25,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: AppColors.white.withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                6.kH,
+                Container(
+                  width: 15,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: AppColors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Vector UI Elements - Floating Triangle Top Left
+          Positioned(
+            top: 50,
+            left: -10,
+            child: CustomPaint(
+              size: const Size(20, 20),
+              painter: _TrianglePainter(
+                color: AppColors.white.withValues(alpha: 0.15),
+              ),
+            ),
+          ),
+          // Vector UI Elements - Plus Sign Decoration
+          Positioned(
+            bottom: 50,
+            right: 30,
+            child: CustomPaint(
+              size: const Size(16, 16),
+              painter: _PlusPainter(
+                color: AppColors.white.withValues(alpha: 0.25),
+              ),
+            ),
+          ),
+          // Content
+          Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+              const Text(
+                "وَ نُنَزِّلُ مِنَ الۡقُرۡاٰنِ مَا هُوَ شِفَآءٌ وَّ رَحۡمَۃٌ لِّلۡمُؤۡمِنِیۡنَ",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontFamily: "NooreHuda", color: AppColors.white, fontSize: 26, letterSpacing: 0),
+              ),
+              verticalGap12,
+              Text(
+                "আর আমি নাযিল করেছি এমন কুরআন, যা মুমিনের জন্য আরোগ্য ও রহমতস্বরূপ",
+                textAlign: TextAlign.center,
+                style: white16W600,
+              ),
+              verticalGap12,
+              Text("সূরাঃ আল-ইসরা (১৭ঃ৮২)", textAlign: TextAlign.center, style: white14W500),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -299,14 +485,14 @@ class _HomePageState extends State<HomePage> {
 
   List<Screen> _getScreens() {
     return [
-      Screen('আয়াত', FlutterIslamicIcons.quran, categorySection),
-      Screen('রুকইয়াহ', PhosphorIcons.first_aid_kit_thin, ruqyah),
-      Screen('হিজামা', PhosphorIcons.first_aid_thin, hijama),
-      Screen('সুরক্ষার আমল', PhosphorIcons.shield_thin, securityDua),
-      Screen('অডিও', PhosphorIcons.music_notes_thin, audioCategories),
-      Screen('মাসায়েল', PhosphorIcons.question_thin, masayel),
-      Screen('মাসনুন দুআ', FlutterIslamicIcons.tasbihHand, masnunDuaCategories),
-      Screen('বিবিধ', PhosphorIcons.bookmarks_thin, bibidh),
+      Screen('আয়াত', AppImages.ayatImage, categorySection),
+      Screen('রুকইয়াহ', AppImages.ruqyahImage, ruqyah),
+      Screen('হিজামা', AppImages.hijamaImage, hijama),
+      Screen('সুরক্ষার আমল', AppImages.protectionImage, securityDua),
+      Screen('অডিও', AppImages.audioImage, audioCategories),
+      Screen('মাসায়েল', AppImages.masayelImage, masayel),
+      Screen('মাসনুন দুআ', AppImages.masnunDuaImage, masnunDuaCategories),
+      Screen('বিবিধ', AppImages.bibidhlImage, bibidh),
     ];
   }
 
@@ -319,17 +505,11 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _checkAppVersion() async {
     try {
-      print("[Config Called start]");
       final response = await VersionService.getAppConfig();
       final configs = response.data["configs"] as List<dynamic>;
-      final latestConfig = Config.fromJson(configs.first);
-      print("[Config Called end]");
+      final latestConfig = conf.Config.fromJson(configs.first);
 
-      debugPrint("latest_config => [${latestConfig.toJson()}]");
       _dataController.currentAppVersion.value = packageInfo.version;
-
-      print("current_app_version => [${packageInfo.buildNumber}]");
-      print("latest_app_version => [${latestConfig.appVersion}]");
 
       if (packageInfo.buildNumber != latestConfig.appVersion) {
         _showAppUpdateDialog();
@@ -357,4 +537,77 @@ class _HomePageState extends State<HomePage> {
           ),
     );
   }
+
+  // Helper method to build decorative dots
+  Widget _buildDot(double size, {double opacity = 0.5}) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.white.withValues(alpha: opacity),
+      ),
+    );
+  }
+}
+
+// Custom Triangle Painter
+class _TrianglePainter extends CustomPainter {
+  final Color color;
+
+  _TrianglePainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    final path = Path()
+      ..moveTo(size.width / 2, 0)
+      ..lineTo(size.width, size.height)
+      ..lineTo(0, size.height)
+      ..close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// Custom Plus Sign Painter
+class _PlusPainter extends CustomPainter {
+  final Color color;
+
+  _PlusPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final centerX = size.width / 2;
+    final centerY = size.height / 2;
+
+    // Horizontal line
+    canvas.drawLine(
+      Offset(centerX - 4, centerY),
+      Offset(centerX + 4, centerY),
+      paint,
+    );
+
+    // Vertical line
+    canvas.drawLine(
+      Offset(centerX, centerY - 4),
+      Offset(centerX, centerY + 4),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

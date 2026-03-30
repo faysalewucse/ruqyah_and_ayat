@@ -366,7 +366,6 @@ class DataController extends GetxController {
   // Version-based update logic
   Future<void> checkAndUpdateData(Config config) async {
     final storageController = Get.find<StorageController>();
-    debugPrint('Checking and updating data versions...');
 
     final currentVersions = {
       'dataVersion': config.dataVersion,
@@ -384,9 +383,6 @@ class DataController extends GetxController {
     };
 
     final previousVersions = storageController.getAllDataVersions(currentVersions.keys.toList());
-
-    debugPrint('Previous versions: $previousVersions');
-    debugPrint('Current API versions: $currentVersions');
 
     void saveNewVersions() {
       storageController.saveDataVersions(currentVersions);
