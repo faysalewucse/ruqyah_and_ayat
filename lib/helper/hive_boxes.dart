@@ -14,3 +14,5 @@ late Box<MasnunDua> masnunDuaBox;
 late Box<Category> masnunDuaCategoriesBox;
 late Box<Article> nirapottarDuaBox;
 late Box<AudioCategory> audioBox;
+late Box<MasnunDua> masayelBox;
+late Box<Category> masayelCategoriesBox;

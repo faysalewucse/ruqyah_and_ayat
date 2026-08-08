@@ -39,18 +39,16 @@ class AudioController extends GetxController {
         allAudios.addAll(audioCategory.children);
       }
     } else {
-      print("কোনো অডিও খুজে পাওয়া যায় নি");
+      debugPrint("কোনো অডিও খুজে পাওয়া যায় নি");
     }
   }
 
   Future<void> loadArticlesById({required String id}) async {
-    final filteredAudios = audioBox.values
-        .where((AudioCategory article) => article.id == id)
-        .toList();
+    final filteredAudios = audioBox.values.where((AudioCategory article) => article.id == id).toList();
     if (filteredAudios.isNotEmpty) {
       audioCategories(filteredAudios);
     } else {
-      print("কোনো অডিও খুজে পাওয়া যায় নি");
+      debugPrint("কোনো অডিও খুজে পাওয়া যায় নি");
     }
   }
 
@@ -71,23 +69,27 @@ class AudioController extends GetxController {
       }
 
       // Track progress using Dio's onReceiveProgress.
-      await Api().dio.download(url, filePath,
-          onReceiveProgress: (receivedBytes, totalBytes) {
-        downloadingFileSize(totalBytes / (1024 * 1024));
-        if (totalBytes != -1) {
-          double progress = (receivedBytes / totalBytes) * 100;
-          downloadingProgress(progress);
-          if (progress == 100) {
-            downloadingProgress(0.0);
-            downloadingFileSize(0.0);
+      await Api().dio.download(
+        url,
+        filePath,
+        onReceiveProgress: (receivedBytes, totalBytes) {
+          downloadingFileSize(totalBytes / (1024 * 1024));
+          if (totalBytes != -1) {
+            double progress = (receivedBytes / totalBytes) * 100;
+            downloadingProgress(progress);
+            if (progress == 100) {
+              downloadingProgress(0.0);
+              downloadingFileSize(0.0);
+            }
           }
-        }
-      }, cancelToken: cancelToken);
+        },
+        cancelToken: cancelToken,
+      );
 
       // Show success message after download completes.
       showSuccessToast(message: "ডাউনলোড সফল হয়েছে।");
     } catch (e) {
-      print('Error downloading file: $e');
+      debugPrint('Error downloading file: $e');
       throw Exception('Failed to download file');
     } finally {
       downloadingAudioLoading(false);
@@ -97,7 +99,6 @@ class AudioController extends GetxController {
   void cancelDownload() {
     if (!cancelToken.isCancelled) {
       cancelToken.cancel();
-      showSuccessToast(message: "ডাউনলোডটি বাদ দেয়া হয়েছে");
       downloadingProgress(0.0);
       downloadingFileSize(0.0);
     }

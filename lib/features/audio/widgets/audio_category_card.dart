@@ -15,15 +15,15 @@ class AudioCategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return audioCategory.children.length > 1
         ? ExpansionTile(
-            title: AudioTitle(title: audioCategory.title, index: index),
+            title: AudioTitle(title: audioCategory.title, index: index, children: false,),
             backgroundColor: Theme.of(context).cardColor,
             collapsedBackgroundColor: Theme.of(context).cardColor,
             tilePadding: const EdgeInsets.symmetric(horizontal: 10.0),
             shape: RoundedRectangleBorder(
-              borderRadius: rounded20,
+              borderRadius: rounded15,
             ),
             collapsedShape: RoundedRectangleBorder(
-              borderRadius: rounded20,
+              borderRadius: rounded15,
             ),
             childrenPadding: const EdgeInsets.only(left: 12.0),
             children: [

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/category_controller.dart';
 import 'package:rukiyah_and_ayat/controllers/masnun_dua_controller.dart';
-import 'package:rukiyah_and_ayat/widgets/cards/ayat_category_card.dart';
+import 'package:rukiyah_and_ayat/widgets/cards/category_card.dart';
 import 'package:rukiyah_and_ayat/widgets/no_data.dart';
 
 class MasnunDuaCategories extends StatefulWidget {
@@ -29,26 +29,24 @@ class _MasnunDuaCategoriesState extends State<MasnunDuaCategories> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("ক্যাটাগরী সমুহ"),
-      ),
-      body: Obx(
-            () => masnunDuaController.masnunDuaCategories.isEmpty
-            ? const NoData(text:  "কোনো ক্যাটাগরী খুজে পাওয়া যায়নি",)
-            : Container(
-          color: Theme.of(context).canvasColor,
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.all(16.0),
-          child: ListView.separated(
-            itemBuilder: (_, index) => AyatCategoryCard(
-              category: masnunDuaController.masnunDuaCategories[index],
-              forMasnunDua: true,
-            ),
-            separatorBuilder: (_, i) => const SizedBox(
-              height: 12,
-            ),
-            itemCount: masnunDuaController.masnunDuaCategories.length,
-          ),
+      appBar: AppBar(title: const Text("মাসনুন দুআ")),
+      body: SafeArea(
+        child: Obx(
+          () => masnunDuaController.masnunDuaCategories.isEmpty
+              ? const NoData(text: "কোনো ক্যাটাগরী খুজে পাওয়া যায়নি")
+              : Container(
+                  color: Theme.of(context).canvasColor,
+                  height: MediaQuery.of(context).size.height,
+                  padding: const EdgeInsets.all(16.0),
+                  child: ListView.separated(
+                    separatorBuilder: (_, i) => const SizedBox(height: 12),
+                    itemCount: masnunDuaController.masnunDuaCategories.length,
+                    itemBuilder: (_, index) => CategoryCard(
+                      category: masnunDuaController.masnunDuaCategories[index],
+                      forMasnunDua: true,
+                    ),
+                  ),
+                ),
         ),
       ),
     );

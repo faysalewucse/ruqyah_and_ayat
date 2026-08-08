@@ -1,8 +1,8 @@
 import 'package:hive/hive.dart';
 
-part 'Config.g.dart'; // For code generation
+part 'Config.g.dart';
 
-@HiveType(typeId: 3) // Unique ID for the Config type
+@HiveType(typeId: 1)
 class Config extends HiveObject {
   @HiveField(0)
   final String appVersion;
@@ -32,7 +32,7 @@ class Config extends HiveObject {
   final String masnunDuaDataVersion;
 
   @HiveField(9)
-  final String masnunDuaCategoryDataVersion; // Added missing field
+  final String masnunDuaCategoryDataVersion;
 
   @HiveField(10)
   final String audioDataVersion;
@@ -42,6 +42,9 @@ class Config extends HiveObject {
 
   @HiveField(12)
   final String bibidhDataVersion;
+
+  @HiveField(13)
+  final String? masayelCategoriesDataVersion;
 
   Config({
     required this.appVersion,
@@ -53,32 +56,13 @@ class Config extends HiveObject {
     required this.hijamaDataVersion,
     required this.nirapottarDataVersion,
     required this.masnunDuaDataVersion,
-    required this.masnunDuaCategoryDataVersion, // Updated constructor
+    required this.masnunDuaCategoryDataVersion,
     required this.audioDataVersion,
     required this.masayelDataVersion,
     required this.bibidhDataVersion,
+    this.masayelCategoriesDataVersion,
   });
 
-  // Convert to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'appVersion': appVersion,
-      'releaseNotes': releaseNotes,
-      'dataVersion': dataVersion,
-      'ayatDataVersion': ayatDataVersion,
-      'categoryDataVersion': categoryDataVersion,
-      'ruqyahDataVersion': ruqyahDataVersion,
-      'hijamaDataVersion': hijamaDataVersion,
-      'nirapottarDataVersion': nirapottarDataVersion,
-      'masnunDuaDataVersion': masnunDuaDataVersion,
-      'masnunDuaCategoryDataVersion': masnunDuaCategoryDataVersion, // JSON mapping
-      'audioDataVersion': audioDataVersion,
-      'masayelDataVersion': masayelDataVersion,
-      'bibidhDataVersion': bibidhDataVersion,
-    };
-  }
-
-  // Create from JSON
   factory Config.fromJson(Map<String, dynamic> json) {
     return Config(
       appVersion: json['appVersion'] as String,
@@ -90,10 +74,31 @@ class Config extends HiveObject {
       hijamaDataVersion: json['hijamaDataVersion'] as String,
       nirapottarDataVersion: json['nirapottarDataVersion'] as String,
       masnunDuaDataVersion: json['masnunDuaDataVersion'] as String,
-      masnunDuaCategoryDataVersion: json['masnunDuaCategoryDataVersion'] as String, // Updated factory
+      masnunDuaCategoryDataVersion: json['masnunDuaCategoryDataVersion'] as String,
       audioDataVersion: json['audioDataVersion'] as String,
       masayelDataVersion: json['masayelDataVersion'] as String,
       bibidhDataVersion: json['bibidhDataVersion'] as String,
+      masayelCategoriesDataVersion: json['masayelCategoriesDataVersion'] ?? '1.0.0',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'appVersion': appVersion,
+      'releaseNotes': releaseNotes,
+      'dataVersion': dataVersion,
+      'ayatDataVersion': ayatDataVersion,
+      'categoryDataVersion': categoryDataVersion,
+      'ruqyahDataVersion': ruqyahDataVersion,
+      'hijamaDataVersion': hijamaDataVersion,
+      'nirapottarDataVersion': nirapottarDataVersion,
+      'masnunDuaDataVersion': masnunDuaDataVersion,
+      'masnunDuaCategoryDataVersion': masnunDuaCategoryDataVersion,
+      'audioDataVersion': audioDataVersion,
+      'masayelDataVersion': masayelDataVersion,
+      'bibidhDataVersion': bibidhDataVersion,
+      if (masayelCategoriesDataVersion != null)
+        'masayelCategoriesDataVersion': masayelCategoriesDataVersion,
+    };
   }
 }

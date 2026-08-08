@@ -1,14 +1,15 @@
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:rukiyah_and_ayat/api/api_urls.dart';
 import 'package:rukiyah_and_ayat/utils/common_functions.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  print('Title: ${message.notification?.title}');
-  print('Body: ${message.notification?.body}');
-  print('Payload: ${message.data}');
+  debugPrint('Title: ${message.notification?.title}');
+  debugPrint('Body: ${message.notification?.body}');
+  debugPrint('Payload: ${message.data}');
 }
 
 class FirebaseApi {
@@ -24,7 +25,7 @@ class FirebaseApi {
   void handleMessage(RemoteMessage? message) {
     if (message == null) return;
     if (message.notification?.title == "App Update") {
-      launchInBrowser(playStoreAppLink);
+      launchInBrowser(ApiUrls.playStoreAppLink);
     }
   }
 
@@ -32,7 +33,7 @@ class FirebaseApi {
   Future<void> initNotification() async {
     await _firebaseMessaging.requestPermission();
     final fcmToken = await _firebaseMessaging.getToken();
-    print("Fcm Token => $fcmToken");
+    debugPrint("Fcm Token => $fcmToken");
     initPushNotifications();
     initLocalNotifications();
   }

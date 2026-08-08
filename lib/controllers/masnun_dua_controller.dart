@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/helper/hive_boxes.dart';
 import 'package:rukiyah_and_ayat/models/Article.dart';
@@ -21,17 +22,17 @@ class MasnunDuaController extends GetxController {
       masnunDuas(savedMasnunDuas);
     } else {
       // Optionally handle the case where there is no cached data
-      print("No articles found in local storage.");
+      debugPrint("No duas found in local storage.");
     }
   }
 
-  Future<void> loadNirapottarDuaByCategory({required String categoryId}) async {
+  Future<void> loadMasnunDuaByCategory({required String categoryId}) async {
     final savedMasnunDuas = masnunDuaBox.values.where((dua) => dua.category == categoryId).toList();
     if (savedMasnunDuas.isNotEmpty) {
       masnunDuas(savedMasnunDuas);
     } else {
       masnunDuas([]);
-      print("No articles found in local storage.");
+      debugPrint("No duas found in local storage.");
     }
   }
   
@@ -50,7 +51,7 @@ class MasnunDuaController extends GetxController {
       masnunDuas(filteredMasnunDuas);
     } else {
       // Optionally handle the case where no matching data is available
-      print("No articles found for the specified index.");
+      debugPrint("No duas found for the specified index.");
     }
   }
 }

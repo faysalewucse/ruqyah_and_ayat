@@ -26,9 +26,9 @@ class AnimatedLiquidLinearProgressIndicatorState
           value: widget.progress,
           backgroundColor: Colors.white,
           valueColor: AlwaysStoppedAnimation(
-              Theme.of(context).primaryColor.withOpacity(0.2)),
+              Theme.of(context).primaryColor.withValues(alpha: 0.2)),
           borderRadius: 12.0,
-          borderColor: AppColors.primaryColor.withOpacity(0.3),
+          borderColor: AppColors.primaryColor.withValues(alpha: 0.3),
           borderWidth: 1,
           center: Text(
             "${percentage.toStringAsFixed(0)}%", // Show the progress percentage

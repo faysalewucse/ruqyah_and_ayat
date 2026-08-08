@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/helper/toast.dart';
@@ -10,13 +11,9 @@ class NetworkController extends GetxController {
 
   late StreamSubscription _streamSubscription;
 
-  @override
-  void onInit() async{
-    // TODO: implement onInit
-    super.onInit();
+  Future<void> initializeNetwork () async {
     await getConnectionType();
-    _streamSubscription =
-        _connectivity.onConnectivityChanged.listen(_updateState);
+    _streamSubscription = _connectivity.onConnectivityChanged.listen(_updateState);
   }
 
   Future<void> getConnectionType() async {
@@ -30,14 +27,12 @@ class NetworkController extends GetxController {
   }
 
   _updateState(List<ConnectivityResult> connectivityResult) {
-    if (connectivityResult.contains(ConnectivityResult.mobile)) {
-      hasConnection(true);
-    } else if (connectivityResult.contains(ConnectivityResult.wifi)) {
-      hasConnection(true);
-    } else if (connectivityResult.contains(ConnectivityResult.ethernet)) {
-      hasConnection(true);
-    } else if (connectivityResult.contains(ConnectivityResult.none)) {
+    if (connectivityResult.contains(ConnectivityResult.none)) {
+      debugPrint("No Connectivity");
       hasConnection(false);
+    } else {
+      debugPrint("Has Connectivity");
+      hasConnection(true);
     }
   }
 

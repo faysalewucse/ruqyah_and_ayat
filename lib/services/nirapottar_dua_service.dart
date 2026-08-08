@@ -4,6 +4,6 @@ import 'package:rukiyah_and_ayat/api/config.dart';
 
 class NirapottarDuaService{
   static Future<Response> getNirapottarDuas () async {
-    return await Api().dio.get(GET_ALL_NIRAPOTTAR_DUAS);
+    return await Api().dio.get(ApiUrls.getAllNirapottarDuas);
   }
 }

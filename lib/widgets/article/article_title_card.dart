@@ -24,12 +24,12 @@ class ArticleTitleCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            // border: Border(left: BorderSide(color: Theme.of(context).primaryColor.withOpacity(0.5), width: 6)),
-            borderRadius: rounded20),
+          color: Theme.of(context).cardColor,
+          borderRadius: rounded15,
+        ),
         child: Row(
           children: [
-           LeadingIndex(index: index + 1),
+            LeadingIndex(index: index + 1),
             8.kW,
             Expanded(
               child: Text(

@@ -4,10 +4,10 @@ import 'package:rukiyah_and_ayat/api/config.dart';
 
 class MasnunDuaService{
   static Future<Response> getMasnunDuas () async {
-    return await Api().dio.get(GET_ALL_MASNUN_DUAS);
+    return await Api().dio.get(ApiUrls.getAllMasnunDuas);
   }
 
   static Future<Response> getMasnunDuaCategories () async {
-    return await Api().dio.get(GET_ALL_MASNUN_DUA_CATEGORIES);
+    return await Api().dio.get(ApiUrls.getAllMasnunDuaCategories);
   }
 }

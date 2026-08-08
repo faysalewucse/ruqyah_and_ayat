@@ -1,0 +1,2 @@
+E:/Yaqeen Tech Solutions/App/Ruqyah App/Rukyaah App/android/app/.cxx/Debug/l4y193z3/x86_64/CMakeFiles/edit_cache.dir
+E:/Yaqeen Tech Solutions/App/Ruqyah App/Rukyaah App/android/app/.cxx/Debug/l4y193z3/x86_64/CMakeFiles/rebuild_cache.dir

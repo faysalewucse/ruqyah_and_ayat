@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rukiyah_and_ayat/controllers/category_controller.dart';
-import 'package:rukiyah_and_ayat/widgets/cards/ayat_category_card.dart';
+import 'package:rukiyah_and_ayat/widgets/cards/category_card.dart';
 import 'package:rukiyah_and_ayat/widgets/no_data.dart';
 
 class AyatCategories extends StatefulWidget {
@@ -34,23 +34,25 @@ class _AyatCategoriesState extends State<AyatCategories> {
       appBar: AppBar(
         title: const Text("ক্যাটাগরী সমুহ"),
       ),
-      body: Obx(
-        () => categoryController.categories.isEmpty
-                ? const NoData(text:  "কোনো ক্যাটাগরী খুজে পাওয়া যায়নি",)
-                : Container(
-          color: Theme.of(context).canvasColor,
-                    height: MediaQuery.of(context).size.height,
-                    padding: const EdgeInsets.all(16.0),
-                    child: ListView.separated(
-                      itemBuilder: (_, index) => AyatCategoryCard(
-                        category: categoryController.categories[index],
+      body: SafeArea(
+        child: Obx(
+          () => categoryController.categories.isEmpty
+                  ? const NoData(text:  "কোনো ক্যাটাগরী খুজে পাওয়া যায়নি",)
+                  : Container(
+            color: Theme.of(context).canvasColor,
+                      height: MediaQuery.of(context).size.height,
+                      padding: const EdgeInsets.all(16.0),
+                      child: ListView.separated(
+                        itemBuilder: (_, index) => CategoryCard(
+                          category: categoryController.categories[index],
+                        ),
+                        separatorBuilder: (_, i) => const SizedBox(
+                          height: 12,
+                        ),
+                        itemCount: categoryController.categories.length,
                       ),
-                      separatorBuilder: (_, i) => const SizedBox(
-                        height: 12,
-                      ),
-                      itemCount: categoryController.categories.length,
                     ),
-                  ),
+        ),
       ),
     );
   }

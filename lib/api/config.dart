@@ -12,7 +12,7 @@ class Api {
   Api() {
     dio = Dio(
       BaseOptions(
-        baseUrl: ROOT_API_URL,
+        baseUrl: ApiUrls.rootApiUrl,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -26,7 +26,7 @@ class Api {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           options.headers['Authorization'] = StorageController().getAuthToken();
-          print("${options.method} : ${options.uri}");
+          debugPrint("Request => ${options.method} : ${options.uri}");
           return handler.next(options);
         },
         onResponse: (response, handler) {

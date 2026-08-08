@@ -20,6 +20,7 @@ class AudioAdapter extends TypeAdapter<Audio> {
       id: fields[0] as String,
       title: fields[1] as String,
       audioUrl: fields[2] as String,
+      audioUrlServer: fields[5] as String?,
       description: fields[3] as String,
       index: fields[4] as int,
     );
@@ -28,13 +29,15 @@ class AudioAdapter extends TypeAdapter<Audio> {
   @override
   void write(BinaryWriter writer, Audio obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.title)
       ..writeByte(2)
       ..write(obj.audioUrl)
+      ..writeByte(5)
+      ..write(obj.audioUrlServer)
       ..writeByte(3)
       ..write(obj.description)
       ..writeByte(4)

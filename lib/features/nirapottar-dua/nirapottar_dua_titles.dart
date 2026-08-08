@@ -44,35 +44,37 @@ class _NirapottarDuaTitlesState extends State<NirapottarDuaTitles> {
       appBar: AppBar(
         title: const Text("হেফাজতের আমল"),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-            child: CustomSearchField(
-                searchController: searchController,
-                filterMethod: _filterNirapottarDuas,
-                hintText: "আমল"),
-          ),
-          Expanded(
-            child: Obx(
-              () => filteredNirapottarDuas.isEmpty
-                  ? const NoData(
-                      text: "কোনো আর্টিক্যাল খুজে পাওয়া যায়নি",
-                    )
-                  : ListView.separated(
-                      padding: const EdgeInsets.all(16.0),
-                      itemBuilder: (_, index) => ArticleTitleCard(
-                        article: filteredNirapottarDuas[index],
-                        index: index,
-                      ),
-                      separatorBuilder: (_, i) => const SizedBox(
-                        height: 12,
-                      ),
-                      itemCount: filteredNirapottarDuas.length,
-                    ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+              child: CustomSearchField(
+                  searchController: searchController,
+                  filterMethod: _filterNirapottarDuas,
+                  hintText: "আমল"),
             ),
-          ),
-        ],
+            Expanded(
+              child: Obx(
+                () => filteredNirapottarDuas.isEmpty
+                    ? const NoData(
+                        text: "কোনো আর্টিক্যাল খুজে পাওয়া যায়নি",
+                      )
+                    : ListView.separated(
+                        padding: const EdgeInsets.all(16.0),
+                        itemBuilder: (_, index) => ArticleTitleCard(
+                          article: filteredNirapottarDuas[index],
+                          index: index,
+                        ),
+                        separatorBuilder: (_, i) => const SizedBox(
+                          height: 12,
+                        ),
+                        itemCount: filteredNirapottarDuas.length,
+                      ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
