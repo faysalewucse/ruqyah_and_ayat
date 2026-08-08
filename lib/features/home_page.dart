@@ -205,7 +205,7 @@ class _HomePageState extends State<HomePage> {
   }) {
     return ListTile(
       dense: true,
-      leading: Image.asset(icon),
+      leading: Image.asset(icon, width: 20, height: 20),
       title: Text(
         title,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).textTheme.titleLarge?.color),

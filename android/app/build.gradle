@@ -23,22 +23,23 @@ android {
     ndkVersion = "27.2.12479018"
 
     compileOptions {
-        // ✅ Required to support Java 8 APIs used by flutter_local_notifications
+        // Required to support Java 8 APIs used by flutter_local_notifications
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-        coreLibraryDesugaringEnabled true // ✅ THIS LINE IS MISSING
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString() // ⚠️ Use .toString() to avoid Kotlin error
+        // .toString() avoids a Kotlin type mismatch on JavaVersion
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     defaultConfig {
         applicationId = "com.sunnahcurebd.rukiyah_and_ayat"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = 23
-        versionName = "1.4.1"
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
     }
 
     signingConfigs {
